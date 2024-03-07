@@ -15,7 +15,6 @@ if (!function_exists('add_action')) {
  *
  * @param unknown $message
  */
-
 function log_me($message)
 {
 	if (WP_DEBUG === true) {
@@ -31,15 +30,11 @@ function log_me($message)
 		}
 	}
 }
-
 // Include template checker
 include_once dirname(__FILE__) . '/template-checker.php';
 // Load Mobile.DE API
-
 include_once dirname(__FILE__) . '/includes/searchAPI.php';
-
 $options = get_option('MobileDE_option');
-
 if (is_array(isset($options['mob_username']))) {
 	// Please correct the following Quatsch. --bth 2014-10-31 06:03:56
 	$mob_api = new mob_searchAPI("mob_URL", isset($options['mob_username'][0]), isset($options['mob_password'][0]), isset($options['mob_language']));
@@ -47,12 +42,10 @@ if (is_array(isset($options['mob_username']))) {
 else {
 	$mob_api = new mob_searchAPI(isset($options['mob_url']), isset($options['mob_username']), isset($options['mob_password']), isset($options['mob_language']));
 }
-
 /*
 * Replacement for template-checker.php
 *
 */
-
 add_action('wp', 'template_decider');
 function template_decider()
 {
@@ -67,7 +60,6 @@ function registerFrontendStuff() {
         wp_enqueue_style('bootstrap_cdn_css', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css');
         wp_enqueue_script('bootstrap_cdn_js', plugin_dir_url(__FILE__) . 'js/bootstrap.min.js', array('jquery'));
     }
-
     if (empty($options['mob_slider_option'])) {
         $options['mob_slider_option'] = 'yes';
     }
@@ -77,7 +69,6 @@ function registerFrontendStuff() {
         wp_enqueue_script('slider_cdn_js', plugin_dir_url(__FILE__) . 'js/slick.min.js', array('jquery'));
         wp_enqueue_script('slick-init', plugin_dir_url(__FILE__) . 'js/slick-init.js', array('jquery'));
     }
-
     if (!is_admin()) {
         wp_enqueue_style('cssSearchDE', plugin_dir_url(__FILE__) . 'css/style_16.css');
     }
@@ -86,14 +77,12 @@ function registerFrontendStuff() {
         add_filter('the_content', 'check_single_fahrzeuge');
     }
 }
-
 function registerAdminStuff()
 {
 	// Register needed stylesheets and JS files
 	wp_register_script('admin_settings', plugin_dir_url(__FILE__) . 'js/admin_settings_scripts.js', array(
 		'jquery'
 	));
-
 	
 	wp_register_script('scriptSearchDE', plugin_dir_url(__FILE__) . 'js/script.js', array(
 		'jquery'
@@ -101,7 +90,6 @@ function registerAdminStuff()
 	wp_enqueue_script('scriptSearchDE');
 	wp_enqueue_script('admin_settings');
 }
-
 add_action('admin_enqueue_scripts', 'registerAdminStuff');
 // Add every 3 days, weekly custom schedules
 function mob_custom_cron_schedules($schedules)
@@ -110,56 +98,37 @@ function mob_custom_cron_schedules($schedules)
 		'interval' => '1296000',
 		'display' => __('Each 3 Days')
 	);
-
 	$schedules['weekly'] = array(
 		'interval' => '3024000',
 		'display' => __('Weekly')
 	);
-
 	$schedules['daily'] = array(
 		'interval' => '432000',
 		'display' => __('Täglich')
 	);
-
 	$schedules['hourly'] = array(
 		'interval' => '36000',
 		'display' => __('Stündlich')
 	);
-
 	$schedules['minutely'] = array(
 		'interval' => '300',
 		'display' => __('Alle 5 Minuten')
 	);
-
 	return $schedules;
 }
-
 add_filter('cron_schedules', 'mob_custom_cron_schedules');
-
 // Add a new custom type on initialization
-
 add_action('init', 'mob_search_result_init', 1);
-
 // Hook into the 'init' action
-
 add_action('init', 'vehicle_taxonomy', 0);
-
 // ********************************************************************************************************
-
 // ********************************************************************************************************
-
 // **************************** Register custom taxonomy for custom post type *****************************
-
 require_once (ABSPATH . 'wp-config.php');
-
 require_once (ABSPATH . 'wp-includes/wp-db.php');
-
 require_once (ABSPATH . 'wp-admin/includes/taxonomy.php');
-
 // Setup a scheduler on plugin activation
-
 register_activation_hook(__FILE__, 'mob_plugin_activation');
-
 function mob_plugin_activation()
 {
 	mob_search_result_init();
@@ -169,26 +138,20 @@ function mob_plugin_activation()
 	}
 	wp_schedule_event(time() , $options['mob_download_interval'], 'mob_periodic_event_hook');
 }
-
 // Remove the scheduler on plugin deactivation
-
 register_deactivation_hook(__FILE__, 'mob_plugin_deactivation');
 function mob_plugin_deactivation()
 {
 	wp_clear_scheduled_hook('mob_periodic_event_hook');
 }
-
 // Helper function used to update schedule
-
 function mob_update_schedule($newScheq)
 {
 	wp_clear_scheduled_hook('mob_periodic_event_hook');
 	wp_schedule_event(time() , $newScheq, 'mob_periodic_event_hook');
 }
-
 // Limit Posts
 // Not used at the moment.
-
 function checkVehicleCount()
 {
 	$max = 2;
@@ -198,10 +161,8 @@ function checkVehicleCount()
 		wp_die(__("Mit ihrem derzeitigen Abonnement können Sie maximal " . $max . " Fahrzeuge importieren, Sie haben derzeit " . $num_posts . " Fahrzeuge inseriert. Weiter Informationen gibt es auf https://www.mobilede-fahrzeugintegration.de/"));
 	}
 }
-
 // checkVehicleCount();
 // The scheduler function that downloads search feeds
-
 add_action('mob_periodic_event_hook', 'mob_download_import_feed');
 function mob_download_import_feed()
 {
@@ -248,30 +209,23 @@ function mob_download_import_feed()
         unset($modifiedVehicles['intern_adKeys']);
         importVehicles($modifiedVehicles);
     }
-
     mob_clean();
 }
-
-
 add_action('mob_cleanup', 'mob_clean');
-
 function deleteByAdKeys($metaValues, $adKeys) {
     $filteredValues = array_filter($metaValues, function ($current) use ($adKeys) {
         return in_array($current['ad_key'], $adKeys);
     });
     $postIds = array_column($filteredValues, 'post_id');
-
     if (!empty($postIds)) {
         removePostsbyIds($postIds);
     }
 }
-
 function getVehiclesFromApi()
 {
     set_time_limit(0);
     $options = get_option('MobileDE_option');
     $vehicles = array();
-
     foreach ($options['mob_username'] as $index => $username) {
         $mob_api = new mob_searchAPI("mob_url", $username, $options['mob_password'][$index], $options['mob_language']);
         $temp = $mob_api->getAllAds();
@@ -282,10 +236,8 @@ function getVehiclesFromApi()
             // ToDo: Handle error, log or display message.
         }
     }
-
     return $vehicles;
 }
-
 function mergeVehicleData($vehicles, $temp)
 {
     if (isset($temp['intern_adKeys'])) {
@@ -293,25 +245,18 @@ function mergeVehicleData($vehicles, $temp)
             ? array_merge($vehicles['intern_adKeys'], $temp['intern_adKeys']) 
             : $temp['intern_adKeys'];
     }
-
     $vehicles = array_merge($vehicles, $temp);
-
     if (isset($tempInternAdKeys)) {
         $vehicles['intern_adKeys'] = $tempInternAdKeys;
     }
-
     return $vehicles;
 }
-
-
 function getVehiclesByAdkeys($vehicles, $adKeys)
 {
     return array_filter($vehicles, function($vehicle) use ($adKeys) {
         return in_array($vehicle['ad_key'], $adKeys);
     });
 }
-
-
 function importVehicles($vehicles)
 {
     global $mob_data;
@@ -343,7 +288,6 @@ function importVehicles($vehicles)
     }
     return $post_ids;
 }
-
 /**
  *
  * Returns an array of all vehicles in $vehicles which were modified after
@@ -376,8 +320,6 @@ function getVehiclesModifiedSince($vehicles, $modDate) {
     }
     return $modifiedVehicles;
 }
-
-
 /**
  *
  * Returns an array of meta values.
@@ -400,7 +342,6 @@ function getCurrentMetaValues() {
 	$query = new WP_Query($args);
 	$currentMetaResult = array();
 	$mostRecent = 0;
-
 	if ($query->have_posts()) {
 		while ($query->have_posts()) {
 			$query->the_post();
@@ -426,7 +367,6 @@ function getCurrentMetaValues() {
 		return null;
 	}
 }
-
 /**
  *
  * @param unknown $currentMetaValues
@@ -452,7 +392,6 @@ function getMostRecentModDate($currentMetaValues)
 		return null;
 	}
 }
-
 /**
  *
  * Checks if the license for the current version is valid.
@@ -467,7 +406,6 @@ function removePostsByIds($post_ids)
 	// echo " Fahrzeuge entfernt: ";
 	// The section marked with start... end could be deleted. Test this. --bth
 	// Start.
-
 	$query = new WP_Query(array(
 		'post_type' => $mob_data['customType'],
 		'post_status' => 'publish',
@@ -489,11 +427,9 @@ function writeIntoWp($item)
 	* array_filter().... Error in post.php
 	*/
 	$options = get_option('MobileDE_option');
-
 	if (empty(@$options['mob_cat_tax_option'])) {
 		@$options['mob_cat_tax_option'] = 'no';
 	}
-
 	if (@$options['mob_cat_tax_option'] == 'yes') {
 	$class_catid = wp_create_category($item['category']);
 	} else {
@@ -518,151 +454,116 @@ function writeIntoWp($item)
 		'preis' => $item['price']
 	);
 	wp_set_object_terms($post_id, $preis, 'preis');
-
 	$modell = array(
 		'modell' => @$item['model']
 	);
-
 	wp_set_object_terms($post_id, $modell, 'modell');
 	
 	$marke = array(
 		'marke' => @$item['make']
 	);
-
 	wp_set_object_terms($post_id, $marke, 'marke');
 	$zustand = array(
 		'zustand' => @$item['condition']
 	);
-
 	wp_set_object_terms($post_id, $zustand, 'zustand');
 	$klasse = array(
 		'klasse' => @$item['class']
 	);
-
 	wp_set_object_terms($post_id, $klasse, 'klasse');
 	$kraftstoffart = array(
 		'kraftstoffart' => @$item['fuel']
 	);
-
 	wp_set_object_terms($post_id, $kraftstoffart, 'kraftstoffart');
 	$getriebe = array(
 		'getriebe' => @$item['gearbox']
 	);
-
 	wp_set_object_terms($post_id, $getriebe, 'getriebe');
 	$erstzulassung = array(
 		'erstzulassung' => @$item['first_registration']
 	);
-
 	wp_set_object_terms($post_id, $erstzulassung, 'erstzulassung');
 	$standort = array(
 		'standort' => @$item['seller']
 	);
-
 	wp_set_object_terms($post_id, $standort, 'standort');
 	$beschreibung = array(
 		'beschreibung' => @$item['model_description']
 	);
-
 	wp_set_object_terms($post_id, $beschreibung, 'beschreibung');
 	$schaden = array(
 		'schaden' => @$item['schaden']
 	);
-
 	wp_set_object_terms($post_id, $schaden, 'schaden');
 	$emissionsklasse = array(
 		'emissionsklasse' => @$item['emission_class']
 	);
-
 	wp_set_object_terms($post_id, $emissionsklasse, 'emissionsklasse');
 	$co2_emission = array(
 		'co2_emission' => @$item['co2_emission']
 	);
-
 	wp_set_object_terms($post_id, $co2_emission, 'co2_emission');
 	$verbrauch_innerorts = array(
 		'verbrauch_innerorts' => @$item['inner']
 	);
-
 	wp_set_object_terms($post_id, $verbrauch_innerorts, 'verbrauch_innerorts');
 	$verbrauch_ausserorts = array(
 		'verbrauch_ausserorts' => @$item['outer']
 	);
-
 	wp_set_object_terms($post_id, $verbrauch_ausserorts, 'verbrauch_ausserorts');
 	$verbrauch_kombiniert = array(
 		'verbrauch_kombiniert' => @$item['combined']
 	);
-
 	wp_set_object_terms($post_id, $verbrauch_kombiniert, 'verbrauch_kombiniert');
 	$aussenfarbe = array(
 		'aussenfarbe' => @$item['aussenfarbe']
 	);
-
 	wp_set_object_terms($post_id, $aussenfarbe, 'aussenfarbe');
 	$hubraum = array(
 		'hubraum' => @$item['cubic_capacity']
 	);
-
 	wp_set_object_terms($post_id, $hubraum, 'hubraum');
 	$naechste_hu = array(
 		'naechste_hu' => @$item['nextInspection']
 	);
-
 	wp_set_object_terms($post_id, $naechste_hu, 'naechste_hu');
 	$ausstattung = array(
 		'ausstattung' => @$item['features']
 	);
-
 	wp_set_object_terms($post_id, $ausstattung, 'ausstattung');
 	$kilometer = array(
 		'kilometer' => @$item['mileage']
 	);
-
 	wp_set_object_terms($post_id, $kilometer, 'kilometer');
 	$kilometer_unformatiert = array(
 		'kilometer_unformatiert' => @$item['mileage_raw']
 	);
-
 	wp_set_object_terms($post_id, $kilometer_unformatiert, 'kilometer_unformatiert');
 	$kilometer_dropdown = array(
 		'kilometer_dropdown' => @$item['kilometer_dropdown']
 	);
-
 	wp_set_object_terms($post_id, $kilometer_dropdown, 'kilometer_dropdown');
-
 	$preis_unformatiert = array(
 		'preis_unformatiert' => @$item['price_raw_short']
 	);
-
 	wp_set_object_terms($post_id, $preis_unformatiert, 'preis_unformatiert');
-
 	$ladekapazitaet = array(
 		'ladekapazitaet' => @$item['loadCapacity']
 	);
-
 	wp_set_object_terms($post_id, $ladekapazitaet, 'ladekapazitaet');
-
 	$ad_gallery = array(
 		'ad_gallery' => @$item['images']
 	);
-
 	wp_set_object_terms($post_id, $ad_gallery, 'ad_gallery');
-
 	$baujahr = array(
 		'baujahr' => @$item['construction-year']
 	);
-
 	wp_set_object_terms($post_id, $baujahr, 'baujahr');
-
 	$anzahl_schlafplaetze = array(
 		'anzahl_schlafplaetze' => @$item['number_of_bunks']);
 	wp_set_object_terms($post_id, $anzahl_schlafplaetze, 'anzahl_schlafplaetze');
-
-
 	if(!empty($item['ad_key'])) { update_post_meta($post_id, 'vehicleListingID', $item['ad_key'], true); }
 	update_post_meta($post_id, 'dataSource', 'mobile.de_api');
-
 	if(!empty($item['newCars'])) { update_post_meta($post_id, 'newCars', $item['creation-date']); }
 	if(!empty($item['class'])) { update_post_meta($post_id, 'class', $item['class']); }
 	if(!empty($item['brand'])) { update_post_meta($post_id, 'brand', $item['make']); } // Deprecated.
@@ -786,60 +687,33 @@ function writeIntoWp($item)
 	if(!empty($item['manufacturer-color-name'])) { update_post_meta($post_id, 'manufacturer_color_name', $item['manufacturer-color-name']); }
 	if(!empty($item['shipping-volume'])) { update_post_meta($post_id, 'shipping_volume', $item['shipping-volume']); }
 	if(!empty($item['loadCapacity'])) { update_post_meta($post_id, 'load_capacity', $item['loadCapacity']); }
-
 	$numimages = count($item['images']);
-
 	if($numimages > 1) {
 		update_post_meta($post_id, 'carousel', '1');
 	}
 	// update_post_meta($post_id, 'ad_gallery', $item['images']);
-
-
 $options = get_option('MobileDE_option');
-
 if (empty($options['mob_image_option'])) {
-
 	$options['mob_image_option'] = 'web';
-
 }
-
-
-
 if ($options['mob_image_option'] == 'web') {
-
-
-
 	foreach($item['images'] as $image) {
-
-
-
 		update_post_meta($post_id, 'ad_gallery', (string)$image);
-
-
-
 	}
-
-
-
 	if (substr($item['images'][0], -6) == '27.JPG') {
-
 		$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
-
 		if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
 			$i = '';
 			$metaData = import_post_image($post_id, $temp, $i == 0);
 			// metaData = update_post_meta($post_id, $temp, $i);
 		}
-
 		else {
 			$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
 		}
 	}
-
 	else {
 		$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
 	}
-
 } else {
 		foreach($item['images'] as $i => $image) {
 		/***
@@ -848,38 +722,22 @@ if ($options['mob_image_option'] == 'web') {
 		*/
 		// log_me('EBAY BILD');
 		// log_me((string)$image);
-
 		// update_post_meta($post_id, 'ad_gallery', (string)$image);
-
 		if (substr($image, -6) == '27.JPG') {
-
 			$temp = str_replace('27.JPG', '57.JPG', $image); // 1600x1200 px
-
 			if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
-
 				$metaData = import_post_image($post_id, $temp, $i == 0);
-
 				// metaData = update_post_meta($post_id, $temp, $i);
 			}
-
 			else {
-
 				$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
-
 			}
-
 		}
-
 		else {
-
 			$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
-
 		}
-
 	}
-
 }
-
 	// new feature meta_values as single post_meta
 	if(!empty($item['ABS'])) { update_post_meta($post_id, 'ABS', $item['ABS']); }
 	if(!empty($item['ALLOY_WHEELS'])) { update_post_meta($post_id, 'ALLOY_WHEELS', $item['ALLOY_WHEELS']); }
@@ -896,7 +754,6 @@ if ($options['mob_image_option'] == 'web') {
 	if(!empty($item['E10_ENABLED'])) {update_post_meta($post_id, 'E10_ENABLED', $item['E10_ENABLED']); }
 	if(!empty($item['ELECTRIC_ADJUSTABLE_SEATS'])) {update_post_meta($post_id, 'ELECTRIC_ADJUSTABLE_SEATS', $item['ELECTRIC_ADJUSTABLE_SEATS']); }
 	if(!empty($item['ELECTRIC_EXTERIOR_MIRRORS'])) {update_post_meta($post_id, 'ELECTRIC_EXTERIOR_MIRRORS', $item['ELECTRIC_EXTERIOR_MIRRORS']); }
-
 	if(!empty($item['AIR_SUSPENSION'])) {update_post_meta($post_id, 'AIR_SUSPENSION', $item['AIR_SUSPENSION']); }
 	if(!empty($item['ALARM_SYSTEM'])) {update_post_meta($post_id, 'ALARM_SYSTEM', $item['ALARM_SYSTEM']); }
 	if(!empty($item['CARPLAY'])) {update_post_meta($post_id, 'CARPLAY', $item['CARPLAY']); }
@@ -911,10 +768,8 @@ if ($options['mob_image_option'] == 'web') {
 	if(!empty($item['ELECTRIC_HEATED_REAR_SEATS'])) {update_post_meta($post_id, 'ELECTRIC_HEATED_REAR_SEATS', $item['ELECTRIC_HEATED_REAR_SEATS']); }
 	if(!empty($item['ELECTRIC_BACKSEAT_ADJUSTMENT'])) {update_post_meta($post_id, 'ELECTRIC_BACKSEAT_ADJUSTMENT', $item['ELECTRIC_BACKSEAT_ADJUSTMENT']); }
 	if(!empty($item['BLIND_SPOT_MONITOR'])) {update_post_meta($post_id, 'BLIND_SPOT_MONITOR', $item['BLIND_SPOT_MONITOR']); }
-
 	
 	
-
 	if(!empty($item['ELECTRIC_HEATED_SEATS'])) {update_post_meta($post_id, 'ELECTRIC_HEATED_SEATS', $item['ELECTRIC_HEATED_SEATS']); }
 	if(!empty($item['ELECTRIC_WINDOWS'])) {update_post_meta($post_id, 'ELECTRIC_WINDOWS', $item['ELECTRIC_WINDOWS']); }
 	if(!empty($item['ESP'])) {update_post_meta($post_id, 'ESP', $item['ESP']); }
@@ -988,15 +843,11 @@ if ($options['mob_image_option'] == 'web') {
 	if(!empty($item['wltp-consumption-power-combined-weighted'])) { update_post_meta($post_id, 'wltp-consumption-power-combined-weighted', $item['wltp-consumption-power-combined-weighted']); }
 	// Weighted amount of carbon dioxide emissions in g/km for plugin hybrids
 	if(!empty($item['wltp-co2-emission-combined-weighted'])) { update_post_meta($post_id, 'wltp-co2-emission-combined-weighted', $item['wltp-co2-emission-combined-weighted']); }
-
 	update_post_meta($post_id, 'is_finished', '1');
-
 	return $post_id;
 }
-
 function updateTemporaryFields($post_id, $metaValues)
 {
-
 	// Available from: 07.01.2019 or Sofort
 	if (!empty($metavalues[available_from]) && $metavalues[available_from] != "Sofort") {
 		$availableFrom = new DateTime($metavalues[available_from]);
@@ -1009,9 +860,7 @@ function updateTemporaryFields($post_id, $metaValues)
 		}
 	}
 }
-
 do_action( 'kfz_web_meta' );
-
 // function import_post_image($post_id, $image_url, $thumbnail = false)
 // {
 // 	$upload_dir = wp_upload_dir();
@@ -1037,7 +886,6 @@ do_action( 'kfz_web_meta' );
 // 	}
 // 	return $attach_data;
 // }
-
 function import_post_image($post_id, $image_url, $thumbnail = false)
 {
     $re = '/\[0]\s\=\>\s/m';
@@ -1074,7 +922,6 @@ function import_post_image($post_id, $image_url, $thumbnail = false)
     }
     return $attach_data;
 }
-
 /**
  * Deletes all posts from 'fahrzeuge'.
  */
@@ -1094,7 +941,6 @@ function mob_deleteAllPosts()
 		wp_delete_post($post->ID, true);
 	}
 }
-
 /**
  *
  *
@@ -1111,7 +957,6 @@ function mob_deleteAllPosts()
  *
  *
  */
-
 function mob_delete_attachment($post_id)
 {
 	$args = array(
@@ -1128,16 +973,12 @@ function mob_delete_attachment($post_id)
 		}
 	}
 }
-
 // On deactivation, remove all functions from the scheduled action hook. // ? --bth 2014-11-11
-
 register_deactivation_hook(__FILE__, 'mob_deactivation');
-
 function mob_deactivation()
 {
 	wp_clear_scheduled_hook('mob_periodic_event_hook');
 }
-
 function more_fields($resetIndex = false)
 { // Name? --bth 20
 	static $attachments, $index = 0;
@@ -1146,7 +987,6 @@ function more_fields($resetIndex = false)
 		$index = 0;
 		return;
 	}
-
 	$uploadDir = wp_upload_dir();
 	$attachURL = $uploadDir['baseurl'];
 	$subDir = $uploadDir['subdir'];
@@ -1161,7 +1001,6 @@ function more_fields($resetIndex = false)
 		);
 		$attachments = get_posts($args);
 	}
-
 	if (isset($attachments[$index])) {
 		$metaData = wp_get_attachment_metadata($attachments[$index]->ID);
 		$index++;
@@ -1178,18 +1017,13 @@ function more_fields($resetIndex = false)
 		return false;
 	}
 }
-
 /**
  * Loads the admin settings page and handlers used with it.
  */
 /*
-
 * Find out why license is checked here. --bth 2014-11-11
-
 */
-
 // load admin settings page and handlers used with it
-
 // global $wp_version;
 // $license = trim(get_option('edd_sample_license_key'));
 // $api_params = array(
@@ -1197,2131 +1031,1034 @@ function more_fields($resetIndex = false)
 // 	'license' => $license,
 // 	'item_name' => urlencode(KFZ_WEB_ITEM_NAME)
 // );
-
 // Call the custom API.
-
-
-
 //
 // $response = wp_remote_get(add_query_arg($api_params, KFZ_WEB_STORE) , array(
 // 	'timeout' => 15,
 // 	'sslverify' => false
 // ));
-
-
-
 // if (is_wp_error($response)) return false;
-
 // $license_data = json_decode(wp_remote_retrieve_body($response));
-
 include_once dirname(__FILE__) . '/admin.php';
-
 include_once dirname(__FILE__) . '/license.php';
-
-
 // if ($license_data->license == 'valid') {
-
 // 	include_once dirname(__FILE__) . '/license.php';
-
 // 	// include_once dirname(__FILE__) . '/widget.php';
-
 // 	// this license is still valid
-
 // }
 // else {
 // 	include_once dirname(__FILE__) . '/license.php';
 // 	// this license is no longer valid
 // }
 /*
-
-
-
 * ??? --bth 2014-11-11
-
-
-
 */
-
-
-
 // function start_el(&$output, $category, $depth, $args)
-
 // {
-
 // 	$pad = str_repeat(' ', $depth * 3);
-
 // 	$cat_name = apply_filters('list_cats', $category->name, $category);
-
 // 	$output.= "\t<option class=\"level-$depth\" value=\"" . $category->slug . "\"";
-
 // 	if ($category->term_id == $args['selected']) $output.= ' selected="selected"';
-
 // 	$output.= '>';
-
 // 	$output.= $pad . $cat_name;
-
 // 	if ($args['show_count']) $output.= '  (' . $category->count . ')';
-
 // 	if ($args['show_last_update']) {
-
 // 		$format = 'Y-m-d';
-
 // 		$output.= '  ' . gmdate($format, $category->last_update_timestamp);
-
 // 	}
-
-
-
 // 	$output.= "</option>\n";
-
 // }
-
-
-
 /*
-
-
-
 * In order to list taxonomies.
-
-
-
 */
-
-
-
 // Get taxonomies terms links.
-
-
-
 // function custom_taxonomies_terms_links()
-
 // {
-
-
-
 // 	// get post by post id
-
-
-
 // 	$post = get_post($post->ID);
-
-
-
 // 	// get post type by post
-
-
-
 // 	$post_type = $post->post_type;
-
-
-
 // 	// get post type taxonomies
-
-
-
 // 	$taxonomies = get_object_taxonomies($post_type, 'fahrzeuge');
-
 // 	$out = array();
-
 // 	foreach($taxonomies as $taxonomy_slug => $taxonomy) {
-
-
-
 // 		// get the terms related to post
-
-
-
 // 		$terms = get_the_terms($post->ID, $taxonomy_slug);
-
 // 		if (!empty($terms)) {
-
 // 			$out[] = "<div class='mobilede-taxlist'><p>" . $taxonomy->label . ":&nbsp</p>\n";
-
 // 			foreach($terms as $term) {
-
 // 				$out[] = '  <a href="' . get_term_link($term->slug, $taxonomy_slug) . '">' . $term->name . "</a><br />\n";
-
 // 			}
-
-
-
 // 			$out[] = "</div>\n";
-
 // 		}
-
 // 	}
-
-
-
 // 	return implode('', $out);
-
 // }
-
-
-
 // include CPT in query
-
-
-
 add_filter('pre_get_posts', 'query_post_type');
-
-
-
 function query_post_type($query)
-
 {
-
 	if (is_category() || is_tag()) {
-
 		$post_type = get_query_var('fahrzeuge');
-
 		if ($post_type) $post_type = $post_type;
-
 		else $post_type = array(
-
 			'post',
-
 			'fahrzeuge',
-
 			'nav_menu_item'
-
 		);
-
 		$query->set('post_type', $post_type);
-
 		return $query;
-
 	}
-
 }
-
-
-
 function mob_search_result_init()
-
 {
-
 	global $mob_data;
-
-
-
 	// create custom type for search result
-
-
-
 	$posts_labels = array(
-
 		'name' => _x('Fahrzeuge', 'post type general name') ,
-
 		'singular_name' => _x('Fahrzeuge', 'post type singular name') ,
-
 		'add_new' => _x('Neues Fahrzeug', 'vehicles') ,
-
 		'add_new_item' => __('Neues Fahrzeug hinzufügen') ,
-
 		'edit_item' => __('Fahrzeuge bearbeiten') ,
-
 		'new_item' => __('Neues Fahrzeug') ,
-
 		'view_item' => __('Fahrzeugdetails ansehen') ,
-
 		'search_items' => __('Fahrzeuge durchsuchen') ,
-
 		'not_found' => __('Kein Fahrzeug gefunden') ,
-
 		'not_found_in_trash' => __('Kein Fahrzeug im Papierkorb gefunden') ,
-
 		'_builtin' => false,
-
 		'parent_item_colon' => '',
-
 		'menu_name' => 'Fahrzeuge'
-
 	);
-
-
-
 	$posts_args = array(
-
 		'labels' => $posts_labels,
-
 		'public' => true,
-
 		'publicly_queryable' => true,
-
 		'exclude_from_search' => false,
-
 		'show_ui' => true,
-
 		'show_in_menu' => true,
-
 		'query_var' => true,
-
 		'rewrite' => array(
-
 			'slug' => $mob_data['customType'],
-
 			'with_front' => true
-
 		) ,
-
 		'capability_type' => 'post',
-
 		'has_archive' => true,
-
 		'hierarchical' => true,
-
 		'menu_position' => 8,
-
 		'menu_icon' => 'data:image/svg+xml;base64,PHN2ZyBpZD0iRWJlbmVfMSIgZGF0YS1uYW1lPSJFYmVuZSAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxOCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7ZmlsbC1vcGFjaXR5OjAuODU7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5aZWljaGVuZmzDpGNoZSAxPC90aXRsZT48ZyBpZD0ibGF5ZXIxIj48cGF0aCBpZD0icGF0aDkzNDciIGNsYXNzPSJjbHMtMSIgZD0iTTUuNDcsMi4zMUExLjY4LDEuNjgsMCwwLDAsMy43MiwzLjM5TDIuMzEsNi45NEExLjg3LDEuODcsMCwwLDAsLjgxLDguNnY0LjY2SDIuMTd2MS41N2MtLjA3LDEuNDksMi4zNiwxLjU1LDIuNDIsMGwwLTEuNTRoOC43OGwwLDEuNTRjLjA1LDEuNTcsMi40OCwxLjUxLDIuNDIsMFYxMy4yNWgxLjM1VjguNmExLjg3LDEuODcsMCwwLDAtMS41LTEuNjVMMTQuMjgsMy4zOWExLjY4LDEuNjgsMCwwLDAtMS43Ni0xLjA3Wm0uMTYsMS4yM2guMTlsNi4zNywwYy41OCwwLC44MywwLDEuMDguNTZsMSwyLjc2SDMuNzJsMS0yLjY4YS44LjgsMCwwLDEsLjkxLS42NFpNMy40Miw4LjI2QTEuMTUsMS4xNSwwLDEsMSwyLjI3LDkuNDEsMS4xNSwxLjE1LDAsMCwxLDMuNDIsOC4yNlptMTEuMjMsMEExLjE1LDEuMTUsMCwxLDEsMTMuNSw5LjQxLDEuMTUsMS4xNSwwLDAsMSwxNC42NSw4LjI2Wm0tLjc5LTEuNTJaIi8+PC9nPjwvc3ZnPg==',
-
 		'supports' => array(
-
 			'title',
-
 			'editor',
-
 			'thumbnail',
-
 			'excerpt'
-
 		) ,
-
 		'taxonomies' => array(
-
 			'category'
-
 			// 'post_tag',
-
 			// 'marke',
-
 			// 'modell',
-
 			// 'preis'
-
 		)
-
 	);
-
 	register_post_type($mob_data['customType'], $posts_args);
-
 }
-
-
-
 // ********************************************************************************************************
-
 // ********************************************************************************************************
-
 // **************************** Register custom taxonomy for custom post type *****************************
-
 // Register Custom Taxonomy
-
-
-
 function vehicle_taxonomy()
-
 {
-
 	/**
-
 	 * ****************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** MARKE *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Marke', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Marke', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Marken', 'text_domain') ,
-
 		'all_items' => __('Alle Marken', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neue Marke', 'text_domain') ,
-
 		'add_new_item' => __('Neue Marke hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Marke bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Marke aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Marken durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Marken durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Marken hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Marken zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('marke', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	/**
-
 	 * ****************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** MODELL *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Modell', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Modell', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Modell', 'text_domain') ,
-
 		'all_items' => __('Alle Modelle', 'text_domain') ,
-
 		'parent_item' => __('Parent Marke', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Marke:', 'text_domain') ,
-
 		'new_item_name' => __('Neues Modell', 'text_domain') ,
-
 		'add_new_item' => __('Neues Modell hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Modell bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Modell aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Modelle durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Modelle durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Modell hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Modelle zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('modell', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	/**
-
 	 * ****************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** ZUSTAND *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Zustand', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Zustand', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Zustand', 'text_domain') ,
-
 		'all_items' => __('Alle Zustände', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Zustand', 'text_domain') ,
-
 		'add_new_item' => __('Neuen zustand hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Zustand bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Zustand aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Zustände durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Zustände durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Zustand hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Zustände zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('zustand', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	/**
-
 	 * ****************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** PREIS *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Preis', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Preis', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Preis', 'text_domain') ,
-
 		'all_items' => __('Alle Preise', 'text_domain') ,
-
 		'parent_item' => __('Parent Modell', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Modell:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Preis', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Preis hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Preis bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Preis aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Preise durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Preise durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Preis hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Preise zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('preis', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	/**
-
 	 * ****************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** KLASSE *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Klasse', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Klasse', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Klasse', 'text_domain') ,
-
 		'all_items' => __('Alle Klassen', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neue Klasse', 'text_domain') ,
-
 		'add_new_item' => __('Neue Klasse hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Klasse bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Klasse aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Klassen durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Klassen durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Klasse hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Klassen zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('klasse', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	/**
-
 	 * **********************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** KRAFTSTOFF *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Kraftstoffart', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Kraftstoffart', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Kraftstoffart', 'text_domain') ,
-
 		'all_items' => __('Alle Kraftstoffarten', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neue Kraftstoffart', 'text_domain') ,
-
 		'add_new_item' => __('Neue Kraftstoffart hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Kraftstoffart bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Kraftstoffart aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Kraftstoffarten durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Kraftstoffarten durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Kraftstoffart hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Kraftstoffarten zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('kraftstoffart', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	/**
-
 	 * ****************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** GETRIEBE *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Getriebe', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Getriebe', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Getriebe', 'text_domain') ,
-
 		'all_items' => __('Alle Getriebe', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neues Getriebe', 'text_domain') ,
-
 		'add_new_item' => __('Neues Getriebe hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Getriebe bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Getriebe aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Getriebe durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Getriebe durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Getriebe hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Getriebe zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('getriebe', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	/**
-
 	 * ****************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** ERSTZULASSUNG *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Erstzulassung', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Erstzulassung', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Erstzulassung', 'text_domain') ,
-
 		'all_items' => __('Alle Erstzulassungen', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neue Erstzulassung', 'text_domain') ,
-
 		'add_new_item' => __('Neue Erstzulassung hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Erstzulassung bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Erstzulassung aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Erstzulassungen durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Erstzulassung durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Erstzulassung hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Erstzulassungen zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('erstzulassung', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	/**
-
 	 * ****************************************************************
-
 	 *
-
 	 *
-
 	 *
-
 	 * *************************** Standort *******************************
-
 	 */
-
 	$labels = array(
-
 		'name' => _x('Standort', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Standort', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Standort', 'text_domain') ,
-
 		'all_items' => __('Alle Standorte', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Standort', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Standort hinzufÃ¼gen', 'text_domain') ,
-
 		'edit_item' => __('Standort bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Standort aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Standort durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Standorte durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Standorte hinzufÃ¼gen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am hÃ¤ufigsten genutzte Standorte zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('standort', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Beschreibung', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Beschreibung', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Beschreibung', 'text_domain') ,
-
 		'all_items' => __('Alle Beschreibungen', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neue Beschreibung', 'text_domain') ,
-
 		'add_new_item' => __('Neue Beschreibung hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Beschreibung bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Beschreibung aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Beschreibungen durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Beschreibungen durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Beschreibungen hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Beschreibungen zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('beschreibung', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Schaden', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Schaden', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Schaden', 'text_domain') ,
-
 		'all_items' => __('Alle Schaden', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Schaden', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Schaden hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Schaden bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Schaden aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Schaden durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Schaden durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Schaden hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Schaden zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('schaden', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Emissionsklasse', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Emissionsklasse', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Emissionsklasse', 'text_domain') ,
-
 		'all_items' => __('Alle Emissionsklasse', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Emissionsklasse', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Emissionsklasse hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Emissionsklasse bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Emissionsklasse aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Emissionsklasse durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Emissionsklasse durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Emissionsklasse hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Emissionsklasse zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('emissionsklasse', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('CO2 Emission', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('CO2 Emission', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('CO2 Emission', 'text_domain') ,
-
 		'all_items' => __('Alle CO2 Emission', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer CO2 Emission', 'text_domain') ,
-
 		'add_new_item' => __('Neuen CO2 Emission hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('CO2 Emission bearbeiten', 'text_domain') ,
-
 		'update_item' => __('CO2 Emission aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('CO2 Emission durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('CO2 Emission durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('CO2 Emission hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte CO2 Emission zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('co2_emission', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Verbrauch Innerorts', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Verbrauch Innerorts', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Verbrauch Innerorts', 'text_domain') ,
-
 		'all_items' => __('Alle Verbrauch Innerorts', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Verbrauch Innerorts', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Verbrauch Innerorts hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Verbrauch Innerorts bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Verbrauch Innerorts aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Verbrauch Innerorts durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Verbrauch Innerorts durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Verbrauch Innerorts hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Verbrauch Innerorts zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('verbrauch_innerorts', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Verbrauch Ausserorts', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Verbrauch Ausserorts', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Verbrauch Ausserorts', 'text_domain') ,
-
 		'all_items' => __('Alle Verbrauch Ausserorts', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Verbrauch Ausserorts', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Verbrauch Ausserorts hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Verbrauch Ausserorts bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Verbrauch Ausserorts aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Verbrauch Ausserorts durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Verbrauch Ausserorts durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Verbrauch Ausserorts hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Verbrauch Ausserorts zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('verbrauch_ausserorts', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Verbrauch Kombiniert', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Verbrauch Kombiniert', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Verbrauch Kombiniert', 'text_domain') ,
-
 		'all_items' => __('Alle Verbrauch Kombiniert', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Verbrauch Kombiniert', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Verbrauch Kombiniert hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Verbrauch Kombiniert bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Verbrauch Kombiniert aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Verbrauch Kombiniert durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Verbrauch Kombiniert durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Verbrauch Kombiniert hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Verbrauch Kombiniert zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('verbrauch_kombiniert', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Aussenfarbe', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Aussenfarbe', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Aussenfarbe', 'text_domain') ,
-
 		'all_items' => __('Alle Aussenfarbe', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Aussenfarbe', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Aussenfarbe hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Aussenfarbe bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Aussenfarbe aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Aussenfarbe durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Aussenfarbe durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Aussenfarbe hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Aussenfarbe zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('aussenfarbe', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Hubraum', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Hubraum', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Hubraum', 'text_domain') ,
-
 		'all_items' => __('Alle Hubraum', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Hubraum', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Hubraum hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Hubraum bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Hubraum aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Hubraum durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Hubraum durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Hubraum hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Hubraum zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('hubraum', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Nächste HU', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Nächste HU', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Nächste HU', 'text_domain') ,
-
 		'all_items' => __('Alle Nächste HU', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Nächste HU', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Nächste HU hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Nächste HU bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Nächste HU aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Nächste HU durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Nächste HU durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Nächste HU hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Nächste HU zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('naechste_hu', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Ausstattung', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Ausstattung', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Ausstattung', 'text_domain') ,
-
 		'all_items' => __('Alle Ausstattung', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Ausstattung', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Ausstattung hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Ausstattung bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Ausstattung aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Ausstattung durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Ausstattung durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Ausstattung hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Ausstattung zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('ausstattung', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Kilometer', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Kilometer', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Kilometer', 'text_domain') ,
-
 		'all_items' => __('Alle Kilometer', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Kilometer', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Kilometer hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Kilometer bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Kilometer aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Kilometer durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Kilometer durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Kilometer hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Kilometer zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('kilometer', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Kilometer Unformatiert', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Kilometer Unformatiert', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Kilometer Unformatiert', 'text_domain') ,
-
 		'all_items' => __('Alle Kilometer Unformatiert', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Kilometer Unformatiert', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Kilometer Unformatiert hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Kilometer Unformatiert bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Kilometer Unformatiert aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Kilometer Unformatiert durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Kilometer Unformatiert durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Kilometer Unformatiert hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Kilometer Unformatiert zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('kilometer_unformatiert', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Kilometer Dropdown', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Kilometer Dropdown', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Kilometer Dropdown', 'text_domain') ,
-
 		'all_items' => __('Alle Kilometer Dropdown', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Kilometer Dropdown', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Kilometer Dropdown hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Kilometer Dropdown bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Kilometer Dropdown aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Kilometer Dropdown durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Kilometer Dropdown durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Kilometer Dropdown hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Kilometer Dropdown zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('kilometer_dropdown', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Preis Unformatiert', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Preis Unformatiert', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Preis Unformatiert', 'text_domain') ,
-
 		'all_items' => __('Alle Preis Unformatiert', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Preis Unformatiert', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Preis Unformatiert hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Preis Unformatiert bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Preis Unformatiert aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Preis Unformatiert durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Preis Unformatiert durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Preis Unformatiert hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Preis Unformatiert zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('preis_unformatiert', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Ladekapazität', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Ladekapazität', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Ladekapazität', 'text_domain') ,
-
 		'all_items' => __('Alle Ladekapazität', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Ladekapazität', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Ladekapazität hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Ladekapazität bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Ladekapazität aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Ladekapazität durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Ladekapazität durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Ladekapazität hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Ladekapazität zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('ladekapazitaet', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Baujahr', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Baujahr', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Baujahr', 'text_domain') ,
-
 		'all_items' => __('Alle Baujahr', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Baujahr', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Baujahr hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Baujahr bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Baujahr aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Baujahr durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Baujahr durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Baujahr hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Baujahr zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => true,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('baujahr', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 	$labels = array(
-
 		'name' => _x('Anzahl Schlafplätze', 'Taxonomy General Name', 'text_domain') ,
-
 		'singular_name' => _x('Anzahl Schlafplätze', 'Taxonomy Singular Name', 'text_domain') ,
-
 		'menu_name' => __('Anzahl Schlafplätze', 'text_domain') ,
-
 		'all_items' => __('Alle Anzahl Schlafplätze', 'text_domain') ,
-
 		'parent_item' => __('Parent Item', 'text_domain') ,
-
 		'parent_item_colon' => __('Parent Item:', 'text_domain') ,
-
 		'new_item_name' => __('Neuer Anzahl Schlafplätze', 'text_domain') ,
-
 		'add_new_item' => __('Neuen Anzahl Schlafplätze hinzufügen', 'text_domain') ,
-
 		'edit_item' => __('Anzahl Schlafplätze bearbeiten', 'text_domain') ,
-
 		'update_item' => __('Anzahl Schlafplätze aktualisieren', 'text_domain') ,
-
 		'separate_items_with_commas' => __('Anzahl Schlafplätze durch Kommas trennen', 'text_domain') ,
-
 		'search_items' => __('Anzahl Schlafplätze durchsuchen', 'text_domain') ,
-
 		'add_or_remove_items' => __('Anzahl Schlafplätze hinzufügen/entfernen', 'text_domain') ,
-
 		'choose_from_most_used' => __('Am häufigsten genutzte Anzahl Schlafplätze zeigen', 'text_domain') ,
-
 		'not_found' => __('Nichts gefunden', 'text_domain')
-
 	);
-
 	$args = array(
-
 		'labels' => $labels,
-
 		'hierarchical' => true,
-
 		'public' => true,
-
 		'show_ui' => false,
-
 		'show_admin_column' => false,
-
 		'show_in_nav_menus' => false,
-
 		'show_tagcloud' => false
-
 	);
-
 	register_taxonomy('baujahr', array(
-
 		'fahrzeuge'
-
 	) , $args);
-
 }
-
-
-
 function mob_clean(){
-
 	global $mob_data;
-
-
-
 	$args = array(
-
 			'post_type' => $mob_data['customType'],
-
 			'posts_per_page' => -1,
-
 		);
-
 		$query = new WP_Query($args);
-
-
-
 		$adKeys = array();
-
 		$postIds = array();
-
 		$postIdsToDelete = array();
-
 		log_me($adKeys);
-
-
-
 		while ($query->have_posts()) {
-
 			$query->the_post();
-
 			$meta_values = get_post_meta( get_the_ID() );
-
 			if(!isset($meta_values['is_finished']) && !isset($meta_values['is_finished'][0])){
-
 					log_me("MISSING IS_FINISHED STUB DETECTED! " . get_the_ID());
-
 					$postIdsToDelete[] = get_the_ID();
-
 					log_me($postIdsToDelete);
-
 			}
-
 			if(!isset($meta_values['ad_key']) && !isset($meta_values['ad_key'][0])){
-
 					log_me("MISSING AD_KEY STUB DETECTED! " . get_the_ID());
-
 					$postIdsToDelete[] = get_the_ID();
-
 					log_me($postIdsToDelete);
-
 			}
-
 			else {
-
 					$adKey = $meta_values['ad_key'][0];
-
-
-
 					if (in_array($adKey, $adKeys)){ // Compare to predecessors
-
 						log_me("DUPLICATE DETECTED! " . $adKey);
-
 						$postIdsToDelete[] = get_the_ID(); // Push post_id
-
 					}
-
 					else {
-
 						$adKeys[] = $adKey; // Log ad_key
-
 						$postIds[] = get_the_ID(); // Log post_id (same index)
-
 					}
-
 			}
-
 		}
-
 		if(!empty($postIdsToDelete)){
-
 			removePostsbyIds($postIdsToDelete);
-
 			log_me(count($postIdsToDelete) . " ERRONEOUS POSTS DELETED.");
-
-
-
 		$query->reset();
-
-
-
 }
-
 		log_me('adKeys');
-
 		log_me($adKeys);
-
 		log_me('dieIDs');
-
 		log_me($postIdsToDelete);
-
 		// do_action('kfz_web_after_import');
-
 }
