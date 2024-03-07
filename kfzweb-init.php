@@ -7,6 +7,8 @@ Version: 2.0
 Author: neusued GmbH
 Author URI: www.neusued.de 
 License: All rights reserved
+Text-Domain: kfz-web
+Domain Path: /languages
 */
 
 define( 'KFZ_WEB_STORE', 'https://www.mobilede-fahrzeugintegration.de/' );

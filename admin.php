@@ -56,7 +56,7 @@ class mob_Setting{
                 do_settings_sections( 'searchde-setting-admin' );
                 submit_button(); 
             ?><input class="button-primary" type="button"
-			id="importData" value="Import vehicles" /> <input class="button-primary" type="button" id="deletePosts" value="Delete vehicles" />
+			id="importData" value="<?php esc_attr_e('Import vehicles', 'kfz-web') ?>" /> <input class="button-primary" type="button" id="deletePosts" value="Delete vehicles" />
 	</form>
 	
 		<?php
@@ -65,8 +65,7 @@ class mob_Setting{
 		if( $status == false && $status !== 'valid' ) { 
 			echo'
 			<div class="notice notice-error"><p>
-			The plugin is not activated. If you have problems with activation, check whether the plugin has already been activated on another site. <b>Deactivate</b> the plugin on the previous domain and then <b>activate</b> it on this page.</p><p>If you do not have access to your previous domain, write to us a <a target="_blank" href="http://support.neusued.de/">Ticket</a> at http://support.neusued.de/
-
+			' . __('The plugin is not activated. If you have problems with activation, check whether the plugin has already been activated on another site. <b>Deactivate</b> the plugin on the previous domain and then <b>activate</b> it on this page.</p><p>If you do not have access to your previous domain, write to us a <a target="_blank" href="http://support.neusued.de/">Ticket</a> at http://support.neusued.de/', 'kfz-web') . '
 			</p></div>
 			';
 		}
@@ -81,7 +80,7 @@ class mob_Setting{
 			if (version_compare(PHP_VERSION, '5.4.0') <= 0) {
 				echo '
 				<div class="notice notice-error"><p>
-				kgz-web needs at leat PHP-Version: ' . PHP_VERSION . "\n" . '</p></div>';
+				kfz-web needs at leat PHP-Version: ' . PHP_VERSION . "\n" . '</p></div>';
 			}
 			else {
 				echo '
@@ -305,8 +304,9 @@ class mob_Setting{
 			);
 			?>
 			<input class="button-primary" type="button" id="addAccount"
-				value="+ add account" />
+				value="<?php esc_attr_e('+ add account', 'kfz-web') ?>" />
 			<?php
+
 		}
 
 
@@ -342,8 +342,6 @@ class mob_Setting{
 				'</select>'
 			);
 		}
-		
-
 		public function mob_download_interval_callback()
 		{
 			echo '<select class="settingsSelect" name="MobileDE_option[mob_download_interval]">'.
@@ -352,11 +350,10 @@ class mob_Setting{
 				'</select>'
 			);
 		}
-
 		public function mob_image_callback()
 		{
 			echo '
-			<sub>Leave images on mobile.de or import them and generate thumbnails?</sub><br><br>
+			<sub>' . __('Leave images on mobile.de or import them and generate thumbnails?', 'kfz-web') . '</sub><br><br>
 			<select class="settingsSelect" name="MobileDE_option[mob_image_option]">'.
 				mob_htmlToOptions($this->mob_data['mob_images'], false,
 				isset( $this->options['mob_image_option'] ) ? esc_attr( $this->options['mob_image_option']) : ''.
@@ -384,7 +381,7 @@ class mob_Setting{
 		public function mob_slider_callback()
 		{
 			echo '
-			<sub><a href="http://kenwheeler.github.io/slick/" target=_blank">Slickslider</a> for the vehicle pictures to load?</sub><br><br>
+			<sub><a href="http://kenwheeler.github.io/slick/" target=_blank">Slickslider</a> ' . __('for the vehicle pictures to load?', 'kfz-web') . '</sub><br><br>
 			<select class="settingsSelect" name="MobileDE_option[mob_slider_option]">'.
 				mob_htmlToOptions($this->mob_data['mob_slider'], false,
 				isset( $this->options['mob_slider_option'] ) ? esc_attr( $this->options['mob_slider_option']) : ''.
@@ -396,7 +393,8 @@ class mob_Setting{
 		public function mob_cat_tax_callback()
 		{
 			echo '
-			<sub>Should the standard categories be filled with vehicle data?<br><br>
+			<sub>' . __('Should the standard categories be filled with vehicle data?', 'kfz-web') . '</sub>
+			<br><br>
 			<select class="settingsSelect" name="MobileDE_option[mob_cat_tax_option]">'.
 				mob_htmlToOptions($this->mob_data['use_cat_tax'], false,
 				isset( $this->options['mob_cat_tax_option'] ) ? esc_attr( $this->options['mob_cat_tax_option']) : ''.

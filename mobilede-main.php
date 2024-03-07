@@ -692,29 +692,29 @@ function writeIntoWp($item)
 		update_post_meta($post_id, 'carousel', '1');
 	}
 	// update_post_meta($post_id, 'ad_gallery', $item['images']);
-$options = get_option('MobileDE_option');
-if (empty($options['mob_image_option'])) {
-	$options['mob_image_option'] = 'web';
-}
-if ($options['mob_image_option'] == 'web') {
-	foreach($item['images'] as $image) {
-		update_post_meta($post_id, 'ad_gallery', (string)$image);
+	$options = get_option('MobileDE_option');
+	if (empty($options['mob_image_option'])) {
+		$options['mob_image_option'] = 'web';
 	}
-	if (substr($item['images'][0], -6) == '27.JPG') {
-		$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
-		if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
-			$i = '';
-			$metaData = import_post_image($post_id, $temp, $i == 0);
-			// metaData = update_post_meta($post_id, $temp, $i);
+	if ($options['mob_image_option'] == 'web') {
+		foreach($item['images'] as $image) {
+			update_post_meta($post_id, 'ad_gallery', (string)$image);
+		}
+		if (substr($item['images'][0], -6) == '27.JPG') {
+			$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
+			if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
+				$i = '';
+				$metaData = import_post_image($post_id, $temp, $i == 0);
+				// metaData = update_post_meta($post_id, $temp, $i);
+			}
+			else {
+				$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
+			}
 		}
 		else {
 			$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
 		}
-	}
-	else {
-		$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
-	}
-} else {
+	} else {
 		foreach($item['images'] as $i => $image) {
 		/***
 		* Import bigger image.

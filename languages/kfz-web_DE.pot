@@ -1,0 +1,1542 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 2\n"
+"Report-Msgid-Bugs-To: Florian Hüttig <florian@neusused.de>\n"
+"POT-Creation-Date: 2024-03-07 22:43+0100\n"
+"PO-Revision-Date: 2024-03-07 22:50+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: <>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Eazy Po 1.0.0.0\n"
+
+#: admin.php:51
+msgid "MobileDE Settings"
+msgstr ""
+
+#: admin.php:59
+msgid "Import vehicles"
+msgstr "Fahrzeugimport starten"
+
+#: admin.php:68
+msgid ""
+"The plugin is not activated. If you have problems with activation, check "
+"whether the plugin has already been activated on another site. "
+"<b>Deactivate</b> the plugin on the previous domain and then <b>activate</b> "
+"it on this page.</p><p>If you do not have access to your previous domain, "
+"write to us a <a target=\"_blank\" href=\"http://support.neusued.de/"
+"\">Ticket</a> at http://support.neusued.de/"
+msgstr ""
+
+#: admin.php:307
+msgid "+ add account"
+msgstr "+ Account hinzufügen"
+
+#: admin.php:356
+msgid "Leave images on mobile.de or import them and generate thumbnails?"
+msgstr "Bilder von mobile.de laden - Thumbnaill wird importiert"
+
+#: admin.php:384
+msgid "for the vehicle pictures to load?"
+msgstr "für die Fahrzeugbilder laden?"
+
+#: admin.php:396
+msgid "Should the standard categories be filled with vehicle data?"
+msgstr ""
+
+#: license.php:15
+msgid "kfz-web Plugin Lizenz Einstellungen"
+msgstr ""
+
+#: license.php:24
+msgid "Lizenzschlüssel"
+msgstr ""
+
+#: license.php:28
+msgid "Lizenzschlüssel Eintragen"
+msgstr ""
+
+#: license.php:34 license.php:42
+msgid "Lizenz Aktivieren"
+msgstr ""
+
+#: license.php:39
+msgid "Lizenz Deaktivieren"
+msgstr ""
+
+#: mobilede-main.php:99
+msgid "Each 3 Days"
+msgstr ""
+
+#: mobilede-main.php:103
+msgid "Weekly"
+msgstr ""
+
+#: mobilede-main.php:107
+msgid "Täglich"
+msgstr ""
+
+#: mobilede-main.php:111
+msgid "Stündlich"
+msgstr ""
+
+#: mobilede-main.php:115
+msgid "Alle 5 Minuten"
+msgstr ""
+
+#: mobilede-main.php:161
+msgid "Mit ihrem derzeitigen Abonnement können Sie maximal "
+msgstr ""
+
+#: mobilede-main.php:1118
+msgctxt "post type general name"
+msgid "Fahrzeuge"
+msgstr ""
+
+#: mobilede-main.php:1119
+msgctxt "post type singular name"
+msgid "Fahrzeuge"
+msgstr ""
+
+#: mobilede-main.php:1120
+msgctxt "vehicles"
+msgid "Neues Fahrzeug"
+msgstr ""
+
+#: mobilede-main.php:1121
+msgid "Neues Fahrzeug hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1122
+msgid "Fahrzeuge bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1123
+msgid "Neues Fahrzeug"
+msgstr ""
+
+#: mobilede-main.php:1124
+msgid "Fahrzeugdetails ansehen"
+msgstr ""
+
+#: mobilede-main.php:1125
+msgid "Fahrzeuge durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1126
+msgid "Kein Fahrzeug gefunden"
+msgstr ""
+
+#: mobilede-main.php:1127
+msgid "Kein Fahrzeug im Papierkorb gefunden"
+msgstr ""
+
+#: mobilede-main.php:1179
+msgctxt "Taxonomy General Name"
+msgid "Marke"
+msgstr ""
+
+#: mobilede-main.php:1180
+msgctxt "Taxonomy Singular Name"
+msgid "Marke"
+msgstr ""
+
+#: mobilede-main.php:1181
+msgid "Marken"
+msgstr ""
+
+#: mobilede-main.php:1182
+msgid "Alle Marken"
+msgstr ""
+
+#: mobilede-main.php:1183 mobilede-main.php:1255 mobilede-main.php:1327
+#: mobilede-main.php:1363 mobilede-main.php:1399 mobilede-main.php:1435
+#: mobilede-main.php:1471 mobilede-main.php:1500 mobilede-main.php:1529
+#: mobilede-main.php:1558 mobilede-main.php:1587 mobilede-main.php:1616
+#: mobilede-main.php:1645 mobilede-main.php:1674 mobilede-main.php:1703
+#: mobilede-main.php:1732 mobilede-main.php:1761 mobilede-main.php:1790
+#: mobilede-main.php:1819 mobilede-main.php:1848 mobilede-main.php:1877
+#: mobilede-main.php:1906 mobilede-main.php:1935 mobilede-main.php:1964
+#: mobilede-main.php:1993
+msgid "Parent Item"
+msgstr ""
+
+#: mobilede-main.php:1184 mobilede-main.php:1256 mobilede-main.php:1328
+#: mobilede-main.php:1364 mobilede-main.php:1400 mobilede-main.php:1436
+#: mobilede-main.php:1472 mobilede-main.php:1501 mobilede-main.php:1530
+#: mobilede-main.php:1559 mobilede-main.php:1588 mobilede-main.php:1617
+#: mobilede-main.php:1646 mobilede-main.php:1675 mobilede-main.php:1704
+#: mobilede-main.php:1733 mobilede-main.php:1762 mobilede-main.php:1791
+#: mobilede-main.php:1820 mobilede-main.php:1849 mobilede-main.php:1878
+#: mobilede-main.php:1907 mobilede-main.php:1936 mobilede-main.php:1965
+#: mobilede-main.php:1994
+msgid "Parent Item:"
+msgstr ""
+
+#: mobilede-main.php:1185
+msgid "Neue Marke"
+msgstr ""
+
+#: mobilede-main.php:1186
+msgid "Neue Marke hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1187
+msgid "Marke bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1188
+msgid "Marke aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1189
+msgid "Marken durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1190
+msgid "Marken durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1191
+msgid "Marken hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1192
+msgid "Am häufigsten genutzte Marken zeigen"
+msgstr ""
+
+#: mobilede-main.php:1193 mobilede-main.php:1229 mobilede-main.php:1265
+#: mobilede-main.php:1301 mobilede-main.php:1337 mobilede-main.php:1373
+#: mobilede-main.php:1409 mobilede-main.php:1445 mobilede-main.php:1481
+#: mobilede-main.php:1510 mobilede-main.php:1539 mobilede-main.php:1568
+#: mobilede-main.php:1597 mobilede-main.php:1626 mobilede-main.php:1655
+#: mobilede-main.php:1684 mobilede-main.php:1713 mobilede-main.php:1742
+#: mobilede-main.php:1771 mobilede-main.php:1800 mobilede-main.php:1829
+#: mobilede-main.php:1858 mobilede-main.php:1887 mobilede-main.php:1916
+#: mobilede-main.php:1945 mobilede-main.php:1974 mobilede-main.php:2003
+msgid "Nichts gefunden"
+msgstr ""
+
+#: mobilede-main.php:1215
+msgctxt "Taxonomy General Name"
+msgid "Modell"
+msgstr ""
+
+#: mobilede-main.php:1216
+msgctxt "Taxonomy Singular Name"
+msgid "Modell"
+msgstr ""
+
+#: mobilede-main.php:1217
+msgid "Modell"
+msgstr ""
+
+#: mobilede-main.php:1218
+msgid "Alle Modelle"
+msgstr ""
+
+#: mobilede-main.php:1219
+msgid "Parent Marke"
+msgstr ""
+
+#: mobilede-main.php:1220
+msgid "Parent Marke:"
+msgstr ""
+
+#: mobilede-main.php:1221
+msgid "Neues Modell"
+msgstr ""
+
+#: mobilede-main.php:1222
+msgid "Neues Modell hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1223
+msgid "Modell bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1224
+msgid "Modell aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1225
+msgid "Modelle durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1226
+msgid "Modelle durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1227
+msgid "Modell hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1228
+msgid "Am häufigsten genutzte Modelle zeigen"
+msgstr ""
+
+#: mobilede-main.php:1251
+msgctxt "Taxonomy General Name"
+msgid "Zustand"
+msgstr ""
+
+#: mobilede-main.php:1252
+msgctxt "Taxonomy Singular Name"
+msgid "Zustand"
+msgstr ""
+
+#: mobilede-main.php:1253
+msgid "Zustand"
+msgstr ""
+
+#: mobilede-main.php:1254
+msgid "Alle Zustände"
+msgstr ""
+
+#: mobilede-main.php:1257
+msgid "Neuer Zustand"
+msgstr ""
+
+#: mobilede-main.php:1258
+msgid "Neuen zustand hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1259
+msgid "Zustand bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1260
+msgid "Zustand aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1261
+msgid "Zustände durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1262
+msgid "Zustände durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1263
+msgid "Zustand hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1264
+msgid "Am häufigsten genutzte Zustände zeigen"
+msgstr ""
+
+#: mobilede-main.php:1287
+msgctxt "Taxonomy General Name"
+msgid "Preis"
+msgstr ""
+
+#: mobilede-main.php:1288
+msgctxt "Taxonomy Singular Name"
+msgid "Preis"
+msgstr ""
+
+#: mobilede-main.php:1289
+msgid "Preis"
+msgstr ""
+
+#: mobilede-main.php:1290
+msgid "Alle Preise"
+msgstr ""
+
+#: mobilede-main.php:1291
+msgid "Parent Modell"
+msgstr ""
+
+#: mobilede-main.php:1292
+msgid "Parent Modell:"
+msgstr ""
+
+#: mobilede-main.php:1293
+msgid "Neuer Preis"
+msgstr ""
+
+#: mobilede-main.php:1294
+msgid "Neuen Preis hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1295
+msgid "Preis bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1296
+msgid "Preis aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1297
+msgid "Preise durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1298
+msgid "Preise durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1299
+msgid "Preis hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1300
+msgid "Am häufigsten genutzte Preise zeigen"
+msgstr ""
+
+#: mobilede-main.php:1323
+msgctxt "Taxonomy General Name"
+msgid "Klasse"
+msgstr ""
+
+#: mobilede-main.php:1324
+msgctxt "Taxonomy Singular Name"
+msgid "Klasse"
+msgstr ""
+
+#: mobilede-main.php:1325
+msgid "Klasse"
+msgstr ""
+
+#: mobilede-main.php:1326
+msgid "Alle Klassen"
+msgstr ""
+
+#: mobilede-main.php:1329
+msgid "Neue Klasse"
+msgstr ""
+
+#: mobilede-main.php:1330
+msgid "Neue Klasse hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1331
+msgid "Klasse bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1332
+msgid "Klasse aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1333
+msgid "Klassen durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1334
+msgid "Klassen durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1335
+msgid "Klasse hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1336
+msgid "Am häufigsten genutzte Klassen zeigen"
+msgstr ""
+
+#: mobilede-main.php:1359
+msgctxt "Taxonomy General Name"
+msgid "Kraftstoffart"
+msgstr ""
+
+#: mobilede-main.php:1360
+msgctxt "Taxonomy Singular Name"
+msgid "Kraftstoffart"
+msgstr ""
+
+#: mobilede-main.php:1361
+msgid "Kraftstoffart"
+msgstr ""
+
+#: mobilede-main.php:1362
+msgid "Alle Kraftstoffarten"
+msgstr ""
+
+#: mobilede-main.php:1365
+msgid "Neue Kraftstoffart"
+msgstr ""
+
+#: mobilede-main.php:1366
+msgid "Neue Kraftstoffart hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1367
+msgid "Kraftstoffart bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1368
+msgid "Kraftstoffart aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1369
+msgid "Kraftstoffarten durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1370
+msgid "Kraftstoffarten durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1371
+msgid "Kraftstoffart hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1372
+msgid "Am häufigsten genutzte Kraftstoffarten zeigen"
+msgstr ""
+
+#: mobilede-main.php:1395
+msgctxt "Taxonomy General Name"
+msgid "Getriebe"
+msgstr ""
+
+#: mobilede-main.php:1396
+msgctxt "Taxonomy Singular Name"
+msgid "Getriebe"
+msgstr ""
+
+#: mobilede-main.php:1397
+msgid "Getriebe"
+msgstr ""
+
+#: mobilede-main.php:1398
+msgid "Alle Getriebe"
+msgstr ""
+
+#: mobilede-main.php:1401
+msgid "Neues Getriebe"
+msgstr ""
+
+#: mobilede-main.php:1402
+msgid "Neues Getriebe hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1403
+msgid "Getriebe bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1404
+msgid "Getriebe aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1405
+msgid "Getriebe durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1406
+msgid "Getriebe durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1407
+msgid "Getriebe hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1408
+msgid "Am häufigsten genutzte Getriebe zeigen"
+msgstr ""
+
+#: mobilede-main.php:1431
+msgctxt "Taxonomy General Name"
+msgid "Erstzulassung"
+msgstr ""
+
+#: mobilede-main.php:1432
+msgctxt "Taxonomy Singular Name"
+msgid "Erstzulassung"
+msgstr ""
+
+#: mobilede-main.php:1433
+msgid "Erstzulassung"
+msgstr ""
+
+#: mobilede-main.php:1434
+msgid "Alle Erstzulassungen"
+msgstr ""
+
+#: mobilede-main.php:1437
+msgid "Neue Erstzulassung"
+msgstr ""
+
+#: mobilede-main.php:1438
+msgid "Neue Erstzulassung hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1439
+msgid "Erstzulassung bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1440
+msgid "Erstzulassung aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1441
+msgid "Erstzulassungen durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1442
+msgid "Erstzulassung durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1443
+msgid "Erstzulassung hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1444
+msgid "Am häufigsten genutzte Erstzulassungen zeigen"
+msgstr ""
+
+#: mobilede-main.php:1467
+msgctxt "Taxonomy General Name"
+msgid "Standort"
+msgstr ""
+
+#: mobilede-main.php:1468
+msgctxt "Taxonomy Singular Name"
+msgid "Standort"
+msgstr ""
+
+#: mobilede-main.php:1469
+msgid "Standort"
+msgstr ""
+
+#: mobilede-main.php:1470
+msgid "Alle Standorte"
+msgstr ""
+
+#: mobilede-main.php:1473
+msgid "Neuer Standort"
+msgstr ""
+
+#: mobilede-main.php:1474
+msgid "Neuen Standort hinzufÃ¼gen"
+msgstr ""
+
+#: mobilede-main.php:1475
+msgid "Standort bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1476
+msgid "Standort aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1477
+msgid "Standort durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1478
+msgid "Standorte durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1479
+msgid "Standorte hinzufÃ¼gen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1480
+msgid "Am hÃ¤ufigsten genutzte Standorte zeigen"
+msgstr ""
+
+#: mobilede-main.php:1496
+msgctxt "Taxonomy General Name"
+msgid "Beschreibung"
+msgstr ""
+
+#: mobilede-main.php:1497
+msgctxt "Taxonomy Singular Name"
+msgid "Beschreibung"
+msgstr ""
+
+#: mobilede-main.php:1498
+msgid "Beschreibung"
+msgstr ""
+
+#: mobilede-main.php:1499
+msgid "Alle Beschreibungen"
+msgstr ""
+
+#: mobilede-main.php:1502
+msgid "Neue Beschreibung"
+msgstr ""
+
+#: mobilede-main.php:1503
+msgid "Neue Beschreibung hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1504
+msgid "Beschreibung bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1505
+msgid "Beschreibung aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1506
+msgid "Beschreibungen durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1507
+msgid "Beschreibungen durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1508
+msgid "Beschreibungen hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1509
+msgid "Am häufigsten genutzte Beschreibungen zeigen"
+msgstr ""
+
+#: mobilede-main.php:1525
+msgctxt "Taxonomy General Name"
+msgid "Schaden"
+msgstr ""
+
+#: mobilede-main.php:1526
+msgctxt "Taxonomy Singular Name"
+msgid "Schaden"
+msgstr ""
+
+#: mobilede-main.php:1527
+msgid "Schaden"
+msgstr ""
+
+#: mobilede-main.php:1528
+msgid "Alle Schaden"
+msgstr ""
+
+#: mobilede-main.php:1531
+msgid "Neuer Schaden"
+msgstr ""
+
+#: mobilede-main.php:1532
+msgid "Neuen Schaden hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1533
+msgid "Schaden bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1534
+msgid "Schaden aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1535
+msgid "Schaden durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1536
+msgid "Schaden durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1537
+msgid "Schaden hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1538
+msgid "Am häufigsten genutzte Schaden zeigen"
+msgstr ""
+
+#: mobilede-main.php:1554
+msgctxt "Taxonomy General Name"
+msgid "Emissionsklasse"
+msgstr ""
+
+#: mobilede-main.php:1555
+msgctxt "Taxonomy Singular Name"
+msgid "Emissionsklasse"
+msgstr ""
+
+#: mobilede-main.php:1556
+msgid "Emissionsklasse"
+msgstr ""
+
+#: mobilede-main.php:1557
+msgid "Alle Emissionsklasse"
+msgstr ""
+
+#: mobilede-main.php:1560
+msgid "Neuer Emissionsklasse"
+msgstr ""
+
+#: mobilede-main.php:1561
+msgid "Neuen Emissionsklasse hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1562
+msgid "Emissionsklasse bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1563
+msgid "Emissionsklasse aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1564
+msgid "Emissionsklasse durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1565
+msgid "Emissionsklasse durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1566
+msgid "Emissionsklasse hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1567
+msgid "Am häufigsten genutzte Emissionsklasse zeigen"
+msgstr ""
+
+#: mobilede-main.php:1583
+msgctxt "Taxonomy General Name"
+msgid "CO2 Emission"
+msgstr ""
+
+#: mobilede-main.php:1584
+msgctxt "Taxonomy Singular Name"
+msgid "CO2 Emission"
+msgstr ""
+
+#: mobilede-main.php:1585
+msgid "CO2 Emission"
+msgstr ""
+
+#: mobilede-main.php:1586
+msgid "Alle CO2 Emission"
+msgstr ""
+
+#: mobilede-main.php:1589
+msgid "Neuer CO2 Emission"
+msgstr ""
+
+#: mobilede-main.php:1590
+msgid "Neuen CO2 Emission hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1591
+msgid "CO2 Emission bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1592
+msgid "CO2 Emission aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1593
+msgid "CO2 Emission durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1594
+msgid "CO2 Emission durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1595
+msgid "CO2 Emission hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1596
+msgid "Am häufigsten genutzte CO2 Emission zeigen"
+msgstr ""
+
+#: mobilede-main.php:1612
+msgctxt "Taxonomy General Name"
+msgid "Verbrauch Innerorts"
+msgstr ""
+
+#: mobilede-main.php:1613
+msgctxt "Taxonomy Singular Name"
+msgid "Verbrauch Innerorts"
+msgstr ""
+
+#: mobilede-main.php:1614
+msgid "Verbrauch Innerorts"
+msgstr ""
+
+#: mobilede-main.php:1615
+msgid "Alle Verbrauch Innerorts"
+msgstr ""
+
+#: mobilede-main.php:1618
+msgid "Neuer Verbrauch Innerorts"
+msgstr ""
+
+#: mobilede-main.php:1619
+msgid "Neuen Verbrauch Innerorts hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1620
+msgid "Verbrauch Innerorts bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1621
+msgid "Verbrauch Innerorts aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1622
+msgid "Verbrauch Innerorts durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1623
+msgid "Verbrauch Innerorts durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1624
+msgid "Verbrauch Innerorts hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1625
+msgid "Am häufigsten genutzte Verbrauch Innerorts zeigen"
+msgstr ""
+
+#: mobilede-main.php:1641
+msgctxt "Taxonomy General Name"
+msgid "Verbrauch Ausserorts"
+msgstr ""
+
+#: mobilede-main.php:1642
+msgctxt "Taxonomy Singular Name"
+msgid "Verbrauch Ausserorts"
+msgstr ""
+
+#: mobilede-main.php:1643
+msgid "Verbrauch Ausserorts"
+msgstr ""
+
+#: mobilede-main.php:1644
+msgid "Alle Verbrauch Ausserorts"
+msgstr ""
+
+#: mobilede-main.php:1647
+msgid "Neuer Verbrauch Ausserorts"
+msgstr ""
+
+#: mobilede-main.php:1648
+msgid "Neuen Verbrauch Ausserorts hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1649
+msgid "Verbrauch Ausserorts bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1650
+msgid "Verbrauch Ausserorts aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1651
+msgid "Verbrauch Ausserorts durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1652
+msgid "Verbrauch Ausserorts durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1653
+msgid "Verbrauch Ausserorts hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1654
+msgid "Am häufigsten genutzte Verbrauch Ausserorts zeigen"
+msgstr ""
+
+#: mobilede-main.php:1670
+msgctxt "Taxonomy General Name"
+msgid "Verbrauch Kombiniert"
+msgstr ""
+
+#: mobilede-main.php:1671
+msgctxt "Taxonomy Singular Name"
+msgid "Verbrauch Kombiniert"
+msgstr ""
+
+#: mobilede-main.php:1672
+msgid "Verbrauch Kombiniert"
+msgstr ""
+
+#: mobilede-main.php:1673
+msgid "Alle Verbrauch Kombiniert"
+msgstr ""
+
+#: mobilede-main.php:1676
+msgid "Neuer Verbrauch Kombiniert"
+msgstr ""
+
+#: mobilede-main.php:1677
+msgid "Neuen Verbrauch Kombiniert hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1678
+msgid "Verbrauch Kombiniert bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1679
+msgid "Verbrauch Kombiniert aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1680
+msgid "Verbrauch Kombiniert durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1681
+msgid "Verbrauch Kombiniert durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1682
+msgid "Verbrauch Kombiniert hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1683
+msgid "Am häufigsten genutzte Verbrauch Kombiniert zeigen"
+msgstr ""
+
+#: mobilede-main.php:1699
+msgctxt "Taxonomy General Name"
+msgid "Aussenfarbe"
+msgstr ""
+
+#: mobilede-main.php:1700
+msgctxt "Taxonomy Singular Name"
+msgid "Aussenfarbe"
+msgstr ""
+
+#: mobilede-main.php:1701
+msgid "Aussenfarbe"
+msgstr ""
+
+#: mobilede-main.php:1702
+msgid "Alle Aussenfarbe"
+msgstr ""
+
+#: mobilede-main.php:1705
+msgid "Neuer Aussenfarbe"
+msgstr ""
+
+#: mobilede-main.php:1706
+msgid "Neuen Aussenfarbe hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1707
+msgid "Aussenfarbe bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1708
+msgid "Aussenfarbe aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1709
+msgid "Aussenfarbe durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1710
+msgid "Aussenfarbe durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1711
+msgid "Aussenfarbe hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1712
+msgid "Am häufigsten genutzte Aussenfarbe zeigen"
+msgstr ""
+
+#: mobilede-main.php:1728
+msgctxt "Taxonomy General Name"
+msgid "Hubraum"
+msgstr ""
+
+#: mobilede-main.php:1729
+msgctxt "Taxonomy Singular Name"
+msgid "Hubraum"
+msgstr ""
+
+#: mobilede-main.php:1730
+msgid "Hubraum"
+msgstr ""
+
+#: mobilede-main.php:1731
+msgid "Alle Hubraum"
+msgstr ""
+
+#: mobilede-main.php:1734
+msgid "Neuer Hubraum"
+msgstr ""
+
+#: mobilede-main.php:1735
+msgid "Neuen Hubraum hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1736
+msgid "Hubraum bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1737
+msgid "Hubraum aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1738
+msgid "Hubraum durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1739
+msgid "Hubraum durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1740
+msgid "Hubraum hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1741
+msgid "Am häufigsten genutzte Hubraum zeigen"
+msgstr ""
+
+#: mobilede-main.php:1757
+msgctxt "Taxonomy General Name"
+msgid "Nächste HU"
+msgstr ""
+
+#: mobilede-main.php:1758
+msgctxt "Taxonomy Singular Name"
+msgid "Nächste HU"
+msgstr ""
+
+#: mobilede-main.php:1759
+msgid "Nächste HU"
+msgstr ""
+
+#: mobilede-main.php:1760
+msgid "Alle Nächste HU"
+msgstr ""
+
+#: mobilede-main.php:1763
+msgid "Neuer Nächste HU"
+msgstr ""
+
+#: mobilede-main.php:1764
+msgid "Neuen Nächste HU hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1765
+msgid "Nächste HU bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1766
+msgid "Nächste HU aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1767
+msgid "Nächste HU durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1768
+msgid "Nächste HU durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1769
+msgid "Nächste HU hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1770
+msgid "Am häufigsten genutzte Nächste HU zeigen"
+msgstr ""
+
+#: mobilede-main.php:1786
+msgctxt "Taxonomy General Name"
+msgid "Ausstattung"
+msgstr ""
+
+#: mobilede-main.php:1787
+msgctxt "Taxonomy Singular Name"
+msgid "Ausstattung"
+msgstr ""
+
+#: mobilede-main.php:1788
+msgid "Ausstattung"
+msgstr ""
+
+#: mobilede-main.php:1789
+msgid "Alle Ausstattung"
+msgstr ""
+
+#: mobilede-main.php:1792
+msgid "Neuer Ausstattung"
+msgstr ""
+
+#: mobilede-main.php:1793
+msgid "Neuen Ausstattung hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1794
+msgid "Ausstattung bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1795
+msgid "Ausstattung aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1796
+msgid "Ausstattung durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1797
+msgid "Ausstattung durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1798
+msgid "Ausstattung hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1799
+msgid "Am häufigsten genutzte Ausstattung zeigen"
+msgstr ""
+
+#: mobilede-main.php:1815
+msgctxt "Taxonomy General Name"
+msgid "Kilometer"
+msgstr ""
+
+#: mobilede-main.php:1816
+msgctxt "Taxonomy Singular Name"
+msgid "Kilometer"
+msgstr ""
+
+#: mobilede-main.php:1817
+msgid "Kilometer"
+msgstr ""
+
+#: mobilede-main.php:1818
+msgid "Alle Kilometer"
+msgstr ""
+
+#: mobilede-main.php:1821
+msgid "Neuer Kilometer"
+msgstr ""
+
+#: mobilede-main.php:1822
+msgid "Neuen Kilometer hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1823
+msgid "Kilometer bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1824
+msgid "Kilometer aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1825
+msgid "Kilometer durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1826
+msgid "Kilometer durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1827
+msgid "Kilometer hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1828
+msgid "Am häufigsten genutzte Kilometer zeigen"
+msgstr ""
+
+#: mobilede-main.php:1844
+msgctxt "Taxonomy General Name"
+msgid "Kilometer Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1845
+msgctxt "Taxonomy Singular Name"
+msgid "Kilometer Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1846
+msgid "Kilometer Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1847
+msgid "Alle Kilometer Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1850
+msgid "Neuer Kilometer Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1851
+msgid "Neuen Kilometer Unformatiert hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1852
+msgid "Kilometer Unformatiert bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1853
+msgid "Kilometer Unformatiert aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1854
+msgid "Kilometer Unformatiert durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1855
+msgid "Kilometer Unformatiert durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1856
+msgid "Kilometer Unformatiert hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1857
+msgid "Am häufigsten genutzte Kilometer Unformatiert zeigen"
+msgstr ""
+
+#: mobilede-main.php:1873
+msgctxt "Taxonomy General Name"
+msgid "Kilometer Dropdown"
+msgstr ""
+
+#: mobilede-main.php:1874
+msgctxt "Taxonomy Singular Name"
+msgid "Kilometer Dropdown"
+msgstr ""
+
+#: mobilede-main.php:1875
+msgid "Kilometer Dropdown"
+msgstr ""
+
+#: mobilede-main.php:1876
+msgid "Alle Kilometer Dropdown"
+msgstr ""
+
+#: mobilede-main.php:1879
+msgid "Neuer Kilometer Dropdown"
+msgstr ""
+
+#: mobilede-main.php:1880
+msgid "Neuen Kilometer Dropdown hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1881
+msgid "Kilometer Dropdown bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1882
+msgid "Kilometer Dropdown aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1883
+msgid "Kilometer Dropdown durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1884
+msgid "Kilometer Dropdown durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1885
+msgid "Kilometer Dropdown hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1886
+msgid "Am häufigsten genutzte Kilometer Dropdown zeigen"
+msgstr ""
+
+#: mobilede-main.php:1902
+msgctxt "Taxonomy General Name"
+msgid "Preis Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1903
+msgctxt "Taxonomy Singular Name"
+msgid "Preis Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1904
+msgid "Preis Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1905
+msgid "Alle Preis Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1908
+msgid "Neuer Preis Unformatiert"
+msgstr ""
+
+#: mobilede-main.php:1909
+msgid "Neuen Preis Unformatiert hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1910
+msgid "Preis Unformatiert bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1911
+msgid "Preis Unformatiert aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1912
+msgid "Preis Unformatiert durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1913
+msgid "Preis Unformatiert durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1914
+msgid "Preis Unformatiert hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1915
+msgid "Am häufigsten genutzte Preis Unformatiert zeigen"
+msgstr ""
+
+#: mobilede-main.php:1931
+msgctxt "Taxonomy General Name"
+msgid "Ladekapazität"
+msgstr ""
+
+#: mobilede-main.php:1932
+msgctxt "Taxonomy Singular Name"
+msgid "Ladekapazität"
+msgstr ""
+
+#: mobilede-main.php:1933
+msgid "Ladekapazität"
+msgstr ""
+
+#: mobilede-main.php:1934
+msgid "Alle Ladekapazität"
+msgstr ""
+
+#: mobilede-main.php:1937
+msgid "Neuer Ladekapazität"
+msgstr ""
+
+#: mobilede-main.php:1938
+msgid "Neuen Ladekapazität hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1939
+msgid "Ladekapazität bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1940
+msgid "Ladekapazität aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1941
+msgid "Ladekapazität durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1942
+msgid "Ladekapazität durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1943
+msgid "Ladekapazität hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1944
+msgid "Am häufigsten genutzte Ladekapazität zeigen"
+msgstr ""
+
+#: mobilede-main.php:1960
+msgctxt "Taxonomy General Name"
+msgid "Baujahr"
+msgstr ""
+
+#: mobilede-main.php:1961
+msgctxt "Taxonomy Singular Name"
+msgid "Baujahr"
+msgstr ""
+
+#: mobilede-main.php:1962
+msgid "Baujahr"
+msgstr ""
+
+#: mobilede-main.php:1963
+msgid "Alle Baujahr"
+msgstr ""
+
+#: mobilede-main.php:1966
+msgid "Neuer Baujahr"
+msgstr ""
+
+#: mobilede-main.php:1967
+msgid "Neuen Baujahr hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1968
+msgid "Baujahr bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1969
+msgid "Baujahr aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1970
+msgid "Baujahr durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:1971
+msgid "Baujahr durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:1972
+msgid "Baujahr hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:1973
+msgid "Am häufigsten genutzte Baujahr zeigen"
+msgstr ""
+
+#: mobilede-main.php:1989
+msgctxt "Taxonomy General Name"
+msgid "Anzahl Schlafplätze"
+msgstr ""
+
+#: mobilede-main.php:1990
+msgctxt "Taxonomy Singular Name"
+msgid "Anzahl Schlafplätze"
+msgstr ""
+
+#: mobilede-main.php:1991
+msgid "Anzahl Schlafplätze"
+msgstr ""
+
+#: mobilede-main.php:1992
+msgid "Alle Anzahl Schlafplätze"
+msgstr ""
+
+#: mobilede-main.php:1995
+msgid "Neuer Anzahl Schlafplätze"
+msgstr ""
+
+#: mobilede-main.php:1996
+msgid "Neuen Anzahl Schlafplätze hinzufügen"
+msgstr ""
+
+#: mobilede-main.php:1997
+msgid "Anzahl Schlafplätze bearbeiten"
+msgstr ""
+
+#: mobilede-main.php:1998
+msgid "Anzahl Schlafplätze aktualisieren"
+msgstr ""
+
+#: mobilede-main.php:1999
+msgid "Anzahl Schlafplätze durch Kommas trennen"
+msgstr ""
+
+#: mobilede-main.php:2000
+msgid "Anzahl Schlafplätze durchsuchen"
+msgstr ""
+
+#: mobilede-main.php:2001
+msgid "Anzahl Schlafplätze hinzufügen/entfernen"
+msgstr ""
+
+#: mobilede-main.php:2002
+msgid "Am häufigsten genutzte Anzahl Schlafplätze zeigen"
+msgstr ""
