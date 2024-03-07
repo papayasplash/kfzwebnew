@@ -1,0 +1,18 @@
+jQuery(document).ready(function() {
+jQuery('.slider-main').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: true,
+  fade: true,
+  asNavFor: '.slider-nav'
+});
+jQuery('.slider-nav').slick({
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  asNavFor: '.slider-main',
+  dots: true,
+  arrows: true,
+  centerMode: true,
+  focusOnSelect: true
+});
+});

@@ -1,0 +1,110 @@
+.contents{width:750px;margin:10px auto;}
+.wideCheckBox{float:left;margin:10px 0 0 20px;width:210px;}
+
+.sectionBox{margin:5px;padding:5px;border:1px solid #DDD;overflow:hidden;background:#F0F0F0;border-radius:4px;box-shadow:#DDD 3px 3px 3px;text-align:left;}
+.sectionRow{overflow:hidden;margin:0;}
+.sectionRow label{display:block;}
+.sectionRow div{float:left;width:210px;margin:0 0 0 20px;}
+.sectionRow select, .settingsSelect{}
+#variant{width:187px;}
+.submitBox{text-align:center;}
+
+.custom-combobox {position: relative;display: inline-block;}
+.custom-combobox-toggle {position: absolute;top: 0;bottom: 0;margin-left: -1px;padding: 0;/* support: IE7 */*height: 1.7em;*top: 0.1em;}
+.custom-combobox-input,.ui-menu {margin: 0;padding: 0.3em;font-size:12px!important;background:#FFF!important;width:170px;}
+
+.searchContents{margin:10px auto;}
+.searchHeader .info{margin-left:290px;width:250px;margin-top:0px;}
+.mobilede-item{overflow:hidden;margin:10px 20px;/*border:1px solid #DDD;padding:10px;background:#F0F0F0;border-radius:5px;*/}
+.title{font-weight:bold;font-size:14px;}
+.info > div{float:left;overflow:hidden;}
+.info span {display:block;}
+.info{padding:20px;overflow:hidden;}
+
+.mobilede-price { font-size: 22px; }
+.mobilede-price-mwst { font-size:10px; color:#989898 }
+.mobilede-weitere-daten { -moz-column-count: 1;-moz-column-gap: 5px;-webkit-column-count: 1;-webkit-column-gap: 5px;column-count: 1;column-gap: 5px; }
+.mobilede-dat { display: block; position: relative;}
+/* FZG Übersicht */
+.archiveImage{float:left;margin:10px;}
+.fzgliste > div{overflow:hidden;}
+.fzgliste span {display: inline-block;font-size:12px; color:#000;}
+
+.preiscontainer {width:29%;float:right;}
+
+.uebersichtpreis {font-size:20px;float:right;}
+.mwst {font-size:10px; color:#989898;float:right;}
+.info {padding:0px;overflow:hidden;}
+.archive-listing > ul{list-style:none;}
+.verbrauch {font-size:10px;color:#989898}
+/* FZG Übersicht ENDE*/
+
+/* Layout der Ausstattungsmerkmale als Liste */
+.ausstattung {width:100%;list-style-type: square;}
+.ausstattung li {width:33%;float:left;font-size:12px;}
+/*Ausstattungsmerkmale als Liste ENDE */
+
+
+/* Umweltplakette als Grafik (Größenangabe in PX) */
+.umweltplakette img {width:50px;height:auto;}
+/*Umweltplakette ENDE */
+
+/*Detailbeschreibung */
+.summary {font-size:12px;}
+/*Detailbeschreibung ENDE */
+
+/* Single Ansicht */
+.mobilede-preis {
+	font-size: 2em;
+}
+
+.mobilede-preis-vat {
+	font-size: .75em;
+	color: #888;
+	font-style: italic;
+
+}
+
+.mobilede-taxlist p {
+	margin:0;
+	float: left;
+}
+.mobilede-taxlist a {
+	
+}
+.mobilede-section-1 {
+	width: 100%;
+}
+.flexslider {
+	margin: 0;
+	width: 45%;
+	float: left;
+	padding: 0 0 30px 0!important;
+	}
+.mobilede-taxonomie-list {
+	width: 40%;
+	float: left;
+	padding-left: 5%;
+
+	
+}
+.mobilede-data {
+	float: left;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.item {
+	min-height: 250px;
+}
+
+.mobilede-thumbnail img{
+	width: 150px;
+	height: auto;
+}
+
+	/* ENERGIEFFIZIENZKLASSE ALS BILD */
+	.mobile-de-effizienzklasse {width:100%;}
+	.mobile-de-effizienzklasse ul {width:100%;list-style-type:none;}
+	.mobile-de-effizienzklasse ul li {width:33%;float:left;margin-left:0px;}
