@@ -19,9 +19,12 @@ function mob_htmlToOptions($array, $includeAny=true, $selected=''){
 }
 
 class mob_searchAPI {
+	private $language;
+
+
 	var $url, $username, $password;
 	var $xml;
-	function __construct($url, $username, $password, $language){
+	function __construct($url, $username, $password, $language = 'en'){
 		// $this->url=$url; // Replaced for new API 2016
 		$license 	= get_option( 'mob_license_key' );
 		$status 	= get_option( 'mob_license_status' );
@@ -30,10 +33,10 @@ class mob_searchAPI {
 		}
 		$this->username = $username;
 		$this->password = $password;
-		$this->language = $language;
+		$this->language = isset($language) ? $language : 'en';
 	}
 	function mob_searchAPI($url, $username, $password, $language){
-		self::__construct();
+		self::__construct($url, $username, $password, $language);
 	}
 	/*****************************************************************************
  	* 

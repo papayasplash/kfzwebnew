@@ -30,6 +30,14 @@ function log_me($message)
 		}
 	}
 }
+function console_log($output, $with_script_tags = true) {
+	$js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+	');';
+	if ($with_script_tags) {
+	$js_code = '<script>' . $js_code . '</script>';
+	}
+	echo $js_code;
+}
 // Include template checker
 include_once dirname(__FILE__) . '/template-checker.php';
 // Load Mobile.DE API
@@ -125,7 +133,7 @@ add_action('init', 'vehicle_taxonomy', 0);
 // ********************************************************************************************************
 // **************************** Register custom taxonomy for custom post type *****************************
 require_once (ABSPATH . 'wp-config.php');
-require_once (ABSPATH . 'wp-includes/wp-db.php');
+require_once (ABSPATH . 'wp-includes/class-wpdb.php');
 require_once (ABSPATH . 'wp-admin/includes/taxonomy.php');
 // Setup a scheduler on plugin activation
 register_activation_hook(__FILE__, 'mob_plugin_activation');
@@ -257,6 +265,7 @@ function getVehiclesByAdkeys($vehicles, $adKeys)
         return in_array($vehicle['ad_key'], $adKeys);
     });
 }
+// 
 function importVehicles($vehicles)
 {
     global $mob_data;
@@ -277,16 +286,18 @@ function importVehicles($vehicles)
         $existing_ad_keys[get_post_meta($post_id, 'ad_key', true)] = $post_id;
     }
     
-    foreach ($vehicles as $vehicle) {
-        if (!isset($existing_ad_keys[$vehicle['ad_key']])) {
-            // Insert if not exists.
-            $post_ids[] = writeIntoWp($vehicle);
-        } else {
-            // For updates or other operations with existing posts, remove this else block.
-            // $post_ids[] = $existing_ad_keys[$vehicle['ad_key']];
-        }
-    }
+ 
     return $post_ids;
+}
+function do_async_import() {
+    $items = importVehicles();
+    $total = count($items);
+    $progress = 0;
+    foreach ($items as $item) {
+        writeIntoWp($item);
+        $progress++;
+        update_option('async_import_progress', ($progress / $total) * 100);
+    }
 }
 /**
  *
@@ -419,6 +430,29 @@ function removePostsByIds($post_ids)
 		wp_delete_post($post->ID, true);
 	}
 }
+
+/* async import */
+// Handle start import AJAX request
+add_action('wp_ajax_start_async_import', 'start_async_import');
+function start_async_import() {
+    global $wpdb;
+    $wpdb->delete($wpdb->options, array('option_name' => 'async_import_progress'));
+    wp_schedule_single_event(time(), 'do_async_import');
+    wp_die();
+}
+
+// Handle import progress check AJAX request 
+add_action('wp_ajax_check_import_progress', 'check_import_progress');
+function check_import_progress() {
+    $progress = get_option('async_import_progress', 0);
+    wp_send_json_success(array('progress' => $progress));
+}
+
+// Import posts asynchronously
+
+
+
+
 function writeIntoWp($item)
 {
 	global $mob_data;
@@ -723,21 +757,21 @@ function writeIntoWp($item)
 		// log_me('EBAY BILD');
 		// log_me((string)$image);
 		// update_post_meta($post_id, 'ad_gallery', (string)$image);
-		if (substr($image, -6) == '27.JPG') {
-			$temp = str_replace('27.JPG', '57.JPG', $image); // 1600x1200 px
-			if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
-				$metaData = import_post_image($post_id, $temp, $i == 0);
-				// metaData = update_post_meta($post_id, $temp, $i);
+			if (substr($image, -6) == '27.JPG') {
+				$temp = str_replace('27.JPG', '57.JPG', $image); // 1600x1200 px
+				if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
+					$metaData = import_post_image($post_id, $temp, $i == 0);
+					// metaData = update_post_meta($post_id, $temp, $i);
+				}
+				else {
+					$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
+				}
 			}
 			else {
 				$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
 			}
 		}
-		else {
-			$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
-		}
 	}
-}
 	// new feature meta_values as single post_meta
 	if(!empty($item['ABS'])) { update_post_meta($post_id, 'ABS', $item['ABS']); }
 	if(!empty($item['ALLOY_WHEELS'])) { update_post_meta($post_id, 'ALLOY_WHEELS', $item['ALLOY_WHEELS']); }
@@ -1040,6 +1074,37 @@ function more_fields($resetIndex = false)
 // if (is_wp_error($response)) return false;
 // $license_data = json_decode(wp_remote_retrieve_body($response));
 include_once dirname(__FILE__) . '/admin.php';
+// Register custom admin page
+add_action('admin_menu', 'register_import_page');
+function register_import_page() {
+    add_menu_page('Async Import', 'Async Import', 'manage_options', 'async-import', 'display_import_page');
+}
+function display_import_page() {
+    ?>
+    <div class="wrap">
+        <h1>Async Import</h1>
+        <button id="start-import">Start Import</button>
+        <div id="progress-bar"></div>
+    </div>
+    <script>
+        jQuery(document).ready(function($) {
+            $('#start-import').click(function() {
+                $.post(ajaxurl, { action: 'start_async_import' });
+            });
+
+            function checkImportProgress() {
+                $.post(ajaxurl, { action: 'check_import_progress' }, function(response) {
+                    $('#progress-bar').html(response.data.progress + '%');
+                    if (response.data.progress < 100) {
+                        setTimeout(checkImportProgress, 1000);
+                    }
+                });
+            }
+            checkImportProgress();
+        });
+    </script>
+    <?php
+}
 include_once dirname(__FILE__) . '/license.php';
 // if ($license_data->license == 'valid') {
 // 	include_once dirname(__FILE__) . '/license.php';

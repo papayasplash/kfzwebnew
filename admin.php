@@ -8,6 +8,7 @@ class mob_Setting{
      * Holds the values to be used in the fields callbacks
      */
     private $options;
+	public $mob_data;
     public function __construct($mob_data)
     {
 		$this->mob_data=$mob_data;
