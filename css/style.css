@@ -1,3 +1,8 @@
+.vehicle-row {
+	display: flex;
+	flex-direction: row;
+}
+
 .contents{width:750px;margin:10px auto;}
 .wideCheckBox{float:left;margin:10px 0 0 20px;width:210px;}
 

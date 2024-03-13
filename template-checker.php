@@ -204,6 +204,35 @@ function check_single_fahrzeuge($content = null)
         if (!empty($meta_values['emissionFuelConsumption_Combined'][0])) {
             $content .= '<span>Verbrauch komb.*:</span> <strong> ≈' . $meta_values['emissionFuelConsumption_Combined'][0] . ' l/100km</strong><br>';
         }
+
+        // WLTP
+        if (!empty($meta_values['wltp-co2-emission-combined'][0])) {
+            $content .= '<span>CO₂-Emissionen (WLTP)*:</span> <strong> ≈' . $meta_values['wltp-co2-emission-combined'][0] . ' g/km</strong><br>';
+        }
+        // WLTP
+        if (!empty($meta_values['wltp-consumption-fuel-combined'][0])) {
+            $content .= '<span>Verbrauch komb. (WLTP)*:</span> <strong> ≈' . $meta_values['wltp-consumption-fuel-combined'][0] . ' l/100km</strong><br>';
+        }
+        // WLTP
+        if (!empty($meta_values['wltp-consumption-power-combined'][0])) {
+            $content .= '<span>Stromverbrauch (WLTP)*:</span> <strong> ≈' . $meta_values['wltp-consumption-power-combined'][0] . ' kWh/100km (kombiniert)</strong><br>';
+        }
+        // WLTP
+        if (!empty($meta_values['wltp-electric-range'][0])) {
+            $content .= '<span>Elektrische Reichweite (WLTP)*:</span> <strong> ≈' . $meta_values['wltp-electric-range'][0] . ' l/100km</strong><br>';
+        }
+        // WLTP
+        if (!empty($meta_values['wltp-consumption-fuel-combined-weighted'][0])) {
+            $content .= '<span>Gewichteter kombinierter Kraftstoffverbrauch für Plug-in-Hybride (WLTP)*:</span> <strong> ≈' . $meta_values['wltp-consumption-fuel-combined-weighted'][0] . ' l/100km</strong><br>';
+        }
+        // WLTP
+        if (!empty($meta_values['wltp-consumption-power-combined-weighted'][0])) {
+            $content .= '<span>Gewichteter kombinierter Stromverbrauch für Plug-in-Hybride (WLTP)*:</span> <strong> ≈' . $meta_values['wltp-consumption-power-combined-weighted'][0] . ' kWh/100km</strong><br>';
+        }
+        // WLTP
+        if (!empty($meta_values['wltp-co2-emission-combined-weighted'][0])) {
+            $content .= '<span>Gewichtete Menge an Kohlendioxidemissionen für Plug-in-Hybride*:</span> <strong> ≈' . $meta_values['wltp-co2-emission-combined-weighted'][0] . ' g/km</strong><br>';
+        }
         if (!empty($meta_values['emissionFuelConsumption_Inner'][0])) {
             $content .= '<span>Verbrauch innerorts*:</span> <strong> ≈' . $meta_values['emissionFuelConsumption_Inner'][0] . ' l/100km</strong><br>';
         }

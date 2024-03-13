@@ -30,14 +30,7 @@ function log_me($message)
 		}
 	}
 }
-function console_log($output, $with_script_tags = true) {
-	$js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-	');';
-	if ($with_script_tags) {
-	$js_code = '<script>' . $js_code . '</script>';
-	}
-	echo $js_code;
-}
+
 // Include template checker
 include_once dirname(__FILE__) . '/template-checker.php';
 // Load Mobile.DE API
@@ -59,15 +52,11 @@ function template_decider()
 {
 	registerFrontendStuff();
 }
-function registerFrontendStuff() {
+function registerFrontendStuff() 
+{
     $options = get_option('MobileDE_option');
-    if (empty($options['mob_bootstrap_option'])) {
-        $options['mob_bootstrap_option'] = 'yes';
-    }
-    if ($options['mob_bootstrap_option'] == 'yes' && !is_admin()) {
-        wp_enqueue_style('bootstrap_cdn_css', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css');
-        wp_enqueue_script('bootstrap_cdn_js', plugin_dir_url(__FILE__) . 'js/bootstrap.min.js', array('jquery'));
-    }
+
+  
     if (empty($options['mob_slider_option'])) {
         $options['mob_slider_option'] = 'yes';
     }
@@ -186,7 +175,7 @@ function mob_download_import_feed()
     $currentMeta = getCurrentMetaValues();
     if (empty($currentMeta) || empty($currentMeta['intern_mostRecentModificationDate'])) {
         mob_deleteAllPosts(); // Clear and re-import all when there's no meaningful meta.
-        importVehicles($vehicles);
+        importVehicles($vehicles, $apiAdKeys);
         return;
     }
     
@@ -207,7 +196,7 @@ function mob_download_import_feed()
     $remainingVehicles = getVehiclesByAdkeys($vehicles, $adKeysOfRemainingVehicles);
     
     if (!empty($newVehicles)) {
-        importVehicles($newVehicles);
+        importVehicles($newVehicles, $apiAdKeys);
     }
     
     // Fetch modified vehicles only once instead of twice as in the original code.
@@ -215,12 +204,13 @@ function mob_download_import_feed()
     if (!empty($modifiedVehicles) && !empty($modifiedVehicles['intern_adKeys'])) {
         deleteByAdKeys($currentMeta, $modifiedVehicles['intern_adKeys']);
         unset($modifiedVehicles['intern_adKeys']);
-        importVehicles($modifiedVehicles);
+        importVehicles($modifiedVehicles, $apiAdKeys);
     }
     mob_clean();
 }
 add_action('mob_cleanup', 'mob_clean');
-function deleteByAdKeys($metaValues, $adKeys) {
+function deleteByAdKeys($metaValues, $adKeys) 
+{
     $filteredValues = array_filter($metaValues, function ($current) use ($adKeys) {
         return in_array($current['ad_key'], $adKeys);
     });
@@ -266,38 +256,16 @@ function getVehiclesByAdkeys($vehicles, $adKeys)
     });
 }
 // 
-function importVehicles($vehicles)
+function importVehicles($vehicles, $existing_ad_keys)
 {
     global $mob_data;
     $post_ids = array();
-    // Fetch all existing vehicle ad_keys in one query.
-    $existing_vehicles = get_posts(array(
-        'post_type' => $mob_data['customType'],
-        'fields' => 'ids', // Only get the post IDs to improve performance.
-        'posts_per_page' => -1, // Get all posts.
-        'meta_key' => 'ad_key',
-        'meta_value' => array_column($vehicles, 'ad_key'), // Match against all incoming vehicle ad_keys.
-        'meta_compare' => 'IN',
-    ));
-    
-    // Create a map of ad_keys to post IDs for quick lookup.
-    $existing_ad_keys = array();
-    foreach ($existing_vehicles as $post_id) {
-        $existing_ad_keys[get_post_meta($post_id, 'ad_key', true)] = $post_id;
+    foreach ($vehicles as $vehicle) {
+        if (!isset($existing_ad_keys[$vehicle['ad_key']])) {
+            $post_ids[] = writeIntoWp($vehicle);
+        }
     }
-    
- 
     return $post_ids;
-}
-function do_async_import() {
-    $items = importVehicles();
-    $total = count($items);
-    $progress = 0;
-    foreach ($items as $item) {
-        writeIntoWp($item);
-        $progress++;
-        update_option('async_import_progress', ($progress / $total) * 100);
-    }
 }
 /**
  *
@@ -316,7 +284,8 @@ function do_async_import() {
  * @return array
  *
  */
-function getVehiclesModifiedSince($vehicles, $modDate) {
+function getVehiclesModifiedSince($vehicles, $modDate) 
+{
     $temp = strtotime($modDate);
     $modifiedVehicles = ['intern_adKeys' => []]; // Initialize the intern_adKeys array from the beginning.
     foreach ($vehicles as $vehicle) {
@@ -343,7 +312,8 @@ function getVehiclesModifiedSince($vehicles, $modDate) {
 /*
 * Combines "getCurrentMetaValues()" with "getMostRecentModificationDate()".
 */
-function getCurrentMetaValues() {
+function getCurrentMetaValues() 
+{
 	$args = array(
 		'post_type' => 'fahrzeuge',
 		'order' => 'ASC',
@@ -430,28 +400,6 @@ function removePostsByIds($post_ids)
 		wp_delete_post($post->ID, true);
 	}
 }
-
-/* async import */
-// Handle start import AJAX request
-add_action('wp_ajax_start_async_import', 'start_async_import');
-function start_async_import() {
-    global $wpdb;
-    $wpdb->delete($wpdb->options, array('option_name' => 'async_import_progress'));
-    wp_schedule_single_event(time(), 'do_async_import');
-    wp_die();
-}
-
-// Handle import progress check AJAX request 
-add_action('wp_ajax_check_import_progress', 'check_import_progress');
-function check_import_progress() {
-    $progress = get_option('async_import_progress', 0);
-    wp_send_json_success(array('progress' => $progress));
-}
-
-// Import posts asynchronously
-
-
-
 
 function writeIntoWp($item)
 {
@@ -721,10 +669,10 @@ function writeIntoWp($item)
 	if(!empty($item['manufacturer-color-name'])) { update_post_meta($post_id, 'manufacturer_color_name', $item['manufacturer-color-name']); }
 	if(!empty($item['shipping-volume'])) { update_post_meta($post_id, 'shipping_volume', $item['shipping-volume']); }
 	if(!empty($item['loadCapacity'])) { update_post_meta($post_id, 'load_capacity', $item['loadCapacity']); }
-	$numimages = count($item['images']);
-	if($numimages > 1) {
-		update_post_meta($post_id, 'carousel', '1');
-	}
+	// $numimages = count($item['images']);
+	// if($numimages > 1) {
+	// 	update_post_meta($post_id, 'carousel', '1');
+	// }
 	// update_post_meta($post_id, 'ad_gallery', $item['images']);
 	$options = get_option('MobileDE_option');
 	if (empty($options['mob_image_option'])) {
@@ -895,31 +843,7 @@ function updateTemporaryFields($post_id, $metaValues)
 	}
 }
 do_action( 'kfz_web_meta' );
-// function import_post_image($post_id, $image_url, $thumbnail = false)
-// {
-// 	$upload_dir = wp_upload_dir();
-// 	$image_data = file_get_contents($image_url);
-// 	$filename = uniqid($post_id . '-') . basename($image_url);
-// 	if (wp_mkdir_p($upload_dir['path'])) $file = $upload_dir['path'] . '/' . $filename;
-// 	else $file = $upload_dir['subdir'] . '/' . $filename;
-// 	file_put_contents($file, $image_data);
-// 	$wp_filetype = wp_check_filetype($filename, null);
-// 	$attachment = array(
-// 		'post_mime_type' => $wp_filetype['type'],
-// 		'post_title' => sanitize_file_name($filename) ,
-// 		'post_content' => '',
-// 		'post_status' => 'inherit'
-// 	);
-// 	$attach_id = wp_insert_attachment($attachment, $file, $post_id);
-// 	require_once (ABSPATH . 'wp-admin/includes/image.php');
-// 	$attach_data = wp_generate_attachment_metadata($attach_id, $file);
-// 	// Generate thumbnails and different sizes of images.
-// 	wp_update_attachment_metadata($attach_id, $attach_data);
-// 	if ($thumbnail) {
-// 		set_post_thumbnail($post_id, $attach_id);
-// 	}
-// 	return $attach_data;
-// }
+
 function import_post_image($post_id, $image_url, $thumbnail = false)
 {
     $re = '/\[0]\s\=\>\s/m';
@@ -1054,57 +978,8 @@ function more_fields($resetIndex = false)
 /**
  * Loads the admin settings page and handlers used with it.
  */
-/*
-* Find out why license is checked here. --bth 2014-11-11
-*/
-// load admin settings page and handlers used with it
-// global $wp_version;
-// $license = trim(get_option('edd_sample_license_key'));
-// $api_params = array(
-// 	'edd_action' => 'check_license',
-// 	'license' => $license,
-// 	'item_name' => urlencode(KFZ_WEB_ITEM_NAME)
-// );
-// Call the custom API.
-//
-// $response = wp_remote_get(add_query_arg($api_params, KFZ_WEB_STORE) , array(
-// 	'timeout' => 15,
-// 	'sslverify' => false
-// ));
-// if (is_wp_error($response)) return false;
-// $license_data = json_decode(wp_remote_retrieve_body($response));
 include_once dirname(__FILE__) . '/admin.php';
-// Register custom admin page
-add_action('admin_menu', 'register_import_page');
-function register_import_page() {
-    add_menu_page('Async Import', 'Async Import', 'manage_options', 'async-import', 'display_import_page');
-}
-function display_import_page() {
-    ?>
-    <div class="wrap">
-        <h1>Async Import</h1>
-        <button id="start-import">Start Import</button>
-        <div id="progress-bar"></div>
-    </div>
-    <script>
-        jQuery(document).ready(function($) {
-            $('#start-import').click(function() {
-                $.post(ajaxurl, { action: 'start_async_import' });
-            });
 
-            function checkImportProgress() {
-                $.post(ajaxurl, { action: 'check_import_progress' }, function(response) {
-                    $('#progress-bar').html(response.data.progress + '%');
-                    if (response.data.progress < 100) {
-                        setTimeout(checkImportProgress, 1000);
-                    }
-                });
-            }
-            checkImportProgress();
-        });
-    </script>
-    <?php
-}
 include_once dirname(__FILE__) . '/license.php';
 // if ($license_data->license == 'valid') {
 // 	include_once dirname(__FILE__) . '/license.php';

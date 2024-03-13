@@ -103,3 +103,39 @@
 // 	.mobile-de-details-gallery a img {width:100%;margin-right:1%;margin-bottom:1%;float:left;}
 // 	.mobile-de-print-button {display:none;}
 // }
+
+.vehicle {
+    margin: 3rem auto;
+}
+
+  .vehicle-row {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .vehicle-thumbnail {
+  }
+
+  .vehicle-data {
+    flex: 1;
+  }
+  .vehicle-title {
+    font-size: 2rem !important;
+  }
+  .vehicle-price {
+    text-align: right;
+  }
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
+  
+  .table-condensed td,
+  .table-condensed th {
+    padding: 5px;
+  }
+  

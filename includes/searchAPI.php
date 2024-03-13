@@ -56,45 +56,38 @@ class mob_searchAPI {
 		$allAds['intern_adKeys'] = $adKeys;
 		return $allAds;
 	}
-	public function getAdKeys ()
-	{
-		$adKeys = array();
-		$this->sendRequest('search-api/search?page.size=100'); // Inserted for new API 2016
-		$namespaces = $this->xml->getDocNamespaces();
-		$adList = $this->xml;
-		if ($adList != NULL) {
-			$adKeys = $this->treeToArray($adKeys, $adList[0]->xpath('//ad:ad'));
-			/************************
-			 * Inserted to obtain "max-pages"
-			 * New API 2016
-			 * 
-			 * Start
-			 */
-			$maxP = $adList->xpath ( '//search:max-pages' );
-			if (isset($maxP[0])) {
-				$maxPages = $maxP[0];
-			} else {
-				$maxPages = 1;
-			}
-			/*
-			 * Inserted to obtain "max-pages"
-			 * New API 2016
-			 * 
-			 * End
-			 ****************/
-			for ($i = 2; $i <= $maxPages; $i ++) {
-				$this->sendRequest('search-api/search?page.size=100&page.number=' . $i);
-				$adList = $this->xml;
-				if ($adList != NULL) {
-					$adKeys = $this->treeToArray($adKeys,
-							$adList[0]->xpath('//ad:ad'));            
-				}
-			}
-		} else {
-			$this->error = 'Internal Error: sendRequest delivered no result!';
-		}
-		return $adKeys;
-	}
+	public function getAdKeys() {
+    $adKeys = array();
+    $this->sendRequest('search-api/search?page.size=100');
+
+    if ($this->xml !== null) {
+        $adList = $this->xml;
+        if ($adList != null) {
+            $adKeys = $this->treeToArray($adKeys, $adList[0]->xpath('//ad:ad'));
+
+            $maxPages = 1;
+            $maxP = $adList->xpath('//search:max-pages');
+            if (isset($maxP[0])) {
+                $maxPages = (int)$maxP[0];
+            }
+
+            for ($i = 2; $i <= $maxPages; $i++) {
+                $this->sendRequest('search-api/search?page.size=100&page.number=' . $i);
+                $adList = $this->xml;
+                if ($adList != null) {
+                    $adKeys = $this->treeToArray($adKeys, $adList[0]->xpath('//ad:ad'));
+                }
+            }
+        } else {
+            $this->error = 'Internal Error: sendRequest delivered no result!';
+        }
+    } else {
+        $this->error = 'Internal Error: XML data is not available!';
+    }
+
+    return $adKeys;
+}
+
 	public function getAds ($adKeys)
 	{
 		$vehicles = array();
