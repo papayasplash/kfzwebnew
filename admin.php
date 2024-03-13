@@ -333,7 +333,9 @@ class mob_Setting{
 				echo '</td></tr>';
 			}
 		}
-		echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th>';
+		echo '
+		<div class="progress">Progress</div>
+		<tr valign="top"><th colspan="2" scope="row"><hr /></th>';
 		}
 		public function mob_language_callback()
 		{

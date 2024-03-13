@@ -1,5 +1,76 @@
-
+(function($) {
+    var offset = 0;
+    var progressBar = $('.progress-bar');
+    
+    function processData() {
+        $.ajax({
+            url: ajaxurl,
+            method: 'POST',
+            data: {
+                action: 'process_data',
+                offset: offset
+            },
+            success: function(response) {
+                if (response.success) {
+                    offset = response.data.offset;
+                    var remainingItems = response.data.remaining_items;
+                    var progressPercentage = (totalItems - remainingItems) / totalItems * 100;
+                    progressBar.css('width', progressPercentage + '%');
+                    
+                    if (response.data.status === 'processing') {
+                        processData();
+                    } else {
+                        progressBar.removeClass('active');
+                    }
+                } else {
+                    console.error(response.data);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+    
+    processData();
+})(jQuery);
 jQuery(document).ready(function(){
+	(function($) {
+    var offset = 0;
+    var progressBar = $('.progress-bar');
+    
+    function processData() {
+        $.ajax({
+            url: ajaxurl,
+            method: 'POST',
+            data: {
+                action: 'process_data',
+                offset: offset
+            },
+            success: function(response) {
+                if (response.success) {
+                    offset = response.data.offset;
+                    var remainingItems = response.data.remaining_items;
+                    var progressPercentage = (totalItems - remainingItems) / totalItems * 100;
+                    progressBar.css('width', progressPercentage + '%');
+                    
+                    if (response.data.status === 'processing') {
+                        processData();
+                    } else {
+                        progressBar.removeClass('active');
+                    }
+                } else {
+                    console.error(response.data);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+    
+    processData();
+})(jQuery);
 	jQuery('#addAccount').click(function() {
 		userRow=jQuery(this).parent().parent();
 		passRow=jQuery(this).parent().parent().next();

@@ -55,7 +55,6 @@ function template_decider()
 function registerFrontendStuff() 
 {
     $options = get_option('MobileDE_option');
-
   
     if (empty($options['mob_slider_option'])) {
         $options['mob_slider_option'] = 'yes';
@@ -71,8 +70,19 @@ function registerFrontendStuff()
     }
     
     if (is_singular('fahrzeuge')) {
-        add_filter('the_content', 'check_single_fahrzeuge');
-    }
+        add_filter('the_content', 'check_single_fahrzeuge');    
+		function kfzweb_hide_feature_image() {
+			return '';
+		}
+		// add the filter
+		function kfzweb_hide_single_title() {
+			return '';
+		}
+		add_filter( 'post_thumbnail_html', 'kfzweb_hide_feature_image', 10, 3);
+
+		add_filter( 'the_title', 'kfzweb_hide_single_title' );
+
+	}
 }
 function registerAdminStuff()
 {
@@ -400,50 +410,72 @@ function removePostsByIds($post_ids)
 		wp_delete_post($post->ID, true);
 	}
 }
+add_action('wp_ajax_process_data', 'process_data_ajax_handler');
 
-function writeIntoWp($item)
-{
-	global $mob_data;
-	/*
-	* Create dummy array to silence
-	* array_filter().... Error in post.php
-	*/
-	$options = get_option('MobileDE_option');
-	if (empty(@$options['mob_cat_tax_option'])) {
-		@$options['mob_cat_tax_option'] = 'no';
-	}
-	if (@$options['mob_cat_tax_option'] == 'yes') {
-	$class_catid = wp_create_category($item['category']);
-	} else {
-	$class_catid = '';
-	}
-	$post_id = wp_insert_post(array(
-		'post_status' => 'publish',
-		'post_author' => '1',
-		'post_type' => $mob_data['customType'],
-		'post_title' => $item['make'] . ' ' . $item['model_description'],
-		'post_content' => $item['enriched_description'],
-		'tags_input' => $item['model_description'],
-		'comment_status' => 'closed', // disable comments fmh 24.02.15
-		'tax_input' => array(), // Custom Taxonomies that are loaded after? --bth 2014-11-12
-		'post_category' => array($class_catid)
-	));
-	/* Custom Taxonomies */
-	$kategorie = array(
-		'kategorie' => @$item['category']
-	);
-	$preis = array(
-		'preis' => $item['price']
-	);
-	wp_set_object_terms($post_id, $preis, 'preis');
-	$modell = array(
-		'modell' => @$item['model']
-	);
-	wp_set_object_terms($post_id, $modell, 'modell');
-	
-	$marke = array(
-		'marke' => @$item['make']
-	);
+function process_data_ajax_handler() {
+    $offset = intval($_POST['offset']);
+    $limit = 50; // Process 50 items per request
+    
+    $processed_items = writeIntoWp($offset, $limit);
+    
+    $remaining_items = get_remaining_items_count();
+    
+    if ($remaining_items > 0) {
+        $response = array(
+            'status' => 'processing',
+            'offset' => $offset + $limit,
+            'remaining_items' => $remaining_items,
+        );
+    } else {
+        $response = array(
+            'status' => 'complete',
+        );
+    }
+    
+    wp_send_json_success($response);
+}
+function writeIntoWp($offset, $limit) {
+    global $mob_data;
+    
+    $options = get_option('MobileDE_option');
+    if (empty(@$options['mob_cat_tax_option'])) {
+        @$options['mob_cat_tax_option'] = 'no';
+    }
+    
+    $items = get_items_to_process($offset, $limit); // Function to retrieve a chunk of items
+    
+    foreach ($items as $item) {
+        if (@$options['mob_cat_tax_option'] == 'yes') {
+            $class_catid = wp_create_category($item['category']);
+        } else {
+            $class_catid = '';
+        }
+        
+        $post_id = wp_insert_post(array(
+            'post_status' => 'publish',
+            'post_author' => '1',
+            'post_type' => $mob_data['customType'],
+            'post_title' => $item['make'] . ' ' . $item['model_description'],
+            'post_content' => $item['enriched_description'],
+            'tags_input' => $item['model_description'],
+            'comment_status' => 'closed',
+            'tax_input' => array(),
+            'post_category' => array($class_catid)
+        ));
+        
+        // Custom Taxonomies
+        $kategorie = array('kategorie' => @$item['category']);
+        $preis = array('preis' => $item['price']);
+        wp_set_object_terms($post_id, $preis, 'preis');
+        $modell = array('modell' => @$item['model']);
+        wp_set_object_terms($post_id, $modell, 'modell');
+        $marke = array('marke' => @$item['make']);
+        // ... (rest of the custom taxonomies)
+    // }
+    
+    // return count($items);
+}
+
 	wp_set_object_terms($post_id, $marke, 'marke');
 	$zustand = array(
 		'zustand' => @$item['condition']
@@ -586,6 +618,7 @@ function writeIntoWp($item)
 	if(!empty($item['unit'])) { update_post_meta($post_id, 'emissionFuelConsumption_Unit', $item['unit']); }
 	if(!empty($item['emissionSticker'])) { update_post_meta($post_id, 'emissionSticker', $item['emissionSticker']); }
 	if(!empty($item['exterior_color'])) { update_post_meta($post_id, 'exteriorColor', $item['exterior_color']); }
+	if(!empty($item['exterior_color'])) { update_post_meta($post_id, 'exterior_color', $item['exterior_color']); }
 	if(!empty($item['fuel'])) { update_post_meta($post_id, 'fuel', $item['fuel']); }
 	if(!empty($item['power'])) { update_post_meta($post_id, 'power', $item['power']); }
 	if(!empty($item['number_of_previous_owners'])) { update_post_meta($post_id, 'owners', $item['number_of_previous_owners']); }
@@ -593,6 +626,7 @@ function writeIntoWp($item)
 	if(!empty($item['gearbox'])) { update_post_meta($post_id, 'gearbox', $item['gearbox']); }
 	// update_post_meta($post_id, 'monthsTillInspection', $item['monthsTillInspection']);
 	if(!empty($item['nextInspection'])) { update_post_meta($post_id, 'nextInspection', $item['nextInspection']); }
+	if(!empty($item['nextInspection'])) { update_post_meta($post_id, 'next_inspection', $item['nextInspection']); }
 	if(!empty($item['features'])) { update_post_meta($post_id, 'features', $item['features']); }
 	if(!empty($item['mileage'])) { update_post_meta($post_id, 'mileage', $item['mileage']); }
 	if(!empty($item['mileage_raw'])) { update_post_meta($post_id, 'mileage_raw', $item['mileage_raw']); } // Added 2015-03-16 --bth
@@ -669,18 +703,19 @@ function writeIntoWp($item)
 	if(!empty($item['manufacturer-color-name'])) { update_post_meta($post_id, 'manufacturer_color_name', $item['manufacturer-color-name']); }
 	if(!empty($item['shipping-volume'])) { update_post_meta($post_id, 'shipping_volume', $item['shipping-volume']); }
 	if(!empty($item['loadCapacity'])) { update_post_meta($post_id, 'load_capacity', $item['loadCapacity']); }
-	// $numimages = count($item['images']);
-	// if($numimages > 1) {
-	// 	update_post_meta($post_id, 'carousel', '1');
-	// }
-	// update_post_meta($post_id, 'ad_gallery', $item['images']);
+	$numimages = count($item['images']);
+	if($numimages > 1) {
+		update_post_meta($post_id, 'carousel', '1');
+	}
+	
+	// add_post_meta($post_id, 'ad_gallery', (string)$item['images']);
 	$options = get_option('MobileDE_option');
 	if (empty($options['mob_image_option'])) {
 		$options['mob_image_option'] = 'web';
 	}
 	if ($options['mob_image_option'] == 'web') {
 		foreach($item['images'] as $image) {
-			update_post_meta($post_id, 'ad_gallery', (string)$image);
+			add_post_meta($post_id, 'ad_gallery', (string)$image);
 		}
 		if (substr($item['images'][0], -6) == '27.JPG') {
 			$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
