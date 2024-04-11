@@ -125,7 +125,7 @@ add_action('init', 'vehicle_taxonomy', 0);
 // ********************************************************************************************************
 // **************************** Register custom taxonomy for custom post type *****************************
 require_once (ABSPATH . 'wp-config.php');
-require_once (ABSPATH . 'wp-includes/wp-db.php');
+require_once (ABSPATH . 'wp-includes/class-wpdb.php');
 require_once (ABSPATH . 'wp-admin/includes/taxonomy.php');
 // Setup a scheduler on plugin activation
 register_activation_hook(__FILE__, 'mob_plugin_activation');

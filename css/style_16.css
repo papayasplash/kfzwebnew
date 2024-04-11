@@ -1,105 +1,39 @@
-// @media screen {
+.vehicle {
+    margin: 0rem auto 3rem auto;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid;
+}
 
-// /* MOBILE.DE WORDPRESS PLUGIN STYLES */
+  .vehicle-row {
+    display: flex;
+    gap: 1rem;
+  }
 
-// /* UEBERSICHT */
+  .vehicle-thumbnail {
+  }
 
-// 	/* FAHRZEUG WRAPPER (UMSCHLIESST JE 1 FAHRZEUG) */
-// 	/* Bei einer Galerieansicht mit mehr als 1 Fahrzeug pro Reihe sollte der Wert width:100% auf beispielsweise 33% für 3 Fahrzeuge pro Reihe reduziert werden */
-// 	.mobile-de-uebrsicht-fzg-wrapper {width:100%;float:left;}
-// 	.mobile-de-uebersicht-header {width:100%;display:block;}
-// 		/* FAHRZEUGTITEL H2 */
-// 		#mobile-de-wp-uebersicht-name {}
-// 		/* FAHRZEUGBILD */
-// 		#mobile-de-wp-uebersicht-img {float:left;margin: 0 2% 1em 0;}
-// 			/* FAHRZEUGINFORMATIONEN WIE PREIS, LEISTUNG, ETC. */
-// 			.mobile-de-wp-uebersicht-informationen-wrapper {position:relative;width:auto;display: inline-block;min-width: 73%;}
-// 					.mobile-de-wp-uebersicht-informationen-preis {width:20%;float:right;}
-// 					.mobile-de-wp-uebersicht-informationen-preis p {position:absolute;right:0;}
-// 					.mobile-de-wp-uebersicht-informationen-preis p#mobile-de-vat-information {font-size:0.7em;}
-// 					/* WEITERE FAHRZEUGINFORMATIONEN WIE EZ, GETRIEBE, LEISTUNG, VERBRAUCH, ETC */
-// 					.mobile-de-uebersicht-fzg-detailinformationen {width:75%;float:left;}
-// 					.mobile-de-uebersicht-fzg-detailinformationen p {margin: 0 0 0 0;}
-// 					/* STYLE FÜR DAS LABEL DER ELEMENTE */
-// 					.mobile-de-uebersicht-fzg-detailinformationen p label {font-weight:bold;}
-// 	/* DAT INFO TEXT (RECHTLICH VERPFLICHTEND) */
-// 	.mobile-de-uebersicht-dat {font-size:0.7em;}
-
-// /* UEBERSICHT ENDE */
-
-
-// /* FAHRZEUG DETAILSEITE */
-// 	/* WRAPPER FÜR DIE HAUPTINFORMATIONEN WIE PREIS, ETC... */
-// 	.mobile-de-wp-detail-hauptinformationen-wrapper {width:100%;}
-// 	/* INFORMATIONEN ALS LISTE  ÜBER DEN WERT COLUMN WIRD BESTIMMT, WIE VIELE ELEMENTE NEBENEINANDER ANGEZEIGT WERDEN HIER: 2*/
-// 	.mobile-de-wp-detail-hauptinformationen-wrapper ul {width:100%;list-style-type: none;-moz-column-count: 2;-moz-column-gap: 5px;-webkit-column-count: 2;-webkit-column-gap: 5px;column-count: 2;column-gap: 5px;}
-// 		/* PREIS */
-// 	.mobile-de-wp-detail-hauptinformationen-wrapper ul li.mobile-de-detail-preis {font-size:1.2em;}
-// 			/* MWST INFORMATIONS TEXT */
-// 	p#mobile-de-detail-vat {font-size:0.7em;margin-bottom: 0em;}
-// 	/* WRAPPER FÜR ZUSATZINFORMATIONEN */
-// 	.mobile-de-wp-detail-zusatzinformationen-wrapper {width:100%;}
-// 	/* ZUSATZINFORMATIONEN ALS LISTE  ÜBER DEN WERT COLUMN WIRD BESTIMMT, WIE VIELE ELEMENTE NEBENEINANDER ANGEZEIGT WERDEN HIER: 2*/
-// 	.mobile-de-wp-detail-zusatzinformationen-wrapper ul {width:100%;list-style-type: none;-moz-column-count: 3;-moz-column-gap: 5px;-webkit-column-count: 3;-webkit-column-gap: 5px;column-count: 3;column-gap: 5px;}
-// 	.mobile-de-wp-detail-zusatzinformationen-wrapper ul li {font-size:0.65em;}
-// 	/* LABEL FÜR DIE WERTE */
-// 		.mobile-de-wp-detail-zusatzinformationen-wrapper ul li label {}
-// 	/* BILDGRÖSSE FÜR DIE UMWELTPLAKETTE */
-// 	.mobile-de-wp-detail-zusatzinformationen-wrapper ul li.mobile-de-wp-details-umweltplakette img {width:2em;height:auto;}
-
-// 	/* AUSSTATTUNGSDETAILS */
-// 	.mobile-de-wp-details-zusatzausstattung {width:100%;}
-// 	.mobile-de-wp-details-zusatzausstattung ul {width:100%;list-style-type: none;-moz-column-count: 3;-moz-column-gap: 5px;-webkit-column-count: 3;-webkit-column-gap: 5px;column-count: 3;column-gap: 5px;}
-// 	.mobile-de-wp-details-zusatzausstattung ul li {font-size:0.65em;}
-// 	/* ENERGIEFFIZIENZKLASSE ALS BILD */
-// 	.mobile-de-effizienzklasse {width:100%;}
-// 	.mobile-de-effizienzklasse ul {width:100%;list-style-type:none;}
-// 	.mobile-de-effizienzklasse ul li {float:left;margin-left:0px;}
-	
-// 		/* DAT INFO TEXT (RECHTLICH VERPFLICHTEND) */
-// 	.mobile-de-details-dat {font-size:0.7em;}
-// 	/* ZUSÄTZLICHE BILDER ZUM ANGEBOT */
-// 	.mobile-de-details-gallery {width:100%;display:block;}
-// 	.mobile-de-details-clear {clear:both;}
-// 	/* ES WERDEN IM STANDARD 4 BILDER NEBENEINANDER DARGESTELLT */
-// 	.mobile-de-details-gallery a img {width:24%;margin-right:1%;margin-bottom:1%;float:left;}
-// 	/* DRUCKEN BUTTON IN DER FAHRZEUG DETAILANSICHT - MIT DEM BEFEHL display:none; KANN DIESER AUSGEBLENDET WERDEN */
-// 	.mobile-de-print-button {}
-// }
-
-// /* AB HIER KÖNNEN SIE DIE DRUCKAUSGABE ANPASSEN UND INFORMATIONEN AUSBLENDEN */
-
-// @media print { 
-
-// /* FAHRZEUG DETAILSEITE */
-// 	/* WRAPPER FÜR DIE HAUPTINFORMATIONEN WIE PREIS, ETC... */
-// 	.mobile-de-wp-detail-hauptinformationen-wrapper {width:100%;}
-// 	/* INFORMATIONEN ALS LISTE  ÜBER DEN WERT COLUMN WIRD BESTIMMT, WIE VIELE ELEMENTE NEBENEINANDER ANGEZEIGT WERDEN HIER: 2*/
-// 	.mobile-de-wp-detail-hauptinformationen-wrapper ul {width:100%;list-style-type: none;}
-// 		/* PREIS */
-// 		.mobile-de-wp-detail-hauptinformationen-wrapper ul li.mobile-de-detail-preis {font-size:1.2em;width:50%;float:left;}
-// 			/* MWST INFORMATIONS TEXT */
-// 			p#mobile-de-detail-vat {font-size:0.7em;margin-bottom: 0em;}
-// 	/* WRAPPER FÜR ZUSATZINFORMATIONEN */
-// 	.mobile-de-wp-detail-zusatzinformationen-wrapper {width:100%;}
-// 	/* ZUSATZINFORMATIONEN ALS LISTE  ÜBER DEN WERT COLUMN WIRD BESTIMMT, WIE VIELE ELEMENTE NEBENEINANDER ANGEZEIGT WERDEN HIER: 2*/
-// 	.mobile-de-wp-detail-zusatzinformationen-wrapper ul {width:100%;list-style-type: none;display:block;}
-// 	.mobile-de-wp-detail-zusatzinformationen-wrapper ul li {font-size:0.65em;float:left;width:33%;}
-// 	/* LABEL FÜR DIE WERTE */
-// 		.mobile-de-wp-detail-zusatzinformationen-wrapper ul li label {}
-// 	/* BILDGRÖSSE FÜR DIE UMWELTPLAKETTE */
-// 	.mobile-de-wp-detail-zusatzinformationen-wrapper ul li.mobile-de-wp-details-umweltplakette img {width:2em;height:auto;}
-
-// 	/* AUSSTATTUNGSDETAILS */
-// 	.mobile-de-wp-details-zusatzausstattung {width:100%;}
-// 	.mobile-de-wp-details-zusatzausstattung ul {width:100%;list-style-type: none;}
-// 	.mobile-de-wp-details-zusatzausstattung ul li {font-size:0.65em;float:left;width:33%;}
-// 		/* DAT INFO TEXT (RECHTLICH VERPFLICHTEND) */
-// 	.mobile-de-details-dat {font-size:0.7em;display:block;width:100%;}
-// 	/* ZUSÄTZLICHE BILDER ZUM ANGEBOT */
-// 	.mobile-de-details-gallery {display:none;}
-// 	.mobile-de-details-clear {clear:both;}
-// 	/* ES WERDEN IM STANDARD 4 BILDER NEBENEINANDER DARGESTELLT */
-// 	.mobile-de-details-gallery a img {width:100%;margin-right:1%;margin-bottom:1%;float:left;}
-// 	.mobile-de-print-button {display:none;}
-// }
+  .vehicle-data {
+    flex: 1;
+  }
+  .vehicle-title {
+    font-size: 160% !important;
+  }
+  .vehicle-price {
+    text-align: right;
+  }
+  .vehicle-emission {
+    font-size: 75% !important;
+  }
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .table-striped tbody tr:nth-of-type(even) {
+    background-color: #cecece;
+  }
+  
+  .table-condensed td,
+  .table-condensed th {
+    padding: 5px;
+  }
