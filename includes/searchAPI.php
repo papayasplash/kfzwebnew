@@ -644,7 +644,32 @@ class mob_searchAPI {
 		} else {
 			$mob_data['energy-efficiency-class'] = "";
 		}
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		if (isset($temp[0]['energy-efficiency-class'])) {
+			$mob_data['energy-efficiency-class'] = (string) $temp[0]['energy-efficiency-class'];
+		} else {
+			$mob_data['energy-efficiency-class'] = "";
+		}
 		$temp = $item->xpath('//ad:fuel/resource:local-description');
 		if (isset($temp[0])) {
 			$mob_data['fuel'] = (string) $temp[0];
@@ -1169,6 +1194,64 @@ class mob_searchAPI {
 		$temp = $item->xpath('//ad:co2-emission-combined-weighted');
 		if (isset($temp[0])){
 			$mob_data['wltp-co2-emission-combined-weighted'] = (string)$temp[0];
+		}
+
+		// PKW EnVKV 2024
+		//CO2 emissions
+		$temp = $item->xpath('//ad:emissions/combined/co2');
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-co2-emission'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-co2-emission'] = "";
+		}
+		// CO2 class based on CO2 emissions
+		$temp = $item->xpath('//ad:emissions/combined/co2-class');
+		if (isset($temp[0]['value'])) {	
+			$mob_data['wltp-co2-class'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-co2-class'] = "";
+		}
+		// CO2 class based on CO2 emissions with discharged battery
+		$temp = $item->xpath('//ad:emissions/discharged/co2Class');
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-co2-class-discharged'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-co2-class-discharged'] = "";	
+		}
+		// Weighted combined consumption
+		$temp = $item->xpath('//ad:consumptions/weightedCombinedFuel');
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-weighted-combined-fuel'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-weighted-combined-fuel'] = "";
+		}
+		// Combined consumption	
+		$temp = $item->xpath('//ad:consumptions/fuel/combined');
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-combined'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-combined'] = "";
+		}
+		// Weighted combined electricity consumption	
+		$temp = $item->xpath('//ad:consumptions/weightedCombinedPower');
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-weighted-combined-power'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-weighted-combined-power'] = "";
+		}
+		// Combined electricity consumption
+		$temp = $item->xpath('//ad:consumptions/power/combined');
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-combined-power'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-combined-power'] = "";
+		}
+		// Combined consumption with discharged battery	
+		$temp = $item->xpath('//ad:consumptions/fuel/combined');
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-combined-discharged'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-combined-discharged'] = "";
 		}
 		// ==================================================================
 		//

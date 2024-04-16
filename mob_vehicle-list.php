@@ -151,7 +151,7 @@ if ($vehicles->have_posts()) { ?>
 				</div> <!-- // vehicle-row -->
 				<div class="vehicle-emission">
 					<?php if (!empty($meta_values['emissionFuelConsumption_Combined'][0])) { ?>
-						<small><label>Kraftstoffverbr. komb. ca.:</label><span>
+						<small>Kraftstoffverbr. komb. ca.:<span>
 								<?php echo $meta_values['emissionFuelConsumption_Combined'][0] . ' l/100km*'; ?>
 							</span></small>
 					<?php } ?>
@@ -208,6 +208,38 @@ if ($vehicles->have_posts()) { ?>
 								Menge an Kohlendioxidemissionen für Plug-in-Hybride*: ≈<span>
 								<?php echo $meta_values['wltp-co2-emission-combined-weighted'][0]; ?>
 							</span> g/km</small>
+					<?php } ?>
+					<?php if (!empty($meta_values['wltp-co2-emission'][0])) { ?><small>CO2-Emissionen (WLTP)*: ≈<span>
+								<?php echo $meta_values['wltp-co2-emission'][0]; ?>
+							</span> g/km</small>
+					<?php } ?>
+					<?php if (!empty($meta_values['wltp-co2-class'][0])) { ?><small>CO2-Klasse auf Basis der CO2-Emissionen (WLTP)*: ≈<span>
+								<?php echo $meta_values['wltp-co2-class'][0]; ?>
+							</span></small>
+					<?php } ?>
+					<?php if (!empty($meta_values['wltp-co2-class-discharged'][0])) { ?><small>CO2-Klasse auf Grundlage der CO2-Emissionen bei entladener Batterie (WLTP)*: ≈<span>
+								<?php echo $meta_values['wltp-co2-class-discharged'][0]; ?>
+							</span></small>
+					<?php } ?>
+					<?php if (!empty($meta_values['wltp-weighted-combined-fuel'][0])) { ?><small>Verbrauch gewichtet, kombiniert (WLTP)*: ≈<span>
+								<?php echo $meta_values['wltp-weighted-combined-fuel'][0]; ?>
+							</span> l/100km</small>
+					<?php } ?>
+					<?php if (!empty($meta_values['wltp-combined'][0])) { ?><small>Verbrauch kombiniert	(WLTP)*: ≈<span>
+								<?php echo $meta_values['wltp-combined'][0]; ?>
+							</span> kWh/100km</small>
+					<?php } ?>
+					<?php if (!empty($meta_values['wltp-weighted-combined-power'][0])) { ?><small>Stromverbrauch gewichtet, kombiniert (WLTP)*: ≈<span>
+								<?php echo $meta_values['wltp-weighted-combined-power'][0]; ?>
+							</span> kWh/100km</small>
+					<?php } ?>
+					<?php if (!empty($meta_values['wltp-combined-power'][0])) { ?><small>Stromverbrauch kombiniert (WLTP)*: ≈<span>
+								<?php echo $meta_values['wltp-combined-power'][0]; ?>
+							</span> kWh/100km</small>
+					<?php } ?>
+					<?php if (!empty($meta_values['wltp-combined-discharged'][0])) { ?><small>Verbrauch bei entladener Batterie kombiniert (WLTP)*: ≈<span>
+								<?php echo $meta_values['wltp-combined-discharged'][0]; ?>
+							</span> kWh/100km</small>
 					<?php } ?>
 				</div>
 			</article>

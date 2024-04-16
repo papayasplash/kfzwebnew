@@ -843,6 +843,27 @@ function writeIntoWp($item)
 	if(!empty($item['wltp-consumption-power-combined-weighted'])) { update_post_meta($post_id, 'wltp-consumption-power-combined-weighted', $item['wltp-consumption-power-combined-weighted']); }
 	// Weighted amount of carbon dioxide emissions in g/km for plugin hybrids
 	if(!empty($item['wltp-co2-emission-combined-weighted'])) { update_post_meta($post_id, 'wltp-co2-emission-combined-weighted', $item['wltp-co2-emission-combined-weighted']); }
+	// CO2 emissions
+	if(!empty($item['wltp-co2-emission'])) { update_post_meta($post_id, 'wltp-co2-emission', $item['wltp-co2-emission']); }
+	// CO2 class based on CO2 emissions
+	if(!empty($item['wltp-co2-class'])) { update_post_meta($post_id, 'wltp-co2-class', $item['wltp-co2-class']); }
+	// CO2 class based on CO2 emissions with discharged battery
+	if(!empty($item['wltp-co2-class-discharged'])) { update_post_meta($post_id, 'wltp-co2-class-discharged', $item['wltp-co2-class-discharged']); }
+	// Weighted combined consumption
+	if( !empty($item['wltp-weighted-combined-fuel']) ) { update_post_meta($post_id, 'wltp-weighted-combined-fuel', $item['wltp-weighted-combined-fuel']); }
+	// combined consumption
+	if( !empty($item['wltp-combined']) ) { update_post_meta($post_id, 'wltp-combined', $item['wltp-combined']); }
+	// Weighted combined electricity consumption
+	if( !empty($item['wltp-weighted-combined-power']) ) { update_post_meta($post_id, 'wltp-weighted-combined-power', $item['wltp-weighted-combined-power']); }
+	// Combined electricity consumption
+	if( !empty($item['wltp-combined-power']) ) { update_post_meta($post_id, 'wltp-combined-power', $item['wltp-combined-power']); }
+	// Combined consumption with discharged battery	
+	if( !empty($item['wltp-combined-discharged']) ) { update_post_meta($post_id, 'wltp-combined-discharged', $item['wltp-combined-discharged']); }
+
+
+
+
+
 	update_post_meta($post_id, 'is_finished', '1');
 	return $post_id;
 }
