@@ -24,10 +24,75 @@ return array_merge( $links, $mylinks );
 
 include_once('mobilede-main.php');
 include_once('shortcodes.php');
+
+
 if (wp_get_schedule('mob_periodic_event_hook') === false){
 	wp_schedule_event(time(), 'minutely', 'mob_periodic_event_hook');
 }
-register_deactivation_hook(__FILE__, 'mob_periodic_event_hook_activation');
-function mob_periodic_event_hook_activation() {
-	wp_clear_scheduled_hook('mob_periodic_event_hook');
+if (wp_get_schedule('kfzweb_daily_license_check') === false){
+	wp_schedule_event(time(), 'daily', 'kfzweb_daily_license_check');
 }
+
+register_deactivation_hook(__FILE__, 'mob_periodic_event_hook_deactivation');
+function mob_periodic_event_hook_deactivation() {
+	wp_clear_scheduled_hook('mob_periodic_event_hook');
+	wp_clear_scheduled_hook('kfzweb_daily_license_check');
+}
+// Funktion zum Planen des täglichen Lizenzchecks
+function kfzweb_schedule_license_check() {
+    if (!wp_next_scheduled('kfzweb_daily_license_check')) {
+        wp_schedule_event(time(), 'daily', 'kfzweb_daily_license_check');
+		error_log('kfzweb_schedule_license_check wp_schedule_event wurde aufgerufen');
+    }
+	error_log('kfzweb_schedule_license_check wurde aufgerufen');
+}
+
+// Funktion zur Durchführung des Lizenzchecks
+function kfzweb_check_license() {
+    $license_status = mob_license_check(); // Funktion zur Überprüfung des Lizenzstatus
+    if ($license_status !== 'active') {
+        add_action('admin_notices', 'kfzweb_license_error_notice');
+    }
+}
+
+// WordPress-Hook, der die Lizenzprüffunktion aufruft
+add_action('kfzweb_daily_license_check', 'kfzweb_check_license');
+
+// Funktion zur Anzeige einer Fehlermeldung im Admin-Bereich
+function kfzweb_license_error_notice() {
+    ?>
+    <div class="notice notice-error">
+        <p><?php _e('Die Lizenz für das KFZWeb Plugin ist abgelaufen oder deaktiviert. Bitte erneuern Sie die Lizenz, um weiterhin alle Funktionen nutzen zu können.', 'kfzweb'); ?></p>
+    </div>
+    <?php
+}
+
+function mob_license_check() {
+	error_log('mob_license_check wurde aufgerufen');
+	global $wp_version;
+
+	$license = trim( get_option( 'mob_license_key' ) );
+		
+	$api_params = array( 
+		'edd_action' => 'check_license', 
+		'license' => $license, 
+		'item_name' => urlencode( KFZ_WEB_ITEM_NAME ) 
+	);
+
+	// Call the custom API.
+	$response = wp_remote_get( add_query_arg( $api_params, KFZ_WEB_STORE ), array( 'timeout' => 15, 'sslverify' => false ) );
+
+
+	if ( is_wp_error( $response ) )
+		return false;
+
+	$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+	if( $license_data->license == 'valid' ) {
+		return 'active';
+		error_log('lizenz aktiv');
+	} else {
+		return 'expired';
+		error_log('lizenz abgelaufen');
+	}
+}
+

@@ -53,13 +53,7 @@ function template_decider()
 }
 function registerFrontendStuff() {
     $options = get_option('MobileDE_option');
-    if (empty($options['mob_bootstrap_option'])) {
-        $options['mob_bootstrap_option'] = 'yes';
-    }
-    if ($options['mob_bootstrap_option'] == 'yes' && !is_admin()) {
-        wp_enqueue_style('bootstrap_cdn_css', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css');
-        wp_enqueue_script('bootstrap_cdn_js', plugin_dir_url(__FILE__) . 'js/bootstrap.min.js', array('jquery'));
-    }
+    
     if (empty($options['mob_slider_option'])) {
         $options['mob_slider_option'] = 'yes';
     }
@@ -699,7 +693,7 @@ function writeIntoWp($item)
 	}
 	if ($options['mob_image_option'] == 'web') {
 		foreach($item['images'] as $image) {
-			update_post_meta($post_id, 'ad_gallery', (string)$image);
+			add_post_meta($post_id, 'ad_gallery', (string)$image);
 		}
 		if (substr($item['images'][0], -6) == '27.JPG') {
 			$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
@@ -724,21 +718,21 @@ function writeIntoWp($item)
 		// log_me('EBAY BILD');
 		// log_me((string)$image);
 		// update_post_meta($post_id, 'ad_gallery', (string)$image);
-		if (substr($image, -6) == '27.JPG') {
-			$temp = str_replace('27.JPG', '57.JPG', $image); // 1600x1200 px
-			if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
-				$metaData = import_post_image($post_id, $temp, $i == 0);
-				// metaData = update_post_meta($post_id, $temp, $i);
+			if (substr($image, -6) == '27.JPG') {
+				$temp = str_replace('27.JPG', '57.JPG', $image); // 1600x1200 px
+				if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
+					$metaData = import_post_image($post_id, $temp, $i == 0);
+					// metaData = update_post_meta($post_id, $temp, $i);
+				}
+				else {
+					$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
+				}
 			}
 			else {
 				$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
 			}
 		}
-		else {
-			$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
-		}
 	}
-}
 	// new feature meta_values as single post_meta
 	if(!empty($item['ABS'])) { $meta_data_to_update['ABS'] = $item['ABS']; }
 	if(!empty($item['ALLOY_WHEELS'])) { $meta_data_to_update['ALLOY_WHEELS'] = $item['ALLOY_WHEELS']; }
@@ -888,7 +882,7 @@ do_action( 'kfz_web_meta' );
 // function import_post_image($post_id, $image_url, $thumbnail = false)
 // {
 // 	$upload_dir = wp_upload_dir();
-// 	$image_data = file_get_contents($image_url);
+// 	$image_data = wp_remote_get($image_url);
 // 	$filename = uniqid($post_id . '-') . basename($image_url);
 // 	if (wp_mkdir_p($upload_dir['path'])) $file = $upload_dir['path'] . '/' . $filename;
 // 	else $file = $upload_dir['subdir'] . '/' . $filename;
@@ -910,41 +904,45 @@ do_action( 'kfz_web_meta' );
 // 	}
 // 	return $attach_data;
 // }
-function import_post_image($post_id, $image_url, $thumbnail = false)
-{
-    $re = '/\[0]\s\=\>\s/m';
-    $str = '[0] => https://img.classistatic.de/api/v1/mo-prod/images/a4/a44c541e-fcac-48fc-8974-4fb28782ec52?rule=mo-640.jpg';
-    $subst = '';
-    $image_url = preg_replace($re, $subst, $image_url);
-  
-    $upload_dir = wp_upload_dir();
-    $url = $image_url;
-    $image_data = file_get_contents($image_url);
-    $filename = uniqid($post_id . '-') . basename($image_url);
-    $re = '/\?|\=/m';
-    $str = $filename;
-    $subst = '-';
-    $filename = preg_replace($re, $subst, $str);
-    if (wp_mkdir_p($upload_dir['path']))
-    {$file = $upload_dir['path'] . '/' . $filename;}
-    else $file = $upload_dir['subdir'] . '/' . $filename;
-    $isFilePut = file_put_contents($file, $image_data);
-    $wp_filetype = wp_check_filetype($filename, null);
-    $attachment = array(
-        'post_mime_type' => $wp_filetype['type'],
-        'post_title' => sanitize_file_name($filename) ,
-        'post_content' => '',
-        'post_status' => 'inherit'
-    );
-    $attach_id = wp_insert_attachment($attachment, $file, $post_id);
-    require_once (ABSPATH . 'wp-admin/includes/image.php');
-    $attach_data = wp_generate_attachment_metadata($attach_id, $file);
-    // Generate thumbnails and different sizes of images.
-    wp_update_attachment_metadata($attach_id, $attach_data);
-    if ($thumbnail) {
-        set_post_thumbnail($post_id, $attach_id);
+function import_post_image($post_id, $image_url, $thumbnail = false) {
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
+    require_once(ABSPATH . 'wp-admin/includes/media.php');
+
+    // Überprüfen, ob die URL gültig ist
+    if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
+        return false; // URL ist nicht gültig
     }
-    return $attach_data;
+
+    // Verwenden von wp_remote_get anstelle von file_get_contents
+    $response = wp_remote_get($image_url);
+    if (is_wp_error($response)) {
+        return false; // Fehler beim Herunterladen der Datei
+    }
+
+    $image_data = wp_remote_retrieve_body($response);
+    $filename = basename($image_url);
+    $upload_file = wp_upload_bits($filename, null, $image_data);
+    if (!$upload_file['error']) {
+        $wp_filetype = wp_check_filetype($filename, null);
+        $attachment = array(
+            'post_mime_type' => $wp_filetype['type'],
+            'post_parent' => $post_id,
+            'post_title' => preg_replace('/\.[^.]+$/', '', $filename),
+            'post_content' => '',
+            'post_status' => 'inherit'
+        );
+        $attachment_id = wp_insert_attachment($attachment, $upload_file['file'], $post_id);
+        if (!is_wp_error($attachment_id)) {
+            $attachment_data = wp_generate_attachment_metadata($attachment_id, $upload_file['file']);
+            wp_update_attachment_metadata($attachment_id, $attachment_data);
+            if ($thumbnail) {
+                set_post_thumbnail($post_id, $attachment_id);
+            }
+            return $attachment_data;
+        }
+    }
+    return false; // Rückgabe im Fehlerfall
 }
 /**
  * Deletes all posts from 'fahrzeuge'.
@@ -983,19 +981,21 @@ function mob_deleteAllPosts()
  */
 function mob_delete_attachment($post_id)
 {
-	$args = array(
-		'post_type' => 'attachment',
-		'numberposts' => - 1,
-		'post_status' => null,
-		'post_parent' => $post_id
-	);
-	$attachments = get_posts($args);
-	if ($attachments) {
-		foreach($attachments as $attachment) {
-			if (wp_delete_attachment($attachment->ID, true)) {
-			}
-		}
-	}
+    // Abrufen aller Anhänge des Beitrags
+    $attachments = get_children(array(
+        'post_parent' => $post_id,
+        'post_type' => 'attachment',
+        'post_status' => 'inherit', // Anhänge haben den Status 'inherit'
+        'numberposts' => -1, // Alle Anhänge abrufen
+    ));
+
+    // Überprüfen, ob Anhänge vorhanden sind
+    if (!empty($attachments)) {
+        foreach ($attachments as $attachment) {
+            // Löschen jedes Anhangs
+            wp_delete_attachment($attachment->ID, true);
+        }
+    }
 }
 // On deactivation, remove all functions from the scheduled action hook. // ? --bth 2014-11-11
 register_deactivation_hook(__FILE__, 'mob_deactivation');

@@ -47,19 +47,7 @@ class mob_Setting{
 <img src="//www.mobilede-fahrzeugintegration.de/wp-content/uploads/2016/10/kfz-web-logo.png"> </img>
 
             <?php //screen_icon(); ?>
-
-            <h2><?php __('MobileDE Settings'); ?></h2>
-	<form class="inputForm" method="post" action="options.php">
-            <?php
-                // This prints out all hidden setting fields
-                settings_fields( 'MobileDE_option' );   
-                do_settings_sections( 'searchde-setting-admin' );
-                submit_button(); 
-            ?><input class="button-primary" type="button"
-			id="importData" value="<?php esc_attr_e('Import vehicles', 'kfz-web') ?>" /> <input class="button-primary" type="button" id="deletePosts" value="Delete vehicles" />
-	</form>
-	
-		<?php
+			<?php
 		$license 	= get_option( 'mob_license_key' );
 		$status 	= get_option( 'mob_license_status' );
 		if( $status == false && $status !== 'valid' ) { 
@@ -69,7 +57,20 @@ class mob_Setting{
 			</p></div>
 			';
 		}
-
+		?>
+            <h2><?php __('MobileDE Settings'); ?></h2>
+	<form class="inputForm" method="post" action="options.php">
+            <?php
+                // This prints out all hidden setting fields
+                settings_fields( 'MobileDE_option' );   
+                do_settings_sections( 'searchde-setting-admin' );
+                submit_button(); 
+            ?><input class="button-primary" type="button" <?php if( $status == false && $status !== 'valid' ) { ?>disabled<?php } ?>
+			id="importData" value="<?php esc_attr_e('Import vehicles', 'kfz-web') ?>" /> <input class="button-primary" type="button" id="deletePosts" value="Delete vehicles" />
+	</form>
+	
+		
+		<?php
 		// PHP Memory Limit Check
 		$options = ini_get_all();
 		$memory_limit = str_replace('M', '', $options['memory_limit']['local_value']);

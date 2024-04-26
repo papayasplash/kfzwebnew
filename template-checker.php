@@ -17,14 +17,14 @@ function check_single_fahrzeuge($content = null)
 {
     if (is_singular('fahrzeuge')) {
         $meta_values = get_post_meta(get_the_ID());
-        //print_r($meta_values);
+        // print_r($meta_values);
         $content = '
         <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Car"><div class="row"><div class="col-xs-12"><h2 class="text-left title" itemprop="name">' . get_the_title() . '</h2><h5 class="text-left" itemprop="category">' . $meta_values['category'][0] . ', ' . $meta_values['condition'][0] . '</h5></div></div><div class="row"><div class="col-xs-12 col-sm-7">';
         $options = get_option('MobileDE_option');
         if (isset($options['mob_slider_option']) && $options['mob_slider_option'] == 'yes') {
             $content .= '<div class="slider-main" style="overflow: hidden;">';
-            if (!empty($meta_values['images_ebay'])) {
-                $mob_images = $meta_values['images_ebay'];
+            if (!empty($meta_values['ad_gallery'])) {
+                $mob_images = $meta_values['ad_gallery'];
                 foreach ($mob_images as $mob_image) {
                     $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
                     $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
@@ -37,8 +37,8 @@ function check_single_fahrzeuge($content = null)
                 }
             }
             $content .= '</div><div class="slider-nav" style="overflow: hidden;">';
-            if (!empty($meta_values['images_ebay'])) {
-                $mob_images = $meta_values['images_ebay'];
+            if (!empty($meta_values['ad_gallery'])) {
+                $mob_images = $meta_values['ad_gallery'];
                 foreach ($mob_images as $mob_image) {
                     $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
                     $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
@@ -58,8 +58,8 @@ function check_single_fahrzeuge($content = null)
                 $content .= get_the_post_thumbnail_url();
             }
             $content .= '" itemprop="image"/><div class="row">';
-            if (!empty($meta_values['images_ebay'])) {
-                $mob_images = $meta_values['images_ebay'];
+            if (!empty($meta_values['ad_gallery'])) {
+                $mob_images = $meta_values['ad_gallery'];
                 foreach ($mob_images as $mob_image) {
                     $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
                     $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);

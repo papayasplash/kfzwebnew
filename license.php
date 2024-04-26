@@ -66,35 +66,7 @@ function mob_license_page() {
 * want to do something custom
 *************************************/
 
-function mob_license_check() {
 
-	global $wp_version;
-
-	$license = trim( get_option( 'mob_license_key' ) );
-		
-	$api_params = array( 
-		'edd_action' => 'check_license', 
-		'license' => $license, 
-		'item_name' => urlencode( KFZ_WEB_ITEM_NAME ) 
-	);
-
-	// Call the custom API.
-	$response = wp_remote_get( add_query_arg( $api_params, KFZ_WEB_STORE ), array( 'timeout' => 15, 'sslverify' => false ) );
-
-
-	if ( is_wp_error( $response ) )
-		return false;
-
-	$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-	if( $license_data->license == 'valid' ) {
-		echo '<div class="notice notice-success"><p>Das Plugin wurde erfolgreich auf dieser Domain aktiviert.</p></div>'; exit;
-
-		// this license is still valid
-	} else {
-		echo '<div class="notice notice-error"><p>Das Plugin ist nicht aktiv. Falls Sie Probleme mit der Aktivierung haben, Prüfen sie ob das Plugin schon auf einer anderen Seite aktiviert wurde. <b>Deaktivieren</b> sie das Plugin auf der vorherigen Domain und <b>aktivieren</b> es anschließend auf dieser Seite.</p><p>Wenn sie keinen Zugang zu Ihrer vorherigen Domain haben, schreiben sie uns ein <a target="_blank" href="http://support.neusued-media.de/">Ticket</a> unter http://support.neusued-media-de/</p></div>'; exit;
-		// this license is no longer valid
-	}
-}
 
 
 
