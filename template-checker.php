@@ -21,59 +21,57 @@ function check_single_fahrzeuge($content = null)
         $content = '
         <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Car"><div class="row"><div class="col-xs-12"><h2 class="text-left title" itemprop="name">' . get_the_title() . '</h2><h5 class="text-left" itemprop="category">' . $meta_values['category'][0] . ', ' . $meta_values['condition'][0] . '</h5></div></div><div class="row"><div class="col-xs-12 col-sm-7">';
         $options = get_option('MobileDE_option');
-        if (isset($options['mob_slider_option']) && $options['mob_slider_option'] == 'yes') {
-            $content .= '<div class="slider-main" style="overflow: hidden;">';
-            if (!empty($meta_values['ad_gallery'])) {
-                $mob_images = $meta_values['ad_gallery'];
-                foreach ($mob_images as $mob_image) {
-                    $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
-                    $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
-                    $content .= '<img src="' . $bigimage . '" />';
-                }
-            } else {
-                more_fields(true); // Reset index.
-                while (($more_pics = more_fields())) {
-                    $content .= '<img src="' . $more_pics['file'] . '"/>';
-                }
-            }
-            $content .= '</div><div class="slider-nav" style="overflow: hidden;">';
-            if (!empty($meta_values['ad_gallery'])) {
-                $mob_images = $meta_values['ad_gallery'];
-                foreach ($mob_images as $mob_image) {
-                    $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
-                    $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
-                    $content .= '<img src="' . $mob_image_ssl . '" />';
-                }
-            } else {
-                more_fields(true); // Reset index.
-                // Bilder form /wp-content/uploads
-                while (($more_pics = more_fields())) {
-                    $content .= '<img src="' . $more_pics['sizes']['thumbnail']['file'] . '"/>';
-                }
-            }
-            $content .= '</div>';
-        } else {
-            $content .= '<img class="img-responsive" src="';
-            if (function_exists('has_post_thumbnail') && has_post_thumbnail()) {
-                $content .= get_the_post_thumbnail_url();
-            }
-            $content .= '" itemprop="image"/><div class="row">';
-            if (!empty($meta_values['ad_gallery'])) {
-                $mob_images = $meta_values['ad_gallery'];
-                foreach ($mob_images as $mob_image) {
-                    $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
-                    $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
-                    $content .= '<div class="col-xs-4 col-sm-3 col-lg-2 top15"><a href="' . $bigimage . '"><img class="img img-responsive" src="' . $mob_image_ssl . '" /></a></div>';
-                }
-            } else {
-                more_fields(true); // Reset index.
-                // Bilder form /wp-content/uploads
-                while (($more_pics = more_fields())) {
-                    $content .= '<div class="col-xs-4 col-sm-3 col-lg-2 top15"><a href="' . $more_pics['file'] . '"><img class="img img-responsive" src="' . $more_pics['sizes']['thumbnail']['file'] . '"/></a></div>';
-                }
-            }   
-            $content .= '</div>';
-        }
+        // if (isset($options['mob_slider_option']) && $options['mob_slider_option'] == 'yes') {
+        //     $content .= '<div class="slider-main" style="overflow: hidden;">';
+        //     if (!empty($meta_values['ad_gallery'])) {
+        //         $mob_images = $meta_values['ad_gallery'];
+        //         foreach ($mob_images as $mob_image) {
+        //             $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
+        //             $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
+        //             $content .= '<img src="' . $bigimage . '" />';
+        //         }
+        //     } else {
+        //         more_fields(true); // Reset index.
+        //         while (($more_pics = more_fields())) {
+        //             $content .= '<img src="' . $more_pics['file'] . '"/>';
+        //         }
+        //     }
+        //     $content .= '</div><div class="slider-nav" style="overflow: hidden;">';
+        //     if (!empty($meta_values['ad_gallery'])) {
+        //         $mob_images = $meta_values['ad_gallery'];
+        //         foreach ($mob_images as $mob_image) {
+        //             $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
+        //             $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
+        //             $content .= '<img src="' . $mob_image_ssl . '" />';
+        //         }
+        //     } else {
+        //         more_fields(true); 
+        //         while (($more_pics = more_fields())) {
+        //             $content .= '<img src="' . $more_pics['sizes']['thumbnail']['file'] . '"/>';
+        //         }
+        //     }
+        //     $content .= '</div>';
+        // } else {
+        //     $content .= '<img class="img-responsive" src="';
+        //     if (function_exists('has_post_thumbnail') && has_post_thumbnail()) {
+        //         $content .= get_the_post_thumbnail_url();
+        //     }
+        //     $content .= '" itemprop="image"/><div class="row">';
+        //     if (!empty($meta_values['ad_gallery'])) {
+        //         $mob_images = $meta_values['ad_gallery'];
+        //         foreach ($mob_images as $mob_image) {
+        //             $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
+        //             $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
+        //             $content .= '<div class="col-xs-4 col-sm-3 col-lg-2 top15"><a href="' . $bigimage . '"><img class="img img-responsive" src="' . $mob_image_ssl . '" /></a></div>';
+        //         }
+        //     } else {
+        //         more_fields(true); 
+        //         while (($more_pics = more_fields())) {
+        //             $content .= '<div class="col-xs-4 col-sm-3 col-lg-2 top15"><a href="' . $more_pics['file'] . '"><img class="img img-responsive" src="' . $more_pics['sizes']['thumbnail']['file'] . '"/></a></div>';
+        //         }
+        //     }   
+        //     $content .= '</div>';
+        // }
         $content .= '</div><hr class="visible-xs"><div class="col-xs-12 col-sm-5"><div class="row"><br><div class="col-xs-12" itemprop="makesOffer" itemscope itemtype="http://schema.org/Offer" itemref="product">';
         if (!empty($meta_values['price'][0])) {
             $content .= '<div itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification"><meta itemprop="priceCurrency" content="EUR"><meta itemprop="price" content="'.$meta_values['price'][0].'">';
@@ -200,26 +198,166 @@ function check_single_fahrzeuge($content = null)
             $content .= $nextInspection;
             $content .= '</strong>';
         }
-        $content .= '</div></div></div><div class="col-xs-12 col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-leaf placative-info" aria-hidden="true"></span> Energie & Umwelt</h3></div><div class="panel-body">';
+        $content .= '</div></div></div>
+        <div class="col-xs-12 col-sm-4">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-leaf placative-info" aria-hidden="true"></span> Energie & Umwelt</h3>
+        </div>
+        <div class="panel-body">
+        <table>
+        <style>
+        td {
+            vertical-align: top;
+            height: 25px;
+          }
+        </style>
+        <tbody align="top">
+
+        ';
+        
+        if (!empty($meta_values['wltp-co2-emission'][0])) {
+            $content .= '<tr><td><span>CO2-Emissionen (komb.)* <div class="popover-container"><button>&#x1F6C8;</button><div class="popover-content"><p>CO₂-Emissionen</p><p>Es werden nur die CO₂-Emissionen angegeben, die durch den Betrieb des Pkw entstehen. CO₂-Emissionen, die durch die Produktion und Bereitstellung des Pkw sowie des Kraftstoffes bzw. der Energieträger entstehen oder vermieden werden, werden bei der Ermittlung der CO₂-Emissionen gemäß WLTP nicht berücksichtigt.</p></div></div>: </span></td><td><strong>' . $meta_values['wltp-co2-emission'][0] . ' g/km</strong></td></tr>';
+        }
+        if (!empty($meta_values['wltp-co2-class'][0]) && !empty($meta_values['wltp-co2-class-discharged'][0])) { 
+            $content .= '<tr><td><span>CO2-Klasse: </span></td><td><small>auf Basis der CO2-Emissionen (kombiniert)</small><br><img style="padding: .5rem; background: white; border: 1px solid lightgray;" src="https://img.classistatic.de/api/v1/mo-prod/images/co2class-' . $meta_values['wltp-co2-class'][0] . '-' . $meta_values['wltp-co2-class-discharged'][0] . '-de?rule=mo-240.jpg" /></td></tr>';
+        } elseif (!empty($meta_values['wltp-co2-class'][0]) ) { 
+            $content .= '<tr><td><span>CO2-Klasse: </span></td><td><small>auf Basis der CO2-Emissionen (kombiniert)</small><br><img style="padding: .5rem; background: white; border: 1px solid lightgray;" src="https://img.classistatic.de/api/v1/mo-prod/images/co2class-' . $meta_values['wltp-co2-class'][0] . '?rule=mo-240.jpg" /></td></tr>';
+        }
+        
+        if (!empty($meta_values['wltp-combined-fuel'][0]) && ($meta_values['fuel'][0] !== 'Elektro' && $meta_values['fuel'][0] !== 'Plug-in-Hybrid' && $meta_values['fuel'][0] !== 'Hybrid (Benzin/Elektro)')) { 
+            $content .= '<tr><td><span>Kraftstoffverbrauch:</span></td><td> 
+            <strong>' . $meta_values['wltp-combined-fuel'][0] . 'l/100km (kombiniert)</strong><br>';
+        
+            if (!empty($meta_values['wltp-city-fuel'][0])) {
+                $content .= $meta_values['wltp-city-fuel'][0] . ' l/100km (Innenstadt)<br>';
+            }
+            if (!empty($meta_values['wltp-suburban-fuel'][0])) {
+                $content .= $meta_values['wltp-suburban-fuel'][0] . ' l/100km (Stadtrand)<br>';
+            }
+            if (!empty($meta_values['wltp-rural-fuel'][0])) {
+                $content .= $meta_values['wltp-rural-fuel'][0] . ' l/100km (Landstraße)<br>';
+            }
+            if (!empty($meta_values['wltp-highway-fuel'][0])) {
+                $content .= $meta_values['wltp-highway-fuel'][0] . ' l/100km (Autobahn)<br>';
+            }
+        
+            $content .= '</td></tr>';
+        } 
+        if (!empty($meta_values['wltp-electric-range'][0])) { 
+            $content .= '<tr><td><span>Elektrische Reichweite:</span></td><td> <strong>' . $meta_values['wltp-electric-range'][0] . ' km</strong><br></td></tr>';
+        } 
+        if (!empty($meta_values['wltp-electric-range-equivalent-all'][0])) { 
+            $content .= '<tr><td><span>Elektrische Reichweite (EAER):</span></td><td> <strong>' . $meta_values['wltp-electric-range-equivalent-all'][0] . ' km</strong><br></td></tr>';
+        } 
+        if (!empty($meta_values['wltp-weighted-combined-fuel'][0])) { 
+            $content .= '<tr><td><span>Verbrauch gewichtet, kombiniert:</span></td><td> <strong>' . $meta_values['wltp-weighted-combined-fuel'][0] . ' l/km</strong><br></td></tr>';
+        } 
+        if (!empty($meta_values['wltp-combined-power'][0])) { 
+            $content .= '<tr><td><span>Stromverbrauch bei rein elektrischem Antrieb:</span></td><td> 
+            <strong>' . $meta_values['wltp-combined-power'][0] . ' kWh/100km (kombiniert)</strong><br>';
+        
+            if (!empty($meta_values['wltp-city-power'][0])) {
+                $content .= $meta_values['wltp-city-power'][0] . ' kWh/100km (Innenstadt)<br>';
+            }
+            if (!empty($meta_values['wltp-suburban-power'][0])) {
+                $content .= $meta_values['wltp-suburban-power'][0] . ' kWh/100km (Stadtrand)<br>';
+            }
+            if (!empty($meta_values['wltp-rural-power'][0])) {
+                $content .= $meta_values['wltp-rural-power'][0] . ' kWh/100km (Landstraße)<br>';
+            }
+            if (!empty($meta_values['wltp-highway-power'][0])) {
+                $content .= $meta_values['wltp-highway-power'][0] . ' kWh/100km (Autobahn)<br>';
+            }
+        
+            $content .= '</td></tr>';
+        } 
+        if (!empty($meta_values['wltp-empty-combined-fuel'][0]) && !empty($meta_values['wltp-electric-range']) || !empty($meta_values['wltp-electric-range-equivalent-all'])) { 
+            $content .= '<tr><td><span>Kraftstoffverbrauch bei entladener Batterie:</span></td><td> 
+            <strong>' . $meta_values['wltp-empty-combined-fuel'][0] . ' l/100km (kombiniert)</strong><br>';
+        
+            if (!empty($meta_values['wltp-empty-city-fuel'][0])) {
+                $content .= $meta_values['wltp-empty-city-fuel'][0] . ' l/100km (Innenstadt)<br>';
+            }
+            if (!empty($meta_values['wltp-empty-suburban-fuel'][0])) {
+                $content .= $meta_values['wltp-empty-suburban-fuel'][0] . ' l/100km (Stadtrand)<br>';
+            }
+            if (!empty($meta_values['wltp-empty-rural-fuel'][0])) {
+                $content .= $meta_values['wltp-empty-rural-fuel'][0] . ' l/100km (Landstraße)<br>';
+            }
+            if (!empty($meta_values['wltp-empty-highway-fuel'][0])) {
+                $content .= $meta_values['wltp-empty-highway-fuel'][0] . ' l/100km (Autobahn)<br>';
+            }
+            $content .= '</td></tr>';
+        } 
+        if (!empty($meta_values['wltp-fuel-price-year'][0])) {
+            $formattedPrice = number_format((float)$meta_values['wltp-fuel-price-year'][0], 2, ',', '.');
+            $content .= '<tr><td><span>Kraftstoffpreis:</span></td><td> ' . formatCurrency($meta_values['wltp-fuel-price-year'][0]) . '/l';
+        
+            if (!empty($meta_values['wltp-consumption-price-year'][0])) {
+                $content .= ' <small>(Jahresdurchschnitt ' . $meta_values['wltp-consumption-price-year'][0] . ')</small>';
+            }
+        
+            $content .= '<br></td></tr>';
+        }
+        if (!empty($meta_values['wltp-power-price-year'][0])) {
+            $content .= '<tr><td><span>Strompreis:</span></td><td> ' . formatCurrency($meta_values['wltp-power-price-year'][0]) . '/kWh';
+        
+            if (!empty($meta_values['wltp-consumption-price-year'][0])) {
+                $content .= ' <small>(Jahresdurchschnitt ' . $meta_values['wltp-consumption-price-year'][0] . ')</small>';
+            }
+        
+            $content .= '<br></td></tr>';
+        }
+        if (!empty($meta_values['wltp-consumption-costs'][0])) { 
+            $content .= '<tr><td><span>Energiekosten bei 15.000 km Jahresfahrleistung:</span></td><td> ' . formatCurrency($meta_values['wltp-consumption-costs'][0]) . '/Jahr<br>';
+        } 
+
+
+
+
+        $middleAccumulated = !empty($meta_values['wltp-co2-costs-middle-accumulated'][0]) ? $meta_values['wltp-co2-costs-middle-accumulated'][0] : 0;
+        $middleBase = !empty($meta_values['wltp-co2-costs-middle-base'][0]) ? $meta_values['wltp-co2-costs-middle-base'][0] : 0;
+        $lowAccumulated = !empty($meta_values['wltp-co2-costs-low-accumulated'][0]) ? $meta_values['wltp-co2-costs-low-accumulated'][0] : 0;
+        $lowBase = !empty($meta_values['wltp-co2-costs-low-base'][0]) ? $meta_values['wltp-co2-costs-low-base'][0] : 0;
+        $highAccumulated = !empty($meta_values['wltp-co2-costs-high-accumulated'][0]) ? $meta_values['wltp-co2-costs-high-accumulated'][0] : 0;
+        $highBase = !empty($meta_values['wltp-co2-costs-high-base'][0]) ? $meta_values['wltp-co2-costs-high-base'][0] : 0;
+        
+        $content .= '<tr><td>Mögliche CO₂-Kosten über die nächsten 10 Jahre (15.000 km/Jahr)</td><td> <strong>' . formatCurrency($middleAccumulated) . ' (bei einem angenommenen mittleren durchschnittlichen CO2-Preis von ' . formatCurrency($middleBase) . '/t)</strong><br>';
+        if ($lowBase > 0) { 
+           $content .= formatCurrency($lowAccumulated) . ' (bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von ' . formatCurrency($lowBase) . '/t)<br>'; 
+        }
+        if ($highBase > 0) { 
+            $content .= formatCurrency($highAccumulated) . ' (bei einem angenommenen hohen durchschnittlichen CO2-Preis von ' . formatCurrency($highBase) . '/t)<br>'; 
+        }
+            
+        
+        if (!empty($meta_values['wltp-tax'][0])) {
+            $content .= '<tr><td><span>Kraftfahrzeugsteuer:</span></td><td> ' . formatCurrency($meta_values['wltp-tax'][0]) . '/Jahr<br></td></tr>';
+        }
+       
         if (!empty($meta_values['emissionFuelConsumption_Combined'][0])) {
-            $content .= '<span>Verbrauch komb.*:</span> <strong> ≈' . $meta_values['emissionFuelConsumption_Combined'][0] . ' l/100km</strong><br>';
+            $content .= '<tr><td><span>Verbrauch komb.*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Combined'][0] . ' l/100km</strong><br></td></tr>';
         }
         if (!empty($meta_values['emissionFuelConsumption_Inner'][0])) {
-            $content .= '<span>Verbrauch innerorts*:</span> <strong> ≈' . $meta_values['emissionFuelConsumption_Inner'][0] . ' l/100km</strong><br>';
+            $content .= '<tr><td><span>Verbrauch innerorts*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Inner'][0] . ' l/100km</strong><br></td></tr>';
         }
         if (!empty($meta_values['emissionFuelConsumption_Outer'][0])) {
-            $content .= '<span>Verbrauch außerorts*:</span> <strong> ≈' . $meta_values['emissionFuelConsumption_Outer'][0] . ' l/100km</strong><br>';
+            $content .= '<tr><td><span>Verbrauch außerorts*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Outer'][0] . ' l/100km</strong><br></td></tr>';
         }
         if (!empty($meta_values['emissionFuelConsumption_CO2'][0])) {
-            $content .= '<span>CO2-Emissionen komb.*:</span> <strong> ≈' . $meta_values['emissionFuelConsumption_CO2'][0] . ' g/km</strong><br>';
+            $content .= '<tr><td><span>CO2-Emissionen komb.*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_CO2'][0] . ' g/km</strong><br></td></tr>';
         }
         if (!empty($meta_values['combinedPowerConsumption'][0])) {
-            $content .= '<span>Stromverbrauch komb.*:</span> <strong> ≈' . $meta_values['combinedPowerConsumption'][0] . ' kwH/100km</strong><br>';
+            $content .= '<tr><td><span>Stromverbrauch komb.*:</span></td><td> <strong> ≈' . $meta_values['combinedPowerConsumption'][0] . ' kwH/100km</strong><br></td></tr>';
         }
         if (!empty($meta_values['emissionSticker'][0])) {
-            $content .= '<span>Emissionsklasse:</span> <strong> ' . $meta_values['emissionSticker'][0] . '</strong>';
+            $content .= '<tr><td><span>Emissionsklasse:</span></td><td> ' . $meta_values['emissionSticker'][0] . '';
         }
-        $content .= '</div></div></div><div class="col-xs-12"><hr></div><div class="col-xs-12 col-sm-6"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-camera placative-info" aria-hidden="true"></span> Optik</h3></div><div class="panel-body">';
+        $content .= '
+        </tbody>
+        </table>
+        </div></div></div><div class="col-xs-12"><hr></div><div class="col-xs-12 col-sm-6"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-camera placative-info" aria-hidden="true"></span> Optik</h3></div><div class="panel-body">';
         if (!empty($meta_values['manufacturer_color_name'][0])) {
             $content .= '<span>Farbbezeichnung:</span> <strong> ' . $meta_values['manufacturer_color_name'][0] . '</strong><br/>';
         }

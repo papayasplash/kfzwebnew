@@ -30,7 +30,7 @@ if (wp_get_schedule('mob_periodic_event_hook') === false){
 	wp_schedule_event(time(), 'minutely', 'mob_periodic_event_hook');
 }
 if (wp_get_schedule('kfzweb_daily_license_check') === false){
-	wp_schedule_event(time(), 'daily', 'kfzweb_daily_license_check');
+	wp_schedule_event(time(), 'minutely', 'kfzweb_daily_license_check');
 }
 
 register_deactivation_hook(__FILE__, 'mob_periodic_event_hook_deactivation');

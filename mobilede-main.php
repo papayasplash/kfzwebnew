@@ -271,17 +271,27 @@ function importVehicles($vehicles)
     foreach ($existing_vehicles as $post_id) {
         $existing_ad_keys[get_post_meta($post_id, 'ad_key', true)] = $post_id;
     }
-    
+    $total_vehicles = count($vehicles);
+    $vehicles_imported = 0;
     foreach ($vehicles as $vehicle) {
         if (!isset($existing_ad_keys[$vehicle['ad_key']])) {
             // Insert if not exists.
             $post_ids[] = writeIntoWp($vehicle);
+			$vehicles_imported++;
+			update_option('vehicle_import_progress', ($vehicles_imported / $total_vehicles) * 100);
         } else {
             // For updates or other operations with existing posts, remove this else block.
             // $post_ids[] = $existing_ad_keys[$vehicle['ad_key']];
         }
     }
     return $post_ids;
+}
+add_action('wp_ajax_get_vehicle_import_progress', 'get_vehicle_import_progress_callback');
+
+function get_vehicle_import_progress_callback() {
+    $progress = get_option('vehicle_import_progress', 0); // Standardwert ist 0
+    echo json_encode(array('progress' => $progress));
+    wp_die();
 }
 /**
  *
@@ -416,6 +426,7 @@ function removePostsByIds($post_ids)
 }
 function writeIntoWp($item)
 {
+	
 	global $mob_data;
 	/*
 	* Create dummy array to silence
@@ -441,6 +452,378 @@ function writeIntoWp($item)
 		'tax_input' => array(), // Custom Taxonomies that are loaded after? --bth 2014-11-12
 		'post_category' => array($class_catid)
 	));
+	
+	if(!empty($item['ad_key'])) { $meta_data_to_update['vehicleListingID'] = $item['ad_key']; }
+	update_post_meta($post_id, 'dataSource', 'mobile.de_api');
+	if(!empty($item['newCars'])) { $meta_data_to_update['creation-date'] = $item['creation-date']; }
+	if(!empty($item['class'])) { $meta_data_to_update['class'] = $item['class']; }
+	if(!empty($item['brand'])) { $meta_data_to_update['make'] = $item['make']; } // Deprecated.
+	if(!empty($item['make'])) { $meta_data_to_update['make'] = $item['make']; }
+	if(!empty($item['model'])) { $meta_data_to_update['make'] = $item['model']; }
+	if(!empty($item['model_variant'])) { $meta_data_to_update['model_variant'] = $item['model_variant']; }
+	if(!empty($item['variant'])) { $meta_data_to_update['model_description'] = $item['model_description']; } // Deprecated.
+	if(!empty($item['model_description'])) { $meta_data_to_update['model_description'] = $item['model_description']; }
+	if(!empty($item['damage-and-unrepaired'])) { $meta_data_to_update['damageUnrepaired'] = $item['damage-and-unrepaired']; } // Deprecated
+	if(!empty($item['damage-and-unrepaired'])) { $meta_data_to_update['damage_and_unrepaired'] = $item['damage-and-unrepaired']; }
+	if(!empty($item['accident_damaged'])) { $meta_data_to_update['accidentDamaged'] = $item['accident_damaged']; }
+	if(!empty($item['road_worthy'])) { $meta_data_to_update['road_worthy'] = $item['road_worthy']; }
+	if(!empty($item['category'])) { $meta_data_to_update['category'] = $item['category']; }
+	if(!empty($item['condition'])) { $meta_data_to_update['condition'] = $item['condition']; }
+	if(!empty($item['seller'])) { $meta_data_to_update['seller'] = $item['seller']; }
+	if(!empty($item['seller_id'])) { $meta_data_to_update['seller_id'] = $item['seller_id']; }
+	if(!empty($item['seller_company_name'])) { $meta_data_to_update['seller_company_name'] = $item['seller_company_name']; }
+	if(!empty($item['seller_street'])) { $meta_data_to_update['seller_street'] = $item['seller_street']; }
+	if(!empty($item['seller_zipcode'])) { $meta_data_to_update['seller_zipcode'] = $item['seller_zipcode']; }
+	if(!empty($item['seller_city'])) { $meta_data_to_update['seller_city'] = $item['seller_city']; }
+	if(!empty($item['seller_country'])) { $meta_data_to_update['seller_country'] = $item['seller_country']; }
+	if(!empty($item['seller_email'])) { $meta_data_to_update['seller_email'] = $item['seller_email']; }
+	if(!empty($item['seller_homepage'])) { $meta_data_to_update['seller_homepage'] = $item['seller_homepage']; }
+	if(!empty($item['seller_phone_country_calling_code'])) { $meta_data_to_update['seller_phone_country_calling_code'] = $item['seller_phone_country_calling_code']; }
+	if(!empty($item['seller_phone_area_code'])) { $meta_data_to_update['seller_phone_area_code'] = $item['seller_phone_area_code']; }
+	if(!empty($item['seller_phone_number'])) { $meta_data_to_update['seller_phone_number'] = $item['seller_phone_number']; }
+	if(!empty($item['seller_since'])) { $meta_data_to_update['seller_since'] = $item['seller_since']; }
+	if(!empty($item['sellerType'])) { $meta_data_to_update['sellerType'] = $item['sellerType']; }
+	if(!empty($item['first_registration'])) { $meta_data_to_update['firstRegistration'] = $item['first_registration']; }
+	if(!empty($item['first_registration_year'])) { $meta_data_to_update['firstRegistration_year'] = $item['first_registration_year']; } // Added 2015-03-16 --bth
+	if(!empty($item['emissionClass'])) { $meta_data_to_update['emissionClass'] = $item['emission_class']; }
+	if(!empty($item['emission_class'])) { $meta_data_to_update['emission_class'] = $item['emission_class']; }
+	if(!empty($item['co2_emission'])) { $meta_data_to_update['emissionFuelConsumption_CO2'] = $item['co2_emission']; }
+	if(!empty($item['inner'])) { $meta_data_to_update['emissionFuelConsumption_Inner'] = $item['inner']; }
+	if(!empty($item['outer'])) { $meta_data_to_update['emissionFuelConsumption_Outer'] = $item['outer']; }
+	if(!empty($item['combined'])) { $meta_data_to_update['emissionFuelConsumption_Combined'] = $item['combined']; }
+	if(!empty($item['combined-power-consumption'])) { $meta_data_to_update['combinedPowerConsumption'] = $item['combined-power-consumption']; }
+	if(!empty($item['unit'])) { $meta_data_to_update['emissionFuelConsumption_Unit'] = $item['unit']; }
+	if(!empty($item['emissionSticker'])) { $meta_data_to_update['emissionSticker'] = $item['emissionSticker']; }
+	if(!empty($item['exterior_color'])) { $meta_data_to_update['exteriorColor'] = $item['exterior_color']; }
+	if(!empty($item['fuel']) && !empty($item['HYBRID_PLUGIN'])) {
+		$meta_data_to_update['fuel'] = $item['HYBRID_PLUGIN'];
+		$item['fuel'] = $item['HYBRID_PLUGIN'];
+	} else { 
+		$meta_data_to_update['fuel'] = $item['fuel']; 
+	}
+	if(!empty($item['power'])) { $meta_data_to_update['power'] = $item['power']; }
+	if(!empty($item['number_of_previous_owners'])) { $meta_data_to_update['owners'] = $item['number_of_previous_owners']; }
+	if(!empty($item['cubic_capacity'])) { $meta_data_to_update['cubicCapacity'] = $item['cubic_capacity']; }
+	if(!empty($item['gearbox'])) { $meta_data_to_update['gearbox'] = $item['gearbox']; }
+	// $meta_data_to_update['monthsTillInspection'] = $item['monthsTillInspection']);
+	if(!empty($item['nextInspection'])) { $meta_data_to_update['nextInspection'] = $item['nextInspection']; }
+	if(!empty($item['features'])) { $meta_data_to_update['features'] = $item['features']; }
+	if(!empty($item['mileage'])) { $meta_data_to_update['mileage'] = $item['mileage']; }
+	if(!empty($item['mileage_raw'])) { $meta_data_to_update['mileage_raw'] = $item['mileage_raw']; } // Added 2015-03-16 --bth
+	if(!empty($item['mileage_class'])) { $meta_data_to_update['mileage_class'] = $item['mileage_class']; } // Added 2015-03-16 --bth
+	if(!empty($item['price'])) { $meta_data_to_update['price'] = $item['price']; }
+	if(!empty($item['dealer-price-amount'])) { $meta_data_to_update['dealer_price'] = $item['dealer-price-amount']; }
+	//	$meta_data_to_update['price_raw'] = $item['price_raw']); // Added 2015-03-16 --bth
+	if(!empty($item['price_raw_short'])) { $meta_data_to_update['price_raw_short'] = $item['price_raw_short']; } // Added 2015-03-16 --bth
+	if(!empty($item['currency'])) { $meta_data_to_update['currency'] = $item['currency']; }
+	if(!empty($item['vatable'])) { $meta_data_to_update['vatable'] = $item['vatable']; }
+	if(!empty($item['loadCapacity'])) { $meta_data_to_update['loadCapacity'] = $item['loadCapacity']; }
+	if(!empty($item['detail_page'])) { $meta_data_to_update['detailPage'] = $item['detail_page']; } // Deprecated
+	if(!empty($item['detail_page'])) { $meta_data_to_update['detail_page'] = $item['detail_page']; }
+	if(!empty($item['country'])) { $meta_data_to_update['country'] = $item['country']; }
+	if(!empty($item['zipcode'])) { $meta_data_to_update['zipcode'] = $item['zipcode']; }
+	if(!empty($item['ad_key'])) { $meta_data_to_update['ad_key'] = $item['ad_key']; }
+	// Changes for the caravan seller
+	if(!empty($item['construction-year'])) { $meta_data_to_update['construction_year'] = $item['construction-year']; }
+	if(!empty($item['number-of-bunks'])) { $meta_data_to_update['number_of_bunks'] = $item['number-of-bunks']; }
+	if(!empty($item['length'])) { $meta_data_to_update['length'] = $item['length']; }
+	if(!empty($item['width'])) { $meta_data_to_update['width'] = $item['width']; }
+	if(!empty($item['height'])) { $meta_data_to_update['height'] = $item['height']; }
+	if(!empty($item['licensed-weight'])) { $meta_data_to_update['licensed_weight'] = $item['licensed-weight']; }
+	// Additional data. --bth 2014-10-29 02:18:13
+	/*
+	* Delivery date and period.
+	*
+	*/
+	if(!empty($item['delivery-date'])) { $meta_data_to_update['delivery_date'] = $item['delivery-date']; }
+	if(!empty($item['delivery-period'])) { $meta_data_to_update['delivery_period'] = $item['delivery-period']; }
+	/*
+	* Contains either the future delivery_date or the string "Sofort".
+	* Gets calculated in searchAPI.
+	*/
+	if(!empty($item['available-from'])) { $meta_data_to_update['available_from'] = $item['available-from']; }
+	if(!empty($item['interior-type'])) { $meta_data_to_update['interior_type'] = $item['interior-type']; }
+	if(!empty($item['interior-color'])) { $meta_data_to_update['interior_color'] = $item['interior-color']; }
+	if(!empty($item['door-count'])) { $meta_data_to_update['door_count'] = $item['door-count']; }
+	if(!empty($item['num-seats'])) { $meta_data_to_update['num_seats'] = $item['num-seats']; }
+	if(!empty($item['number_of_previous_owners'])) { $meta_data_to_update['number_of_previous_owners'] = $item['number_of_previous_owners']; }
+	if(!empty($item['seller-inventory-key'])) { $meta_data_to_update['seller_inventory_key'] = $item['seller-inventory-key']; }
+	if(!empty($item['airbag'])) { $meta_data_to_update['airbag'] = $item['airbag']; }
+	/*
+	* Efficiency class and efficiency class image url.
+	*/
+	if(!empty($item['energy-efficiency-class'])) { update_post_meta($post_id, 'efficiency_class', $item['energy-efficiency-class']); }
+	if (!empty($item['energy-efficiency-class'])) {
+		// log_me(plugin_dir_url(__FILE__).'images/'.$item['energy-efficiency-class'].'.png');
+		// Maybe additional condition
+		{
+		update_post_meta($post_id, 'efficiency_class_image_url', get_site_url() . '/wp-content/plugins/kfzweb/images/' . $item['energy-efficiency-class'] . '.png');
+		}
+	}
+	// keys used in search
+	if(!empty($item['class_key'])) { $meta_data_to_update['class_key'] = $item['class_key']; }
+	if(!empty($item['category_key'])) { $meta_data_to_update['category_key'] = $item['category_key']; }
+	if(!empty($item['brand_key'])) { $meta_data_to_update['brand_key'] = $item['brand_key']; }
+	if(!empty($item['model_key'])) { $meta_data_to_update['model_key'] = $item['model_key']; }
+	if(!empty($item['fuel_key'])) { $meta_data_to_update['fuel_key'] = $item['fuel_key']; }
+	if(!empty($item['power_key'])) { $meta_data_to_update['power_key'] = $item['power_key']; }
+	if(!empty($item['owners_key'])) { $meta_data_to_update['owners_key'] = $item['owners_key']; }
+	if(!empty($item['cubicCapacity_key'])) { $meta_data_to_update['cubicCapacity_key'] = $item['cubicCapacity_key']; }
+	if(!empty($item['gearbox_key'])) { $meta_data_to_update['gearbox_key'] = $item['gearbox_key']; }
+	if(!empty($item['modification_date'])) { $meta_data_to_update['modification_date'] = $item['modification_date']; }
+	if(!empty($item['usage-type'])) { $meta_data_to_update['usage_type'] = $item['usage-type']; }
+	if(!empty($item['addition'])) { $meta_data_to_update['addition'] = $item['addition']; }
+	if(!empty($item['enriched_description'])) { $meta_data_to_update['enriched_description'] = $item['enriched_description']; } 
+	// fmh 01.03.15 added for new template-checker content
+	if(!empty($item['identification-number'])) { $meta_data_to_update['identification_number'] = $item['identification-number']; }
+	if(!empty($item['axles'])) { $meta_data_to_update['axles'] = $item['axles']; }
+	if(!empty($item['wheel-formula'])) { $meta_data_to_update['wheel_formula'] = $item['wheel-formula']; }
+	if(!empty($item['hydraulic-installation'])) { $meta_data_to_update['hydraulic_installation'] = $item['hydraulic-installation']; }
+	if(!empty($item['europallet-storage-spaces'])) { $meta_data_to_update['europallet_storage_spaces'] = $item['europallet-storage-spaces']; }
+	if(!empty($item['manufacturer-color-name'])) { $meta_data_to_update['manufacturer_color_name'] = $item['manufacturer-color-name']; }
+	if(!empty($item['shipping-volume'])) { $meta_data_to_update['shipping_volume'] = $item['shipping-volume']; }
+	if(!empty($item['loadCapacity'])) { $meta_data_to_update['load_capacity'] = $item['loadCapacity']; }
+	$numimages = count($item['images']);
+	if($numimages > 1) {
+		update_post_meta($post_id, 'carousel', '1');
+	}
+	// add_post_meta($post_id, 'ad_gallery', (string)$item['images']);
+	$options = get_option('MobileDE_option');
+	if (empty($options['mob_image_option'])) {
+		$options['mob_image_option'] = 'web';
+	}
+	if ($options['mob_image_option'] == 'web') {
+		foreach($item['images'] as $image) {
+			add_post_meta($post_id, 'ad_gallery', (string)$image);
+		}
+		if (substr($item['images'][0], -6) == '27.JPG') {
+			$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
+			if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
+				$i = '';
+				$metaData = import_post_image($post_id, $temp, $i == 0);
+				// metaData = update_post_meta($post_id, $temp, $i);
+			}
+			else {
+				$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
+			}
+		}
+		else {
+			
+			$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
+		}
+	} else {
+		foreach($item['images'] as $i => $image) {
+		/***
+		* Import bigger image.
+		*
+		*/
+		// log_me('EBAY BILD');
+		// log_me((string)$image);
+		// update_post_meta($post_id, 'ad_gallery', (string)$image);
+			if (substr($image, -6) == '27.JPG') {
+				$temp = str_replace('27.JPG', '57.JPG', $image); // 1600x1200 px
+				if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
+					$metaData = import_post_image($post_id, $temp, $i == 0);
+					// metaData = update_post_meta($post_id, $temp, $i);
+				}
+				else {
+					$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
+				}
+			}
+			else {
+				$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
+			}
+		}
+	}	// new feature meta_values as single post_meta
+	if(!empty($item['ABS'])) { $meta_data_to_update['ABS'] = $item['ABS']; }
+	if(!empty($item['ALLOY_WHEELS'])) { $meta_data_to_update['ALLOY_WHEELS'] = $item['ALLOY_WHEELS']; }
+	if(!empty($item['AUTOMATIC_RAIN_SENSOR'])) { $meta_data_to_update['AUTOMATIC_RAIN_SENSOR'] = $item['AUTOMATIC_RAIN_SENSOR']; }
+	if(!empty($item['AUXILIARY_HEATING'])) { $meta_data_to_update['AUXILIARY_HEATING'] = $item['AUXILIARY_HEATING']; }
+	if(!empty($item['BENDING_LIGHTS'])) {$meta_data_to_update['BENDING_LIGHTS'] = $item['BENDING_LIGHTS']; }
+	if(!empty($item['BIODIESEL_SUITABLE'])) {$meta_data_to_update['BIODIESEL_SUITABLE'] = $item['BIODIESEL_SUITABLE']; }
+	if(!empty($item['BLUETOOTH'])) {$meta_data_to_update['BLUETOOTH'] = $item['BLUETOOTH']; }
+	if(!empty($item['CD_MULTICHANGER'])) {$meta_data_to_update['CD_MULTICHANGER'] = $item['CD_MULTICHANGER']; }
+	if(!empty($item['CD_PLAYER'])) {$meta_data_to_update['CD_PLAYER'] = $item['CD_PLAYER']; }
+	if(!empty($item['CENTRAL_LOCKING'])) {$meta_data_to_update['CENTRAL_LOCKING'] = $item['CENTRAL_LOCKING']; }
+	if(!empty($item['CRUISE_CONTROL'])) {$meta_data_to_update['CRUISE_CONTROL'] = $item['CRUISE_CONTROL']; }
+	if(!empty($item['DAYTIME_RUNNING_LIGHTS'])) {$meta_data_to_update['DAYTIME_RUNNING_LIGHTS'] = $item['DAYTIME_RUNNING_LIGHTS']; }
+	if(!empty($item['E10_ENABLED'])) {$meta_data_to_update['E10_ENABLED'] = $item['E10_ENABLED']; }
+	if(!empty($item['ELECTRIC_ADJUSTABLE_SEATS'])) {$meta_data_to_update['ELECTRIC_ADJUSTABLE_SEATS'] = $item['ELECTRIC_ADJUSTABLE_SEATS']; }
+	if(!empty($item['ELECTRIC_EXTERIOR_MIRRORS'])) {$meta_data_to_update['ELECTRIC_EXTERIOR_MIRRORS'] = $item['ELECTRIC_EXTERIOR_MIRRORS']; }
+	if(!empty($item['AIR_SUSPENSION'])) {$meta_data_to_update['AIR_SUSPENSION'] = $item['AIR_SUSPENSION']; }
+	if(!empty($item['ALARM_SYSTEM'])) {$meta_data_to_update['ALARM_SYSTEM'] = $item['ALARM_SYSTEM']; }
+	if(!empty($item['CARPLAY'])) {$meta_data_to_update['CARPLAY'] = $item['CARPLAY']; }
+	if(!empty($item['LANE_DEPARTURE_WARNING'])) {$meta_data_to_update['LANE_DEPARTURE_WARNING'] = $item['LANE_DEPARTURE_WARNING']; }
+	if(!empty($item['SKI_BAG'])) {$meta_data_to_update['SKI_BAG'] = $item['SKI_BAG']; }
+	if(!empty($item['AMBIENT_LIGHTING'])) {$meta_data_to_update['AMBIENT_LIGHTING'] = $item['AMBIENT_LIGHTING']; }
+	if(!empty($item['KEYLESS_ENTRY'])) {$meta_data_to_update['KEYLESS_ENTRY'] = $item['KEYLESS_ENTRY']; }
+	if(!empty($item['DISABLED_ACCESSIBLE'])) {$meta_data_to_update['DISABLED_ACCESSIBLE'] = $item['DISABLED_ACCESSIBLE']; }
+	if(!empty($item['DIGITAL_COCKPIT'])) {$meta_data_to_update['DIGITAL_COCKPIT'] = $item['DIGITAL_COCKPIT']; }
+	if(!empty($item['COLLISION_AVOIDANCE'])) {$meta_data_to_update['COLLISION_AVOIDANCE'] = $item['COLLISION_AVOIDANCE']; }
+	if(!empty($item['ELECTRIC_HEATED_REAR_SEATS'])) {$meta_data_to_update['ELECTRIC_HEATED_REAR_SEATS'] = $item['ELECTRIC_HEATED_REAR_SEATS']; }
+	if(!empty($item['ELECTRIC_BACKSEAT_ADJUSTMENT'])) {$meta_data_to_update['ELECTRIC_BACKSEAT_ADJUSTMENT'] = $item['ELECTRIC_BACKSEAT_ADJUSTMENT']; }
+	if(!empty($item['BLIND_SPOT_MONITOR'])) {$meta_data_to_update['BLIND_SPOT_MONITOR'] = $item['BLIND_SPOT_MONITOR']; }
+	if(!empty($item['ELECTRIC_HEATED_SEATS'])) {$meta_data_to_update['ELECTRIC_HEATED_SEATS'] = $item['ELECTRIC_HEATED_SEATS']; }
+	if(!empty($item['ELECTRIC_WINDOWS'])) {$meta_data_to_update['ELECTRIC_WINDOWS'] = $item['ELECTRIC_WINDOWS']; }
+	if(!empty($item['ESP'])) {$meta_data_to_update['ESP'] = $item['ESP']; }
+	if(!empty($item['EXPORT'])) {$meta_data_to_update['EXPORT'] = $item['EXPORT']; }
+	if(!empty($item['FRONT_FOG_LIGHTS'])) {$meta_data_to_update['FRONT_FOG_LIGHTS'] = $item['FRONT_FOG_LIGHTS']; }
+	if(!empty($item['FULL_SERVICE_HISTORY'])) {$meta_data_to_update['FULL_SERVICE_HISTORY'] = $item['FULL_SERVICE_HISTORY']; }
+	if(!empty($item['HANDS_FREE_PHONE_SYSTEM'])) {$meta_data_to_update['HANDS_FREE_PHONE_SYSTEM'] = $item['HANDS_FREE_PHONE_SYSTEM']; }
+	if(!empty($item['HEAD_UP_DISPLAY'])) {$meta_data_to_update['HEAD_UP_DISPLAY'] = $item['HEAD_UP_DISPLAY']; }
+	if(!empty($item['HU_AU_NEU'])) {$meta_data_to_update['HU_AU_NEU'] = $item['HU_AU_NEU']; }
+	if(!empty($item['HYBRID_PLUGIN'])) {$meta_data_to_update['HYBRID_PLUGIN'] = $item['HYBRID_PLUGIN']; }
+	if(!empty($item['IMMOBILIZER'])) {$meta_data_to_update['IMMOBILIZER'] = $item['IMMOBILIZER']; }
+	if(!empty($item['ISOFIX'])) {$meta_data_to_update['ISOFIX'] = $item['ISOFIX']; }
+	if(!empty($item['LIGHT_SENSOR'])) {$meta_data_to_update['LIGHT_SENSOR'] = $item['LIGHT_SENSOR']; }
+	if(!empty($item['METALLIC'])) {$meta_data_to_update['METALLIC'] = $item['METALLIC']; }
+	if(!empty($item['MP3_INTERFACE'])) {$meta_data_to_update['MP3_INTERFACE'] = $item['MP3_INTERFACE']; }
+	if(!empty($item['MULTIFUNCTIONAL_WHEEL'])) {$meta_data_to_update['MULTIFUNCTIONAL_WHEEL'] = $item['MULTIFUNCTIONAL_WHEEL']; }
+	if(!empty($item['NAVIGATION_SYSTEM'])) {$meta_data_to_update['NAVIGATION_SYSTEM'] = $item['NAVIGATION_SYSTEM']; }
+	if(!empty($item['NONSMOKER_VEHICLE'])) {$meta_data_to_update['NONSMOKER_VEHICLE'] = $item['NONSMOKER_VEHICLE']; }
+	if(!empty($item['ON_BOARD_COMPUTER'])) {$meta_data_to_update['ON_BOARD_COMPUTER'] = $item['ON_BOARD_COMPUTER']; }
+	if(!empty($item['PANORAMIC_GLASS_ROOF'])) {$meta_data_to_update['PANORAMIC_GLASS_ROOF'] = $item['PANORAMIC_GLASS_ROOF']; }
+	if(!empty($item['PARKING_SENSORS'])) {$meta_data_to_update['PARKING_SENSORS'] = $item['PARKING_SENSORS']; }
+	if(!empty($item['PARTICULATE_FILTER_DIESEL'])) {$meta_data_to_update['PARTICULATE_FILTER_DIESEL'] = $item['PARTICULATE_FILTER_DIESEL']; }
+	if(!empty($item['PERFORMANCE_HANDLING_SYSTEM'])) {$meta_data_to_update['PERFORMANCE_HANDLING_SYSTEM'] = $item['PERFORMANCE_HANDLING_SYSTEM']; }
+	if(!empty($item['POWER_ASSISTED_STEERING'])) {$meta_data_to_update['POWER_ASSISTED_STEERING'] = $item['POWER_ASSISTED_STEERING']; }
+	if(!empty($item['ROOF_RAILS'])) {$meta_data_to_update['ROOF_RAILS'] = $item['ROOF_RAILS']; }
+	if(!empty($item['SKI_BAG'])) {$meta_data_to_update['SKI_BAG'] = $item['SKI_BAG']; }
+	if(!empty($item['SPORT_PACKAGE'])) {$meta_data_to_update['SPORT_PACKAGE'] = $item['SPORT_PACKAGE']; }
+	if(!empty($item['SPORT_SEATS'])) {$meta_data_to_update['SPORT_SEATS'] = $item['SPORT_SEATS']; }
+	if(!empty($item['START_STOP_SYSTEM'])) {$meta_data_to_update['START_STOP_SYSTEM'] = $item['START_STOP_SYSTEM']; }
+	if(!empty($item['SUNROOF'])) {$meta_data_to_update['SUNROOF'] = $item['SUNROOF']; }
+	if(!empty($item['TAXI'])) {$meta_data_to_update['TAXI'] = $item['TAXI']; }
+	if(!empty($item['TRACTION_CONTROL_SYSTEM'])) {$meta_data_to_update['TRACTION_CONTROL_SYSTEM'] = $item['TRACTION_CONTROL_SYSTEM']; }
+	if(!empty($item['TRAILER_COUPLING'])) {$meta_data_to_update['TRAILER_COUPLING'] = $item['TRAILER_COUPLING']; }
+	if(!empty($item['TUNER'])) {$meta_data_to_update['TUNER'] = $item['TUNER']; }
+	if(!empty($item['VEGETABLEOILFUEL_SUITABLE'])) {$meta_data_to_update['VEGETABLEOILFUEL_SUITABLE'] = $item['VEGETABLEOILFUEL_SUITABLE']; }
+	if(!empty($item['WARRANTY'])) {$meta_data_to_update['WARRANTY'] = $item['WARRANTY']; }
+	if(!empty($item['XENON_HEADLIGHTS'])) {$meta_data_to_update['XENON_HEADLIGHTS'] = $item['XENON_HEADLIGHTS']; }
+	if(!empty($item['FOUR_WHEEL_DRIVE'])) {$meta_data_to_update['FOUR_WHEEL_DRIVE'] = $item['FOUR_WHEEL_DRIVE']; }
+	if(!empty($item['DISABLED_ACCESSIBLE'])) {$meta_data_to_update['DISABLED_ACCESSIBLE'] = $item['DISABLED_ACCESSIBLE']; }
+	if(!empty($item['climatisation'])) {$meta_data_to_update['climatisation'] = $item['climatisation']; }
+	if(!empty($item['schwacke-code'])) {$meta_data_to_update['schwacke-code'] = $item['schwacke-code']; }
+	if(!empty($item['enkv-compliant'])) {$meta_data_to_update['enkv-compliant'] = $item['enkv-compliant']; }
+	if(!empty($item['description'])) {$meta_data_to_update['description'] = $item['description']; }
+	if(!empty($item['included-delivery-costs'])) {$meta_data_to_update['included-delivery-costs'] = $item['included-delivery-costs']; }
+	if(!empty($item['exhaust-inspection'])) {$meta_data_to_update['exhaust-inspection'] = $item['exhaust-inspection']; }
+	if(!empty($item['operating-hours'])) {$meta_data_to_update['operating-hours'] = $item['operating-hours']; }
+	if(!empty($item['installation-height'])) {$meta_data_to_update['installation-height'] = $item['installation-height']; }
+	if(!empty($item['lifting-capacity'])) {$meta_data_to_update['lifting-capacity'] = $item['lifting-capacity']; }
+	if(!empty($item['lifting-height'])) {$meta_data_to_update['lifting-height'] = $item['lifting-height']; }
+	if(!empty($item['driving-mode'])) {$meta_data_to_update['driving-code'] = $item['driving-mode']; }
+	if(!empty($item['driving-cab'])) {$meta_data_to_update['driving-cab'] = $item['driving-cab']; }
+	if(!empty($item['loading-space-length'])) {$meta_data_to_update['loading-space-length'] = $item['loading-space-length']; }
+	if(!empty($item['loading-space-height'])) {$meta_data_to_update['loading-space-height'] = $item['loading-space-height']; }
+	if(!empty($item['loading-space-width'])) {$meta_data_to_update['loading-space-width'] = $item['loading-space-width']; }
+	if(!empty($item['countryVersion'])) {$meta_data_to_update['country-version'] = $item['countryVersion']; }
+	if(!empty($item['videoUrl'])) {$meta_data_to_update['videoUrl'] = $item['videoUrl']; }
+	if(!empty($item['parking-assistants'])) {$meta_data_to_update['parking-assistants'] = $item['parking-assistants']; }
+	if(!empty($item['price_dropdown'])) { $meta_data_to_update['price_dropdown'] = $item['price_dropdown']; }
+	// wltp Data
+	// Combined fuel consumption for all nonelectric vehicles, optional for plugin hybrids, number in l/100km (natural gas (CNG) in kg/100km)
+	if(!empty($item['wltp-consumption-fuel-combined'])) { $meta_data_to_update['wltp-consumption-fuel-combined'] = $item['wltp-consumption-fuel-combined']; }
+	// Amount of carbon dioxide emissions in g/km for all vehicles, optional for plugin hybrids.
+	if(!empty($item['wltp-co2-emission-combined'])) { $meta_data_to_update['wltp-co2-emission-combined'] = $item['wltp-co2-emission-combined']; }
+	// Combined power consumption for electric vehicles in in kWh/100km
+	if(!empty($item['wltp-consumption-power-combined'])) { $meta_data_to_update['wltp-consumption-power-combined'] = $item['wltp-consumption-power-combined']; }
+	// Electric Range for plugin hybrids and electric vehicles in km
+	if(!empty($item['wltp-electric-range'])) { $meta_data_to_update['wltp-electric-range'] = $item['wltp-electric-range']; }
+	// Weighted combined fuel consumption for plugin hybrids
+	if(!empty($item['wltp-consumption-fuel-combined-weighted'])) { $meta_data_to_update['wltp-consumption-fuel-combined-weighted'] = $item['wltp-consumption-fuel-combined-weighted']; }
+	// Weighted combined power consumption for plugin hybrids in kWh/100km
+	if(!empty($item['wltp-consumption-power-combined-weighted'])) { $meta_data_to_update['wltp-consumption-power-combined-weighted'] = $item['wltp-consumption-power-combined-weighted']; }
+	// Weighted amount of carbon dioxide emissions in g/km for plugin hybrids
+	if(!empty($item['wltp-co2-emission-combined-weighted'])) { $meta_data_to_update['wltp-co2-emission-combined-weighted'] = $item['wltp-co2-emission-combined-weighted']; }
+	// CO2 emissions
+	if(!empty($item['wltp-co2-emission'])) { $meta_data_to_update['wltp-co2-emission'] = $item['wltp-co2-emission']; }
+	// CO2 class based on CO2 emissions
+	if(!empty($item['wltp-co2-class'])) { $meta_data_to_update['wltp-co2-class'] = $item['wltp-co2-class']; }
+	// CO2 class based on CO2 emissions with discharged battery
+	if(!empty($item['wltp-co2-class-discharged'])) { $meta_data_to_update['wltp-co2-class-discharged'] = $item['wltp-co2-class-discharged']; }
+	// Weighted combined consumption
+	if( !empty($item['wltp-weighted-combined-fuel']) ) { $meta_data_to_update['wltp-weighted-combined-fuel'] = $item['wltp-weighted-combined-fuel']; }
+	// combined consumption
+	if( !empty($item['wltp-combined']) ) { $meta_data_to_update['wltp-combined'] = $item['wltp-combined']; }
+	// Weighted combined electricity consumption
+	if( !empty($item['wltp-weighted-combined-power']) ) { $meta_data_to_update['wltp-weighted-combined-power'] = $item['wltp-weighted-combined-power']; }
+	// Combined electricity consumption
+	if( !empty($item['wltp-combined-power']) ) { $meta_data_to_update['wltp-combined-power'] = $item['wltp-combined-power']; }
+	// Combined consumption with discharged battery	
+	if( !empty($item['wltp-combined-discharged']) ) { $meta_data_to_update['wltp-combined-discharged'] = $item['wltp-combined-discharged']; }
+
+	// CO2-Emissionen
+	if(!empty($item['wltp-co2-emission'])) { $meta_data_to_update['wltp-co2-emission'] = $item['wltp-co2-emission']; }
+	// CO2-Klasse auf Basis der CO2-Emissionen
+	if(!empty($item['wltp-co2-class'])) { $meta_data_to_update['wltp-co2-class'] = $item['wltp-co2-class']; }
+	// CO2-Emissionen (bei entladener Batterie)
+	if(!empty($item['wltp-co2-emission-discharged'])) { $meta_data_to_update['wltp-co2-emission-discharged'] = $item['wltp-co2-emission-discharged']; }
+	// CO2-Klasse auf Grundlage der CO2-Emissionen bei entladener Batterie
+	if(!empty($item['wltp-co2-class-discharged'])) { $meta_data_to_update['wltp-co2-class-discharged'] = $item['wltp-co2-class-discharged']; }
+	// Elektrische Reichweite	
+	if(!empty($item['wltp-electric-range'])) { $meta_data_to_update['wltp-electric-range'] = $item['wltp-electric-range']; }
+	// Elektrische Reichweite (EAER)
+	if(!empty($item['wltp-electric-range-equivalent-all'])) { $meta_data_to_update['wltp-electric-range-equivalent-all'] = $item['wltp-electric-range-equivalent-all']; }
+	// Verbrauch gewichtet, kombiniert
+	if(!empty($item['wltp-weighted-combined-fuel'])) { $meta_data_to_update['wltp-weighted-combined-fuel'] = $item['wltp-weighted-combined-fuel']; }
+	// Verbrauch kombiniert
+	if(!empty($item['wltp-combined-fuel'])) { $meta_data_to_update['wltp-combined-fuel'] = $item['wltp-combined-fuel']; }
+	// Verbrauch Innenstadt 
+	if(!empty($item['wltp-city-fuel'])) { $meta_data_to_update['wltp-city-fuel'] = $item['wltp-city-fuel']; }
+	// Verbrauch Stadtrand
+	if(!empty($item['wltp-suburban-fuel'])) { $meta_data_to_update['wltp-suburban-fuel'] = $item['wltp-suburban-fuel']; }
+	// Verbrauch Landstraße
+	if(!empty($item['wltp-rural-fuel'])) { $meta_data_to_update['wltp-rural-fuel'] = $item['wltp-rural-fuel']; }
+	// Verbrauch Autobahn
+	if(!empty($item['wltp-highway-fuel'])) { $meta_data_to_update['wltp-highway-fuel'] = $item['wltp-highway-fuel']; }
+	// Stromverbrauch kombiniert
+	if(!empty($item['wltp-combined-power'])) { $meta_data_to_update['wltp-combined-power'] = $item['wltp-combined-power']; }
+	// Stromverbrauch Innenstadt
+	if(!empty($item['wltp-city-power'])) { $meta_data_to_update['wltp-city-power'] = $item['wltp-city-power']; }
+	// Stromverbrauch Stadtrand
+	if(!empty($item['wltp-suburban-power'])) { $meta_data_to_update['wltp-suburban-power'] = $item['wltp-suburban-power']; }
+	// Stromverbrauch Landstraße
+	if(!empty($item['wltp-rural-power'])) { $meta_data_to_update['wltp-rural-power'] = $item['wltp-rural-power']; }
+	// Stromverbrauch Autobahn
+	if(!empty($item['wltp-highway-power'])) { $meta_data_to_update['wltp-highway-power'] = $item['wltp-highway-power']; }
+	// Verbrauch bei entladener Batterie kombiniert
+	if(!empty($item['wltp-empty-combined-fuel'])) { $meta_data_to_update['wltp-empty-combined-fuel'] = $item['wltp-empty-combined-fuel']; }
+	// Verbrauch bei entladener Batterie Innenstadt
+	if(!empty($item['wltp-empty-city-fuel'])) { $meta_data_to_update['wltp-empty-city-fuel'] = $item['wltp-empty-city-fuel']; }
+	// Verbrauch bei entladener Batterie Stadtrand
+	if(!empty($item['wltp-empty-suburban-fuel'])) { $meta_data_to_update['wltp-empty-suburban-fuel'] = $item['wltp-empty-suburban-fuel']; }
+	// Verbrauch bei entladener Batterie Landstraße
+	if(!empty($item['wltp-empty-rural-fuel'])) { $meta_data_to_update['wltp-empty-rural-fuel'] = $item['wltp-empty-rural-fuel']; }
+	// Verbrauch bei entladener Batterie Autobahn
+	if(!empty($item['wltp-empty-highway-fuel'])) { $meta_data_to_update['wltp-empty-highway-fuel'] = $item['wltp-empty-highway-fuel']; }
+	// Kraftstoffpreis [Jahr]
+	if(!empty($item['wltp-fuel-price-year'])) { $meta_data_to_update['wltp-fuel-price-year'] = $item['wltp-fuel-price-year']; }
+	// Strompreis [Jahr]
+	if(!empty($item['wltp-power-price-year'])) { $meta_data_to_update['wltp-power-price-year'] = $item['wltp-power-price-year']; }
+	// Jahresdurchschnitt [Jahr]
+	if(!empty($item['wltp-consumption-price-year'])) { $meta_data_to_update['wltp-consumption-price-year'] = $item['wltp-consumption-price-year']; }
+	// Energiekosten bei 15.000 km Jahresfahrleistung
+	if(!empty($item['wltp-consumption-costs'])) { $meta_data_to_update['wltp-consumption-costs'] = $item['wltp-consumption-costs']; }
+	// bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von
+	if(!empty($item['wltp-co2-costs-low-base'])) { $meta_data_to_update['wltp-co2-costs-low-base'] = $item['wltp-co2-costs-low-base']; }
+	// bei einem angenommenen mittleren durchschnittlichen CO2-Preis von
+	if(!empty($item['wltp-co2-costs-middle-base'])) { $meta_data_to_update['wltp-co2-costs-middle-base'] = $item['wltp-co2-costs-middle-base']; }
+	// bei einem angenommenen hohen durchschnittlichen CO2-Preis von
+	if(!empty($item['wltp-co2-costs-high-base'])) { $meta_data_to_update['wltp-co2-costs-high-base'] = $item['wltp-co2-costs-high-base']; }
+	// bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von
+	if(!empty($item['wltp-co2-costs-low-accumulated'])) { $meta_data_to_update['wltp-co2-costs-low-accumulated'] = $item['wltp-co2-costs-low-accumulated']; }
+	// bei einem angenommenen mittleren durchschnittlichen CO2-Preis von
+	if(!empty($item['wltp-co2-costs-middle-accumulated'])) { $meta_data_to_update['wltp-co2-costs-middle-accumulated'] = $item['wltp-co2-costs-middle-accumulated']; }
+	// bei einem angenommenen hohen durchschnittlichen CO2-Preis von
+	if(!empty($item['wltp-co2-costs-high-accumulated'])) { $meta_data_to_update['wltp-co2-costs-high-accumulated'] = $item['wltp-co2-costs-high-accumulated']; }
+	// Kraftfahrzeugsteuer
+	if(!empty($item['wltp-tax'])) { $meta_data_to_update['wltp-tax'] = $item['wltp-tax']; }
+	// Zeitspanne von
+	if(!empty($item['wltp-cost-model-from'])) { $meta_data_to_update['wltp-cost-model-from'] = $item['wltp-cost-model-from']; }
+	// Zeitspanne bis
+	if(!empty($item['wltp-cost-model-till'])) { $meta_data_to_update['wltp-cost-model-till'] = $item['wltp-cost-model-till']; }
+
 	/* Custom Taxonomies */
 	$kategorie = array(
 		'kategorie' => @$item['category']
@@ -557,327 +940,27 @@ function writeIntoWp($item)
 	$anzahl_schlafplaetze = array(
 		'anzahl_schlafplaetze' => @$item['number_of_bunks']);
 	wp_set_object_terms($post_id, $anzahl_schlafplaetze, 'anzahl_schlafplaetze');
-	if(!empty($item['ad_key'])) { $meta_data_to_update['vehicleListingID'] = $item['ad_key']; }
-	update_post_meta($post_id, 'dataSource', 'mobile.de_api');
-	if(!empty($item['newCars'])) { $meta_data_to_update['creation-date'] = $item['creation-date']; }
-	if(!empty($item['class'])) { $meta_data_to_update['class'] = $item['class']; }
-	if(!empty($item['brand'])) { $meta_data_to_update['make'] = $item['make']; } // Deprecated.
-	if(!empty($item['make'])) { $meta_data_to_update['make'] = $item['make']; }
-	if(!empty($item['model'])) { $meta_data_to_update['make'] = $item['model']; }
-	if(!empty($item['model_variant'])) { $meta_data_to_update['model_variant'] = $item['model_variant']; }
-	if(!empty($item['variant'])) { $meta_data_to_update['model_description'] = $item['model_description']; } // Deprecated.
-	if(!empty($item['model_description'])) { $meta_data_to_update['model_description'] = $item['model_description']; }
-	if(!empty($item['damage-and-unrepaired'])) { $meta_data_to_update['damageUnrepaired'] = $item['damage-and-unrepaired']; } // Deprecated
-	if(!empty($item['damage-and-unrepaired'])) { $meta_data_to_update['damage_and_unrepaired'] = $item['damage-and-unrepaired']; }
-	if(!empty($item['accident_damaged'])) { $meta_data_to_update['accidentDamaged'] = $item['accident_damaged']; }
-	if(!empty($item['road_worthy'])) { $meta_data_to_update['road_worthy'] = $item['road_worthy']; }
-	if(!empty($item['category'])) { $meta_data_to_update['category'] = $item['category']; }
-	if(!empty($item['condition'])) { $meta_data_to_update['condition'] = $item['condition']; }
-	if(!empty($item['seller'])) { $meta_data_to_update['seller'] = $item['seller']; }
-	if(!empty($item['seller_id'])) { $meta_data_to_update['seller_id'] = $item['seller_id']; }
-	if(!empty($item['seller_company_name'])) { $meta_data_to_update['seller_company_name'] = $item['seller_company_name']; }
-	if(!empty($item['seller_street'])) { $meta_data_to_update['seller_street'] = $item['seller_street']; }
-	if(!empty($item['seller_zipcode'])) { $meta_data_to_update['seller_zipcode'] = $item['seller_zipcode']; }
-	if(!empty($item['seller_city'])) { $meta_data_to_update['seller_city'] = $item['seller_city']; }
-	if(!empty($item['seller_country'])) { $meta_data_to_update['seller_country'] = $item['seller_country']; }
-	if(!empty($item['seller_email'])) { $meta_data_to_update['seller_email'] = $item['seller_email']; }
-	if(!empty($item['seller_homepage'])) { $meta_data_to_update['seller_homepage'] = $item['seller_homepage']; }
-	if(!empty($item['seller_phone_country_calling_code'])) { $meta_data_to_update['seller_phone_country_calling_code'] = $item['seller_phone_country_calling_code']; }
-	if(!empty($item['seller_phone_area_code'])) { $meta_data_to_update['seller_phone_area_code'] = $item['seller_phone_area_code']; }
-	if(!empty($item['seller_phone_number'])) { $meta_data_to_update['seller_phone_number'] = $item['seller_phone_number']; }
-	if(!empty($item['seller_since'])) { $meta_data_to_update['seller_since'] = $item['seller_since']; }
-	if(!empty($item['sellerType'])) { $meta_data_to_update['sellerType'] = $item['sellerType']; }
-	if(!empty($item['first_registration'])) { $meta_data_to_update['firstRegistration'] = $item['first_registration']; }
-	if(!empty($item['first_registration_year'])) { $meta_data_to_update['firstRegistration_year'] = $item['first_registration_year']; } // Added 2015-03-16 --bth
-	if(!empty($item['emissionClass'])) { $meta_data_to_update['emissionClass'] = $item['emission_class']; }
-	if(!empty($item['emission_class'])) { $meta_data_to_update['emission_class'] = $item['emission_class']; }
-	if(!empty($item['co2_emission'])) { $meta_data_to_update['emissionFuelConsumption_CO2'] = $item['co2_emission']; }
-	if(!empty($item['inner'])) { $meta_data_to_update['emissionFuelConsumption_Inner'] = $item['inner']; }
-	if(!empty($item['outer'])) { $meta_data_to_update['emissionFuelConsumption_Outer'] = $item['outer']; }
-	if(!empty($item['combined'])) { $meta_data_to_update['emissionFuelConsumption_Combined'] = $item['combined']; }
-	if(!empty($item['combined-power-consumption'])) { $meta_data_to_update['combinedPowerConsumption'] = $item['combined-power-consumption']; }
-	if(!empty($item['unit'])) { $meta_data_to_update['emissionFuelConsumption_Unit'] = $item['unit']; }
-	if(!empty($item['emissionSticker'])) { $meta_data_to_update['emissionSticker'] = $item['emissionSticker']; }
-	if(!empty($item['exterior_color'])) { $meta_data_to_update['exteriorColor'] = $item['exterior_color']; }
-	if(!empty($item['fuel'])) { $meta_data_to_update['fuel'] = $item['fuel']; }
-	if(!empty($item['power'])) { $meta_data_to_update['power'] = $item['power']; }
-	if(!empty($item['number_of_previous_owners'])) { $meta_data_to_update['owners'] = $item['number_of_previous_owners']; }
-	if(!empty($item['cubic_capacity'])) { $meta_data_to_update['cubicCapacity'] = $item['cubic_capacity']; }
-	if(!empty($item['gearbox'])) { $meta_data_to_update['gearbox'] = $item['gearbox']; }
-	// $meta_data_to_update['monthsTillInspection'] = $item['monthsTillInspection']);
-	if(!empty($item['nextInspection'])) { $meta_data_to_update['nextInspection'] = $item['nextInspection']; }
-	if(!empty($item['features'])) { $meta_data_to_update['features'] = $item['features']; }
-	if(!empty($item['mileage'])) { $meta_data_to_update['mileage'] = $item['mileage']; }
-	if(!empty($item['mileage_raw'])) { $meta_data_to_update['mileage_raw'] = $item['mileage_raw']; } // Added 2015-03-16 --bth
-	if(!empty($item['mileage_class'])) { $meta_data_to_update['mileage_class'] = $item['mileage_class']; } // Added 2015-03-16 --bth
-	if(!empty($item['price'])) { $meta_data_to_update['price'] = $item['price']; }
-	if(!empty($item['dealer-price-amount'])) { $meta_data_to_update['dealer_price'] = $item['dealer-price-amount']; }
-	//	$meta_data_to_update['price_raw'] = $item['price_raw']); // Added 2015-03-16 --bth
-	if(!empty($item['price_raw_short'])) { $meta_data_to_update['price_raw_short'] = $item['price_raw_short']; } // Added 2015-03-16 --bth
-	if(!empty($item['currency'])) { $meta_data_to_update['currency'] = $item['currency']; }
-	if(!empty($item['vatable'])) { $meta_data_to_update['vatable'] = $item['vatable']; }
-	if(!empty($item['loadCapacity'])) { $meta_data_to_update['loadCapacity'] = $item['loadCapacity']; }
-	if(!empty($item['detail_page'])) { $meta_data_to_update['detailPage'] = $item['detail_page']; } // Deprecated
-	if(!empty($item['detail_page'])) { $meta_data_to_update['detail_page'] = $item['detail_page']; }
-	if(!empty($item['country'])) { $meta_data_to_update['country'] = $item['country']; }
-	if(!empty($item['zipcode'])) { $meta_data_to_update['zipcode'] = $item['zipcode']; }
-	if(!empty($item['ad_key'])) { $meta_data_to_update['ad_key'] = $item['ad_key']; }
-	// Changes for the caravan seller
-	if(!empty($item['construction-year'])) { $meta_data_to_update['construction_year'] = $item['construction-year']; }
-	if(!empty($item['number-of-bunks'])) { $meta_data_to_update['number_of_bunks'] = $item['number-of-bunks']; }
-	if(!empty($item['length'])) { $meta_data_to_update['length'] = $item['length']; }
-	if(!empty($item['width'])) { $meta_data_to_update['width'] = $item['width']; }
-	if(!empty($item['height'])) { $meta_data_to_update['height'] = $item['height']; }
-	if(!empty($item['licensed-weight'])) { $meta_data_to_update['licensed_weight'] = $item['licensed-weight']; }
-	// Additional data. --bth 2014-10-29 02:18:13
-	/*
-	* Delivery date and period.
-	*
-	*/
-	if(!empty($item['delivery-date'])) { $meta_data_to_update['delivery_date'] = $item['delivery-date']; }
-	if(!empty($item['delivery-period'])) { $meta_data_to_update['delivery_period'] = $item['delivery-period']; }
-	/*
-	* Contains either the future delivery_date or the string "Sofort".
-	* Gets calculated in searchAPI.
-	*/
-	if(!empty($item['available-from'])) { $meta_data_to_update['available_from'] = $item['available-from']; }
-	if(!empty($item['interior-type'])) { $meta_data_to_update['interior_type'] = $item['interior-type']; }
-	if(!empty($item['interior-color'])) { $meta_data_to_update['interior_color'] = $item['interior-color']; }
-	if(!empty($item['door-count'])) { $meta_data_to_update['door_count'] = $item['door-count']; }
-	if(!empty($item['num-seats'])) { $meta_data_to_update['num_seats'] = $item['num-seats']; }
-	if(!empty($item['number_of_previous_owners'])) { $meta_data_to_update['number_of_previous_owners'] = $item['number_of_previous_owners']; }
-	if(!empty($item['seller-inventory-key'])) { $meta_data_to_update['seller_inventory_key'] = $item['seller-inventory-key']; }
-	if(!empty($item['airbag'])) { $meta_data_to_update['airbag'] = $item['airbag']; }
-	/*
-	* Efficiency class and efficiency class image url.
-	*/
-	if(!empty($item['energy-efficiency-class'])) { update_post_meta($post_id, 'efficiency_class', $item['energy-efficiency-class']); }
-	if (!empty($item['energy-efficiency-class'])) {
-		// log_me(plugin_dir_url(__FILE__).'images/'.$item['energy-efficiency-class'].'.png');
-		// Maybe additional condition
-		{
-		update_post_meta($post_id, 'efficiency_class_image_url', get_site_url() . '/wp-content/plugins/kfzweb/images/' . $item['energy-efficiency-class'] . '.png');
-		}
-	}
-	// keys used in search
-	if(!empty($item['class_key'])) { $meta_data_to_update['class_key'] = $item['class_key']; }
-	if(!empty($item['category_key'])) { $meta_data_to_update['category_key'] = $item['category_key']; }
-	if(!empty($item['brand_key'])) { $meta_data_to_update['brand_key'] = $item['brand_key']; }
-	if(!empty($item['model_key'])) { $meta_data_to_update['model_key'] = $item['model_key']; }
-	if(!empty($item['fuel_key'])) { $meta_data_to_update['fuel_key'] = $item['fuel_key']; }
-	if(!empty($item['power_key'])) { $meta_data_to_update['power_key'] = $item['power_key']; }
-	if(!empty($item['owners_key'])) { $meta_data_to_update['owners_key'] = $item['owners_key']; }
-	if(!empty($item['cubicCapacity_key'])) { $meta_data_to_update['cubicCapacity_key'] = $item['cubicCapacity_key']; }
-	if(!empty($item['gearbox_key'])) { $meta_data_to_update['gearbox_key'] = $item['gearbox_key']; }
-	if(!empty($item['modification_date'])) { $meta_data_to_update['modification_date'] = $item['modification_date']; }
-	if(!empty($item['usage-type'])) { $meta_data_to_update['usage_type'] = $item['usage-type']; }
-	if(!empty($item['addition'])) { $meta_data_to_update['addition'] = $item['addition']; }
-	if(!empty($item['enriched_description'])) { $meta_data_to_update['enriched_description'] = $item['enriched_description']; } 
-	// fmh 01.03.15 added for new template-checker content
-	if(!empty($item['identification-number'])) { $meta_data_to_update['identification_number'] = $item['identification-number']; }
-	if(!empty($item['axles'])) { $meta_data_to_update['axles'] = $item['axles']; }
-	if(!empty($item['wheel-formula'])) { $meta_data_to_update['wheel_formula'] = $item['wheel-formula']; }
-	if(!empty($item['hydraulic-installation'])) { $meta_data_to_update['hydraulic_installation'] = $item['hydraulic-installation']; }
-	if(!empty($item['europallet-storage-spaces'])) { $meta_data_to_update['europallet_storage_spaces'] = $item['europallet-storage-spaces']; }
-	if(!empty($item['manufacturer-color-name'])) { $meta_data_to_update['manufacturer_color_name'] = $item['manufacturer-color-name']; }
-	if(!empty($item['shipping-volume'])) { $meta_data_to_update['shipping_volume'] = $item['shipping-volume']; }
-	if(!empty($item['loadCapacity'])) { $meta_data_to_update['load_capacity'] = $item['loadCapacity']; }
-	$numimages = count($item['images']);
-	if($numimages > 1) {
-		update_post_meta($post_id, 'carousel', '1');
-	}
-	// update_post_meta($post_id, 'ad_gallery', $item['images']);
-	$options = get_option('MobileDE_option');
-	if (empty($options['mob_image_option'])) {
-		$options['mob_image_option'] = 'web';
-	}
-	if ($options['mob_image_option'] == 'web') {
-		foreach($item['images'] as $image) {
-			add_post_meta($post_id, 'ad_gallery', (string)$image);
-		}
-		if (substr($item['images'][0], -6) == '27.JPG') {
-			$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
-			if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
-				$i = '';
-				$metaData = import_post_image($post_id, $temp, $i == 0);
-				// metaData = update_post_meta($post_id, $temp, $i);
-			}
-			else {
-				$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
-			}
-		}
-		else {
-			$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
-		}
-	} else {
-		foreach($item['images'] as $i => $image) {
-		/***
-		* Import bigger image.
-		*
-		*/
-		// log_me('EBAY BILD');
-		// log_me((string)$image);
-		// update_post_meta($post_id, 'ad_gallery', (string)$image);
-			if (substr($image, -6) == '27.JPG') {
-				$temp = str_replace('27.JPG', '57.JPG', $image); // 1600x1200 px
-				if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
-					$metaData = import_post_image($post_id, $temp, $i == 0);
-					// metaData = update_post_meta($post_id, $temp, $i);
-				}
-				else {
-					$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
-				}
-			}
-			else {
-				$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
-			}
-		}
-	}
-	// new feature meta_values as single post_meta
-	if(!empty($item['ABS'])) { $meta_data_to_update['ABS'] = $item['ABS']; }
-	if(!empty($item['ALLOY_WHEELS'])) { $meta_data_to_update['ALLOY_WHEELS'] = $item['ALLOY_WHEELS']; }
-	if(!empty($item['AUTOMATIC_RAIN_SENSOR'])) { $meta_data_to_update['AUTOMATIC_RAIN_SENSOR'] = $item['AUTOMATIC_RAIN_SENSOR']; }
-	if(!empty($item['AUXILIARY_HEATING'])) { $meta_data_to_update['AUXILIARY_HEATING'] = $item['AUXILIARY_HEATING']; }
-	if(!empty($item['BENDING_LIGHTS'])) {$meta_data_to_update['BENDING_LIGHTS'] = $item['BENDING_LIGHTS']; }
-	if(!empty($item['BIODIESEL_SUITABLE'])) {$meta_data_to_update['BIODIESEL_SUITABLE'] = $item['BIODIESEL_SUITABLE']; }
-	if(!empty($item['BLUETOOTH'])) {$meta_data_to_update['BLUETOOTH'] = $item['BLUETOOTH']; }
-	if(!empty($item['CD_MULTICHANGER'])) {$meta_data_to_update['CD_MULTICHANGER'] = $item['CD_MULTICHANGER']; }
-	if(!empty($item['CD_PLAYER'])) {$meta_data_to_update['CD_PLAYER'] = $item['CD_PLAYER']; }
-	if(!empty($item['CENTRAL_LOCKING'])) {$meta_data_to_update['CENTRAL_LOCKING'] = $item['CENTRAL_LOCKING']; }
-	if(!empty($item['CRUISE_CONTROL'])) {$meta_data_to_update['CRUISE_CONTROL'] = $item['CRUISE_CONTROL']; }
-	if(!empty($item['DAYTIME_RUNNING_LIGHTS'])) {$meta_data_to_update['DAYTIME_RUNNING_LIGHTS'] = $item['DAYTIME_RUNNING_LIGHTS']; }
-	if(!empty($item['E10_ENABLED'])) {$meta_data_to_update['E10_ENABLED'] = $item['E10_ENABLED']; }
-	if(!empty($item['ELECTRIC_ADJUSTABLE_SEATS'])) {$meta_data_to_update['ELECTRIC_ADJUSTABLE_SEATS'] = $item['ELECTRIC_ADJUSTABLE_SEATS']; }
-	if(!empty($item['ELECTRIC_EXTERIOR_MIRRORS'])) {$meta_data_to_update['ELECTRIC_EXTERIOR_MIRRORS'] = $item['ELECTRIC_EXTERIOR_MIRRORS']; }
-	if(!empty($item['AIR_SUSPENSION'])) {$meta_data_to_update['AIR_SUSPENSION'] = $item['AIR_SUSPENSION']; }
-	if(!empty($item['ALARM_SYSTEM'])) {$meta_data_to_update['ALARM_SYSTEM'] = $item['ALARM_SYSTEM']; }
-	if(!empty($item['CARPLAY'])) {$meta_data_to_update['CARPLAY'] = $item['CARPLAY']; }
-	
-	if(!empty($item['LANE_DEPARTURE_WARNING'])) {$meta_data_to_update['LANE_DEPARTURE_WARNING'] = $item['LANE_DEPARTURE_WARNING']; }
-	if(!empty($item['SKI_BAG'])) {$meta_data_to_update['SKI_BAG'] = $item['SKI_BAG']; }
-	if(!empty($item['AMBIENT_LIGHTING'])) {$meta_data_to_update['AMBIENT_LIGHTING'] = $item['AMBIENT_LIGHTING']; }
-	if(!empty($item['KEYLESS_ENTRY'])) {$meta_data_to_update['KEYLESS_ENTRY'] = $item['KEYLESS_ENTRY']; }
-	if(!empty($item['DISABLED_ACCESSIBLE'])) {$meta_data_to_update['DISABLED_ACCESSIBLE'] = $item['DISABLED_ACCESSIBLE']; }
-	if(!empty($item['DIGITAL_COCKPIT'])) {$meta_data_to_update['DIGITAL_COCKPIT'] = $item['DIGITAL_COCKPIT']; }
-	if(!empty($item['COLLISION_AVOIDANCE'])) {$meta_data_to_update['COLLISION_AVOIDANCE'] = $item['COLLISION_AVOIDANCE']; }
-	if(!empty($item['ELECTRIC_HEATED_REAR_SEATS'])) {$meta_data_to_update['ELECTRIC_HEATED_REAR_SEATS'] = $item['ELECTRIC_HEATED_REAR_SEATS']; }
-	if(!empty($item['ELECTRIC_BACKSEAT_ADJUSTMENT'])) {$meta_data_to_update['ELECTRIC_BACKSEAT_ADJUSTMENT'] = $item['ELECTRIC_BACKSEAT_ADJUSTMENT']; }
-	if(!empty($item['BLIND_SPOT_MONITOR'])) {$meta_data_to_update['BLIND_SPOT_MONITOR'] = $item['BLIND_SPOT_MONITOR']; }
-	
-	
-	if(!empty($item['ELECTRIC_HEATED_SEATS'])) {$meta_data_to_update['ELECTRIC_HEATED_SEATS'] = $item['ELECTRIC_HEATED_SEATS']; }
-	if(!empty($item['ELECTRIC_WINDOWS'])) {$meta_data_to_update['ELECTRIC_WINDOWS'] = $item['ELECTRIC_WINDOWS']; }
-	if(!empty($item['ESP'])) {$meta_data_to_update['ESP'] = $item['ESP']; }
-	if(!empty($item['EXPORT'])) {$meta_data_to_update['EXPORT'] = $item['EXPORT']; }
-	if(!empty($item['FRONT_FOG_LIGHTS'])) {$meta_data_to_update['FRONT_FOG_LIGHTS'] = $item['FRONT_FOG_LIGHTS']; }
-	if(!empty($item['FULL_SERVICE_HISTORY'])) {$meta_data_to_update['FULL_SERVICE_HISTORY'] = $item['FULL_SERVICE_HISTORY']; }
-	if(!empty($item['HANDS_FREE_PHONE_SYSTEM'])) {$meta_data_to_update['HANDS_FREE_PHONE_SYSTEM'] = $item['HANDS_FREE_PHONE_SYSTEM']; }
-	if(!empty($item['HEAD_UP_DISPLAY'])) {$meta_data_to_update['HEAD_UP_DISPLAY'] = $item['HEAD_UP_DISPLAY']; }
-	if(!empty($item['HU_AU_NEU'])) {$meta_data_to_update['HU_AU_NEU'] = $item['HU_AU_NEU']; }
-	if(!empty($item['HYBRID_PLUGIN'])) {$meta_data_to_update['HYBRID_PLUGIN'] = $item['HYBRID_PLUGIN']; }
-	if(!empty($item['IMMOBILIZER'])) {$meta_data_to_update['IMMOBILIZER'] = $item['IMMOBILIZER']; }
-	if(!empty($item['ISOFIX'])) {$meta_data_to_update['ISOFIX'] = $item['ISOFIX']; }
-	if(!empty($item['LIGHT_SENSOR'])) {$meta_data_to_update['LIGHT_SENSOR'] = $item['LIGHT_SENSOR']; }
-	if(!empty($item['METALLIC'])) {$meta_data_to_update['METALLIC'] = $item['METALLIC']; }
-	if(!empty($item['MP3_INTERFACE'])) {$meta_data_to_update['MP3_INTERFACE'] = $item['MP3_INTERFACE']; }
-	if(!empty($item['MULTIFUNCTIONAL_WHEEL'])) {$meta_data_to_update['MULTIFUNCTIONAL_WHEEL'] = $item['MULTIFUNCTIONAL_WHEEL']; }
-	if(!empty($item['NAVIGATION_SYSTEM'])) {$meta_data_to_update['NAVIGATION_SYSTEM'] = $item['NAVIGATION_SYSTEM']; }
-	if(!empty($item['NONSMOKER_VEHICLE'])) {$meta_data_to_update['NONSMOKER_VEHICLE'] = $item['NONSMOKER_VEHICLE']; }
-	if(!empty($item['ON_BOARD_COMPUTER'])) {$meta_data_to_update['ON_BOARD_COMPUTER'] = $item['ON_BOARD_COMPUTER']; }
-	if(!empty($item['PANORAMIC_GLASS_ROOF'])) {$meta_data_to_update['PANORAMIC_GLASS_ROOF'] = $item['PANORAMIC_GLASS_ROOF']; }
-	if(!empty($item['PARKING_SENSORS'])) {$meta_data_to_update['PARKING_SENSORS'] = $item['PARKING_SENSORS']; }
-	if(!empty($item['PARTICULATE_FILTER_DIESEL'])) {$meta_data_to_update['PARTICULATE_FILTER_DIESEL'] = $item['PARTICULATE_FILTER_DIESEL']; }
-	if(!empty($item['PERFORMANCE_HANDLING_SYSTEM'])) {$meta_data_to_update['PERFORMANCE_HANDLING_SYSTEM'] = $item['PERFORMANCE_HANDLING_SYSTEM']; }
-	if(!empty($item['POWER_ASSISTED_STEERING'])) {$meta_data_to_update['POWER_ASSISTED_STEERING'] = $item['POWER_ASSISTED_STEERING']; }
-	if(!empty($item['ROOF_RAILS'])) {$meta_data_to_update['ROOF_RAILS'] = $item['ROOF_RAILS']; }
-	if(!empty($item['SKI_BAG'])) {$meta_data_to_update['SKI_BAG'] = $item['SKI_BAG']; }
-	if(!empty($item['SPORT_PACKAGE'])) {$meta_data_to_update['SPORT_PACKAGE'] = $item['SPORT_PACKAGE']; }
-	if(!empty($item['SPORT_SEATS'])) {$meta_data_to_update['SPORT_SEATS'] = $item['SPORT_SEATS']; }
-	if(!empty($item['START_STOP_SYSTEM'])) {$meta_data_to_update['START_STOP_SYSTEM'] = $item['START_STOP_SYSTEM']; }
-	if(!empty($item['SUNROOF'])) {$meta_data_to_update['SUNROOF'] = $item['SUNROOF']; }
-	if(!empty($item['TAXI'])) {$meta_data_to_update['TAXI'] = $item['TAXI']; }
-	if(!empty($item['TRACTION_CONTROL_SYSTEM'])) {$meta_data_to_update['TRACTION_CONTROL_SYSTEM'] = $item['TRACTION_CONTROL_SYSTEM']; }
-	if(!empty($item['TRAILER_COUPLING'])) {$meta_data_to_update['TRAILER_COUPLING'] = $item['TRAILER_COUPLING']; }
-	if(!empty($item['TUNER'])) {$meta_data_to_update['TUNER'] = $item['TUNER']; }
-	if(!empty($item['VEGETABLEOILFUEL_SUITABLE'])) {$meta_data_to_update['VEGETABLEOILFUEL_SUITABLE'] = $item['VEGETABLEOILFUEL_SUITABLE']; }
-	if(!empty($item['WARRANTY'])) {$meta_data_to_update['WARRANTY'] = $item['WARRANTY']; }
-	if(!empty($item['XENON_HEADLIGHTS'])) {$meta_data_to_update['XENON_HEADLIGHTS'] = $item['XENON_HEADLIGHTS']; }
-	if(!empty($item['FOUR_WHEEL_DRIVE'])) {$meta_data_to_update['FOUR_WHEEL_DRIVE'] = $item['FOUR_WHEEL_DRIVE']; }
-	if(!empty($item['DISABLED_ACCESSIBLE'])) {$meta_data_to_update['DISABLED_ACCESSIBLE'] = $item['DISABLED_ACCESSIBLE']; }
-	if(!empty($item['climatisation'])) {$meta_data_to_update['climatisation'] = $item['climatisation']; }
-	if(!empty($item['schwacke-code'])) {$meta_data_to_update['schwacke-code'] = $item['schwacke-code']; }
-	if(!empty($item['enkv-compliant'])) {$meta_data_to_update['enkv-compliant'] = $item['enkv-compliant']; }
-	if(!empty($item['description'])) {$meta_data_to_update['description'] = $item['description']; }
-	if(!empty($item['included-delivery-costs'])) {$meta_data_to_update['included-delivery-costs'] = $item['included-delivery-costs']; }
-	if(!empty($item['exhaust-inspection'])) {$meta_data_to_update['exhaust-inspection'] = $item['exhaust-inspection']; }
-	if(!empty($item['operating-hours'])) {$meta_data_to_update['operating-hours'] = $item['operating-hours']; }
-	if(!empty($item['installation-height'])) {$meta_data_to_update['installation-height'] = $item['installation-height']; }
-	if(!empty($item['lifting-capacity'])) {$meta_data_to_update['lifting-capacity'] = $item['lifting-capacity']; }
-	if(!empty($item['lifting-height'])) {$meta_data_to_update['lifting-height'] = $item['lifting-height']; }
-	if(!empty($item['driving-mode'])) {$meta_data_to_update['driving-code'] = $item['driving-mode']; }
-	if(!empty($item['driving-cab'])) {$meta_data_to_update['driving-cab'] = $item['driving-cab']; }
-	if(!empty($item['loading-space-length'])) {$meta_data_to_update['loading-space-length'] = $item['loading-space-length']; }
-	if(!empty($item['loading-space-height'])) {$meta_data_to_update['loading-space-height'] = $item['loading-space-height']; }
-	if(!empty($item['loading-space-width'])) {$meta_data_to_update['loading-space-width'] = $item['loading-space-width']; }
-	if(!empty($item['countryVersion'])) {$meta_data_to_update['country-version'] = $item['countryVersion']; }
-	if(!empty($item['videoUrl'])) {$meta_data_to_update['videoUrl'] = $item['videoUrl']; }
-	if(!empty($item['parking-assistants'])) {$meta_data_to_update['parking-assistants'] = $item['parking-assistants']; }
-	if(!empty($item['price_dropdown'])) { $meta_data_to_update['price_dropdown'] = $item['price_dropdown']; }
-	// wltp Data
-	//  Combined fuel consumption for all nonelectric vehicles, optional for plugin hybrids, number in l/100km (natural gas (CNG) in kg/100km)
-	if(!empty($item['wltp-consumption-fuel-combined'])) { $meta_data_to_update['wltp-consumption-fuel-combined'] = $item['wltp-consumption-fuel-combined']; }
-	//  Amount of carbon dioxide emissions in g/km for all vehicles, optional for plugin hybrids.
-	if(!empty($item['wltp-co2-emission-combined'])) { $meta_data_to_update['wltp-co2-emission-combined'] = $item['wltp-co2-emission-combined']; }
-	// Combined power consumption for electric vehicles in in kWh/100km
-	if(!empty($item['wltp-consumption-power-combined'])) { $meta_data_to_update['wltp-consumption-power-combined'] = $item['wltp-consumption-power-combined']; }
-	// Electric Range for plugin hybrids and electric vehicles in km
-	if(!empty($item['wltp-electric-range'])) { $meta_data_to_update['wltp-electric-range'] = $item['wltp-electric-range']; }
-	// Weighted combined fuel consumption for plugin hybrids
-	if(!empty($item['wltp-consumption-fuel-combined-weighted'])) { $meta_data_to_update['wltp-consumption-fuel-combined-weighted'] = $item['wltp-consumption-fuel-combined-weighted']; }
-	// Weighted combined power consumption for plugin hybrids in kWh/100km
-	if(!empty($item['wltp-consumption-power-combined-weighted'])) { $meta_data_to_update['wltp-consumption-power-combined-weighted'] = $item['wltp-consumption-power-combined-weighted']; }
-	// Weighted amount of carbon dioxide emissions in g/km for plugin hybrids
-	if(!empty($item['wltp-co2-emission-combined-weighted'])) { $meta_data_to_update['wltp-co2-emission-combined-weighted'] = $item['wltp-co2-emission-combined-weighted']; }
-	// CO2 emissions
-	if(!empty($item['wltp-co2-emission'])) { $meta_data_to_update['wltp-co2-emission'] = $item['wltp-co2-emission']; }
-	// CO2 class based on CO2 emissions
-	if(!empty($item['wltp-co2-class'])) { $meta_data_to_update['wltp-co2-class'] = $item['wltp-co2-class']; }
-	// CO2 class based on CO2 emissions with discharged battery
-	if(!empty($item['wltp-co2-class-discharged'])) { $meta_data_to_update['wltp-co2-class-discharged'] = $item['wltp-co2-class-discharged']; }
-	// Weighted combined consumption
-	if( !empty($item['wltp-weighted-combined-fuel']) ) { $meta_data_to_update['wltp-weighted-combined-fuel'] = $item['wltp-weighted-combined-fuel']; }
-	// combined consumption
-	if( !empty($item['wltp-combined']) ) { $meta_data_to_update['wltp-combined'] = $item['wltp-combined']; }
-	// Weighted combined electricity consumption
-	if( !empty($item['wltp-weighted-combined-power']) ) { $meta_data_to_update['wltp-weighted-combined-power'] = $item['wltp-weighted-combined-power']; }
-	// Combined electricity consumption
-	if( !empty($item['wltp-combined-power']) ) { $meta_data_to_update['wltp-combined-power'] = $item['wltp-combined-power']; }
-	// Combined consumption with discharged battery	
-	if( !empty($item['wltp-combined-discharged']) ) { $meta_data_to_update['wltp-combined-discharged'] = $item['wltp-combined-discharged']; }
-
-
-
 	foreach ($meta_data_to_update as $meta_key => $meta_value) {
 		update_post_meta($post_id, $meta_key, $meta_value);
 	}
 
-	update_post_meta($post_id, 'is_finished', '1');
-	return $post_id;
-}
-function updateTemporaryFields($post_id, $metaValues)
-{
-	// Available from: 07.01.2019 or Sofort
-	if (!empty($metavalues[available_from]) && $metavalues[available_from] != "Sofort") {
-		$availableFrom = new DateTime($metavalues[available_from]);
-		$now = new DateTime();
-		if ($availableFrom < $now) {
-			$mob_data['available-from'] = "Sofort";
-		}
-		else {
-			$mob_data['available-from'] = $availableFrom->format('d.m.Y');
+		update_post_meta($post_id, 'is_finished', '1');
+		return $post_id;
+	}
+	function updateTemporaryFields($post_id, $metaValues)
+	{
+		// Available from: 07.01.2019 or Sofort
+		if (!empty($metavalues[available_from]) && $metavalues[available_from] != "Sofort") {
+			$availableFrom = new DateTime($metavalues[available_from]);
+			$now = new DateTime();
+			if ($availableFrom < $now) {
+				$mob_data['available-from'] = "Sofort";
+			}
+			else {
+				$mob_data['available-from'] = $availableFrom->format('d.m.Y');
+			}
 		}
 	}
-}
 do_action( 'kfz_web_meta' );
 // function import_post_image($post_id, $image_url, $thumbnail = false)
 // {
@@ -904,45 +987,41 @@ do_action( 'kfz_web_meta' );
 // 	}
 // 	return $attach_data;
 // }
-function import_post_image($post_id, $image_url, $thumbnail = false) {
-    require_once(ABSPATH . 'wp-admin/includes/image.php');
-    require_once(ABSPATH . 'wp-admin/includes/file.php');
-    require_once(ABSPATH . 'wp-admin/includes/media.php');
-
-    // Überprüfen, ob die URL gültig ist
-    if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
-        return false; // URL ist nicht gültig
+function import_post_image($post_id, $image_url, $thumbnail = true)
+{
+    $re = '/\[0]\s\=\>\s/m';
+    $str = '[0] => https://img.classistatic.de/api/v1/mo-prod/images/a4/a44c541e-fcac-48fc-8974-4fb28782ec52?rule=mo-640.jpg';
+    $subst = '';
+    $image_url = preg_replace($re, $subst, $image_url);
+  
+    $upload_dir = wp_upload_dir();
+    $url = $image_url;
+    $image_data = file_get_contents($image_url);
+    $filename = uniqid($post_id . '-') . basename($image_url);
+    $re = '/\?|\=/m';
+    $str = $filename;
+    $subst = '-';
+    $filename = preg_replace($re, $subst, $str);
+    if (wp_mkdir_p($upload_dir['path']))
+    {$file = $upload_dir['path'] . '/' . $filename;}
+    else $file = $upload_dir['subdir'] . '/' . $filename;
+    $isFilePut = file_put_contents($file, $image_data);
+    $wp_filetype = wp_check_filetype($filename, null);
+    $attachment = array(
+        'post_mime_type' => $wp_filetype['type'],
+        'post_title' => sanitize_file_name($filename) ,
+        'post_content' => '',
+        'post_status' => 'inherit'
+    );
+    $attach_id = wp_insert_attachment($attachment, $file, $post_id);
+    require_once (ABSPATH . 'wp-admin/includes/image.php');
+    $attach_data = wp_generate_attachment_metadata($attach_id, $file);
+    // Generate thumbnails and different sizes of images.
+    wp_update_attachment_metadata($attach_id, $attach_data);
+    if ($thumbnail) {
+        set_post_thumbnail($post_id, $attach_id);
     }
-
-    // Verwenden von wp_remote_get anstelle von file_get_contents
-    $response = wp_remote_get($image_url);
-    if (is_wp_error($response)) {
-        return false; // Fehler beim Herunterladen der Datei
-    }
-
-    $image_data = wp_remote_retrieve_body($response);
-    $filename = basename($image_url);
-    $upload_file = wp_upload_bits($filename, null, $image_data);
-    if (!$upload_file['error']) {
-        $wp_filetype = wp_check_filetype($filename, null);
-        $attachment = array(
-            'post_mime_type' => $wp_filetype['type'],
-            'post_parent' => $post_id,
-            'post_title' => preg_replace('/\.[^.]+$/', '', $filename),
-            'post_content' => '',
-            'post_status' => 'inherit'
-        );
-        $attachment_id = wp_insert_attachment($attachment, $upload_file['file'], $post_id);
-        if (!is_wp_error($attachment_id)) {
-            $attachment_data = wp_generate_attachment_metadata($attachment_id, $upload_file['file']);
-            wp_update_attachment_metadata($attachment_id, $attachment_data);
-            if ($thumbnail) {
-                set_post_thumbnail($post_id, $attachment_id);
-            }
-            return $attachment_data;
-        }
-    }
-    return false; // Rückgabe im Fehlerfall
+    return $attach_data;
 }
 /**
  * Deletes all posts from 'fahrzeuge'.
@@ -2085,4 +2164,8 @@ function mob_clean(){
 		log_me('dieIDs');
 		log_me($postIdsToDelete);
 		// do_action('kfz_web_after_import');
+}
+function formatCurrency($amount) {
+	
+    return number_format((float)$amount, 2, ',', '.') . ' EUR';
 }

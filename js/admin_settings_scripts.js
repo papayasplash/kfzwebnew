@@ -1,4 +1,25 @@
 
+function updateVehicleImportProgress() {
+    jQuery.ajax({
+        url: ajaxurl,
+        type: 'POST',
+        data: {
+            action: 'get_vehicle_import_progress'
+        },
+        success: function(response) {
+            var data = JSON.parse(response);
+            jQuery('#vehicle-progress-bar').css('width', data.progress + '%');
+            jQuery('#vehicle-progress-bar').text(data.progress + '%');
+            if(data.progress < 100) {
+                setTimeout(updateVehicleImportProgress, 1000); // Aktualisiert jede Sekunde
+            }
+        }
+    });
+}
+
+jQuery(document).ready(function() {
+    updateVehicleImportProgress();
+});
 jQuery(document).ready(function(){
 	jQuery('#addAccount').click(function() {
 		userRow=jQuery(this).parent().parent();

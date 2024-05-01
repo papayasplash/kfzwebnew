@@ -71,6 +71,7 @@ PRICE;
     </div> <!-- // vehicle-row -->
     <div class="vehicle-emission">
         <?php
+        display_meta_value($meta_values, 'wltp-co2-emission', 'CO2-Emissionen: ', ' g/km*');
         display_meta_value($meta_values, 'emissionFuelConsumption_Combined', 'Kraftstoffverbr. komb. ca.: ', ' l/100km*');
         display_meta_value($meta_values, 'emissionFuelConsumption_CO2', 'CO2 Emissionen komb. ca.: ', ' g/km*');
         display_meta_value($meta_values, 'emissionClass', 'Emissionsklasse: ');

@@ -58,7 +58,10 @@ class mob_Setting{
 			';
 		}
 		?>
-            <h2><?php __('MobileDE Settings'); ?></h2>
+    <h2><?php __('MobileDE Settings'); ?></h2>
+	<!-- <div id="vehicle-progress-container" style="width: 100%; background-color: #ddd;">
+		<div id="vehicle-progress-bar" style="width: 0%; height: 30px; background-color: #4CAF50; text-align: center; color: white;">0%</div>
+	</div> -->
 	<form class="inputForm" method="post" action="options.php">
             <?php
                 // This prints out all hidden setting fields

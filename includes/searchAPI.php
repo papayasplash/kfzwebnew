@@ -1159,102 +1159,323 @@ class mob_searchAPI {
 		} else {
 			$mob_data['parking-assistants'] = "";
 		}
-		//wltp-values
-		//consumption-fuel-combined
-		$temp = $item->xpath('//ad:consumption-fuel-combined');
-		if (isset($temp[0])){
-			$mob_data['wltp-consumption-fuel-combined'] = (string)$temp[0];
-		}
-		//o2-emission-combined
-		$temp = $item->xpath('//ad:co2-emission-combined');
-		if (isset($temp[0])){
-			$mob_data['wltp-co2-emission-combined'] = (string)$temp[0];
-		}
-		//consumption-power-combined
-		$temp = $item->xpath('//ad:consumption-power-combined');
-		if (isset($temp[0])){
-			$mob_data['wltp-consumption-power-combined'] = (string)$temp[0];
-		}
-		//electric range
-		$temp = $item->xpath('//ad:electric-range');
-		if (isset($temp[0])){
-			$mob_data['wltp-electric-range'] = (string)$temp[0];
-		}
-		//consumption-fuel-combined-weighted
-		$temp = $item->xpath('//ad:consumption-fuel-combined-weighted');
-		if (isset($temp[0])){
-			$mob_data['wltp-consumption-fuel-combined-weighted'] = (string)$temp[0];
-		}
-		//consumption-power-combined-weighted
-		$temp = $item->xpath('//ad:consumption-power-combined-weighted');
-		if (isset($temp[0])){
-			$mob_data['wltp-consumption-power-combined-weighted'] = (string)$temp[0];
-		}
-		//co2-emission-combined-weighted
-		$temp = $item->xpath('//ad:co2-emission-combined-weighted');
-		if (isset($temp[0])){
-			$mob_data['wltp-co2-emission-combined-weighted'] = (string)$temp[0];
-		}
+	
 
-		// PKW EnVKV 2024
-		//CO2 emissions
-		$temp = $item->xpath('//ad:emissions/combined/co2');
-		if (isset($temp[0]['value'])) {
-			$mob_data['wltp-co2-emission'] = (string) $temp[0]['value'];
+		// CO2-Emissionen
+		$temp = $item->xpath('//ad:emissions/ad:combined');
+		error_log('CO2-Emissionen' . $temp[0]['co2']);
+
+		if (isset($temp[0]['co2'])) {
+			$mob_data['wltp-co2-emission'] = (string) $temp[0]['co2'];
 		} else {
 			$mob_data['wltp-co2-emission'] = "";
 		}
-		// CO2 class based on CO2 emissions
-		$temp = $item->xpath('//ad:emissions/combined/co2-class');
-		if (isset($temp[0]['value'])) {	
-			$mob_data['wltp-co2-class'] = (string) $temp[0]['value'];
+		// CO2-Klasse auf Basis der CO2-Emissionen
+		$temp = $item->xpath('//ad:emissions/ad:combined');
+		error_log('CO2-Klasse auf Basis der CO2-Emissionen' . $temp[0]['co2-class']);
+
+		if (isset($temp[0]['co2-class'])) {	
+			$mob_data['wltp-co2-class'] = (string) $temp[0]['co2-class'];
 		} else {
 			$mob_data['wltp-co2-class'] = "";
 		}
-		// CO2 class based on CO2 emissions with discharged battery
-		$temp = $item->xpath('//ad:emissions/discharged/co2Class');
-		if (isset($temp[0]['value'])) {
-			$mob_data['wltp-co2-class-discharged'] = (string) $temp[0]['value'];
+		// CO2-Emissionen (bei entladener Batterie)
+		$temp = $item->xpath('//ad:emissions/ad:discharged');
+		error_log('CO2-Emissionen (bei entladener Batterie)' . $temp[0]['co2']);
+
+		if (isset($temp[0]['co2'])) {
+			$mob_data['wltp-co2-emission-discharged'] = (string) $temp[0]['co2'];
+		} else {
+			$mob_data['wltp-co2-emission-discharged'] = "";	
+		}
+		// CO2-Klasse auf Grundlage der CO2-Emissionen bei entladener Batterie
+		$temp = $item->xpath('//ad:emissions/ad:discharged');
+		error_log('CO2-Klasse auf Grundlage der CO2-Emissionen bei entladener Batterie' . $temp[0]['co2-class']);
+
+		if (isset($temp[0]['co2-class'])) {
+			$mob_data['wltp-co2-class-discharged'] = (string) $temp[0]['co2-class'];
 		} else {
 			$mob_data['wltp-co2-class-discharged'] = "";	
 		}
-		// Weighted combined consumption
-		$temp = $item->xpath('//ad:consumptions/weightedCombinedFuel');
+		// Elektrische Reichweite	
+		$temp = $item->xpath('//ad:range');
+		error_log('Elektrische Reichweite' . $temp[0]['value']);
+		
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-electric-range'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-electric-range'] = "";
+		}
+		// Elektrische Reichweite (EAER)
+		$temp = $item->xpath('//ad:equivalent-all-electric-range');
+		error_log('Elektrische Reichweite (EAER)' . $tem[0]['value']);
+
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-electric-range-equivalent-all'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-electric-range-equivalent-all'] = "";
+		}
+		// Verbrauch gewichtet, kombiniert
+		$temp = $item->xpath('//ad:consumptions/ad:weighted-combined-fuel');
+		error_log('Verbrauch gewichtet, kombiniert' . $temp[0]['value']);
+
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-weighted-combined-fuel'] = (string) $temp[0]['value'];
 		} else {
 			$mob_data['wltp-weighted-combined-fuel'] = "";
 		}
-		// Combined consumption	
-		$temp = $item->xpath('//ad:consumptions/fuel/combined');
-		if (isset($temp[0]['value'])) {
-			$mob_data['wltp-combined'] = (string) $temp[0]['value'];
+		// Verbrauch kombiniert
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch kombiniert' . $temp[0]['combined']);
+
+		if (isset($temp[0]['combined'])) {
+			$mob_data['wltp-combined-fuel'] = (string) $temp[0]['combined'];
 		} else {
-			$mob_data['wltp-combined'] = "";
+			$mob_data['wltp-combined-fuel'] = "";
 		}
-		// Weighted combined electricity consumption	
-		$temp = $item->xpath('//ad:consumptions/weightedCombinedPower');
-		if (isset($temp[0]['value'])) {
-			$mob_data['wltp-weighted-combined-power'] = (string) $temp[0]['value'];
+		// Verbrauch Innenstadt 
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch Innenstadt' . $temp[0]['city']);
+
+		if (isset($temp[0]['city'])) {
+			$mob_data['wltp-city-fuel'] = (string) $temp[0]['city'];
 		} else {
-			$mob_data['wltp-weighted-combined-power'] = "";
+			$mob_data['wltp-city-fuel'] = "";
 		}
-		// Combined electricity consumption
-		$temp = $item->xpath('//ad:consumptions/power/combined');
-		if (isset($temp[0]['value'])) {
-			$mob_data['wltp-combined-power'] = (string) $temp[0]['value'];
+		// Verbrauch Stadtrand
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch Stadtrand' . $temp[0]['suburban']);
+
+		if (isset($temp[0]['suburban'])) {
+			$mob_data['wltp-suburban-fuel'] = (string) $temp[0]['suburban'];
+		} else {
+			$mob_data['wltp-suburban-fuel'] = "";
+		}
+		// Verbrauch Landstraße
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch Landstraße' . $temp[0]['rural']);
+		if (isset($temp[0]['rural'])) {
+			$mob_data['wltp-rural-fuel'] = (string) $temp[0]['rural'];
+		} else {
+			$mob_data['wltp-rural-fuel'] = "";
+		}
+		// Verbrauch Autobahn
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch Autobahn' . $temp[0]['highway']);
+		if (isset($temp[0]['highway'])) {
+			$mob_data['wltp-highway-fuel'] = (string) $temp[0]['highway'];
+		} else {
+			$mob_data['wltp-highway-fuel'] = "";
+		}
+		// Stromverbrauch kombiniert
+		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
+		error_log('Stromverbrauch kombiniert' . $temp[0]['combined']);
+		if (isset($temp[0]['combined'])) {
+			$mob_data['wltp-combined-power'] = (string) $temp[0]['combined'];
 		} else {
 			$mob_data['wltp-combined-power'] = "";
 		}
-		// Combined consumption with discharged battery	
-		$temp = $item->xpath('//ad:consumptions/fuel/combined');
-		if (isset($temp[0]['value'])) {
-			$mob_data['wltp-combined-discharged'] = (string) $temp[0]['value'];
+		// Stromverbrauch Innenstadt
+		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
+		error_log('Stromverbrauch Innenstadt' . $temp[0]['city']);
+
+		if (isset($temp[0]['city'])) {
+			$mob_data['wltp-city-power'] = (string) $temp[0]['city'];
 		} else {
-			$mob_data['wltp-combined-discharged'] = "";
+			$mob_data['wltp-city-power'] = "";
+		}
+		// Stromverbrauch Stadtrand
+		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
+		error_log('Stromverbrauch Stadtrand' . $temp[0]['suburban']);
+
+		if (isset($temp[0]['suburban'])) {
+			$mob_data['wltp-suburban-power'] = (string) $temp[0]['suburban'];
+		} else {
+			$mob_data['wltp-suburban-power'] = "";
+		}
+		// Stromverbrauch Landstraße
+		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
+		error_log('Stromverbrauch Landstraße' . $temp[0]['rural']);
+
+		if (isset($temp[0]['rural'])) {
+			$mob_data['wltp-rural-power'] = (string) $temp[0]['rural'];
+		} else {
+			$mob_data['wltp-rural-power'] = "";
+		}
+		// Stromverbrauch Autobahn
+		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
+		error_log('Stromverbrauch Autobahn' . $temp[0]['highway']);
+
+		if (isset($temp[0]['highway'])) {
+			$mob_data['wltp-highway-power'] = (string) $temp[0]['highway'];
+		} else {
+			$mob_data['wltp-highway-power'] = "";
+		}
+		// Verbrauch bei entladener Batterie kombiniert
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch bei entladener Batterie kombiniert' . $temp[0]['combined']);
+
+		if (isset($temp[0]['combined'])) {
+			$mob_data['wltp-empty-combined-fuel'] = (string) $temp[0]['combined'];
+		} else {
+			$mob_data['wltp-empty-combined-fuel'] = "";
+		}
+		// Verbrauch bei entladener Batterie Innenstadt
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch bei entladener Batterie Innenstadt' . $temp[0]['city']);
+
+		if (isset($temp[0]['city'])) {
+			$mob_data['wltp-empty-city-fuel'] = (string) $temp[0]['city'];
+		} else {
+			$mob_data['wltp-empty-city-fuel'] = "";
+		}
+		// Verbrauch bei entladener Batterie Stadtrand
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch bei entladener Batterie Stadtrand' . $temp[0]['suburban']);
+
+		if (isset($temp[0]['suburban'])) {
+			$mob_data['wltp-empty-suburban-fuel'] = (string) $temp[0]['suburban'];
+		} else {
+			$mob_data['wltp-empty-suburban-fuel'] = "";
+		}
+		// Verbrauch bei entladener Batterie Landstraße
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch bei entladener Batterie Landstraße' . $temp[0]['rural']);
+
+		if (isset($temp[0]['rural'])) {
+			$mob_data['wltp-empty-rural-fuel'] = (string) $temp[0]['rural'];
+		} else {
+			$mob_data['wltp-empty-rural-fuel'] = "";
+		}
+		// Verbrauch bei entladener Batterie Autobahn
+		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
+		error_log('Verbrauch bei entladener Batterie Autobahn' . $temp[0]['highway']);
+
+		if (isset($temp[0]['highway'])) {
+			$mob_data['wltp-empty-highway-fuel'] = (string) $temp[0]['highway'];
+		} else {
+			$mob_data['wltp-empty-highway-fuel'] = "";
+		}
+		// Kraftstoffpreis [Jahr]
+		$temp = $item->xpath('//ad:cost-model/ad:fuel-price');
+		error_log('Kraftstoffpreis [Jahr]' . $temp[0]['value']);
+
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-fuel-price-year'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-fuel-price-year'] = "";
+		}
+		// Strompreis [Jahr]
+		$temp = $item->xpath('//ad:cost-model/ad:power-price');
+		error_log('Strompreis [Jahr]' . $temp[0]['value']);
+
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-power-price-year'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-power-price-year'] = "";
+		}
+		// Jahresdurchschnitt [Jahr]
+		$temp = $item->xpath('//ad:cost-model/ad:consumption-price-year');
+		error_log('Jahresdurchschnitt [Jahr]' . $temp[0]['value']);
+
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-consumption-price-year'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-consumption-price-year'] = "";
+		}
+		// Energiekosten bei 15.000 km Jahresfahrleistung
+		$temp = $item->xpath('//ad:cost-model/ad:consumption-costs');
+		error_log('Energiekosten bei 15.000 km Jahresfahrleistung' . $temp[0]['value']);
+
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-consumption-costs'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-consumption-costs'] = "";
+		}
+		// bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von
+		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:low');
+		error_log('bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von' . $temp[0]['base-price']);
+
+		if (isset($temp[0]['base-price'])) {
+			$mob_data['wltp-co2-costs-low-base'] = (string) $temp[0]['base-price'];
+		} else {
+			$mob_data['wltp-co2-costs-low-base'] = "";
+		}
+		// bei einem angenommenen mittleren durchschnittlichen CO2-Preis von
+		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:middle');
+		error_log('bei einem angenommenen mittleren durchschnittlichen CO2-Preis von' . $temp[0]['base-price']);
+
+		if (isset($temp[0]['base-price'])) {
+			$mob_data['wltp-co2-costs-middle-base'] = (string) $temp[0]['base-price'];
+		} else {
+			$mob_data['wltp-co2-costs-middle-base'] = "";
+		}
+		// bei einem angenommenen hohen durchschnittlichen CO2-Preis von
+		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:high');
+		error_log('bei einem angenommenen hohen durchschnittlichen CO2-Preis von' . $temp[0]['base-price']);
+
+		if (isset($temp[0]['base-price'])) {
+			$mob_data['wltp-co2-costs-high-base'] = (string) $temp[0]['base-price'];
+		} else {
+			$mob_data['wltp-co2-costs-high-base'] = "";
+		}
+		// bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von
+		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:low');
+		error_log('bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von' . $temp[0]['accumulated']);
+
+		if (isset($temp[0]['accumulated'])) {
+			$mob_data['wltp-co2-costs-low-accumulated'] = (string) $temp[0]['accumulated'];
+		} else {
+			$mob_data['wltp-co2-costs-low-accumulated'] = "";
+		}
+		// bei einem angenommenen mittleren durchschnittlichen CO2-Preis von
+		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:middle');
+		error_log('bei einem angenommenen mittleren durchschnittlichen CO2-Preis von' . $temp[0]['accumulated']);
+
+		if (isset($temp[0]['accumulated'])) {
+			$mob_data['wltp-co2-costs-middle-accumulated'] = (string) $temp[0]['accumulated'];
+		} else {
+			$mob_data['wltp-co2-costs-middle-accumulated'] = "";
+		}
+		// bei einem angenommenen hohen durchschnittlichen CO2-Preis von
+		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:high');
+		error_log('bei einem angenommenen hohen durchschnittlichen CO2-Preis von' . $temp[0]['accumulated']);
+
+		if (isset($temp[0]['accumulated'])) {
+			$mob_data['wltp-co2-costs-high-accumulated'] = (string) $temp[0]['accumulated'];
+		} else {
+			$mob_data['wltp-co2-costs-high-accumulated'] = "";
+		}
+
+
+		// Kraftfahrzeugsteuer
+		$temp = $item->xpath('//ad:cost-model/ad:tax');
+		error_log('Kraftfahrzeugsteuer' . $temp[0]['value']);
+
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-tax'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-tax'] = "";
+		}
+		// Zeitspanne von
+		$temp = $item->xpath('//ad:cost-model/ad:time-frame');
+		error_log('Kraftfahrzeugsteuer' . $temp[0]['from']);
+
+		if (isset($temp[0]['from'])) {
+			$mob_data['wltp-cost-model-from'] = (string) $temp[0]['from'];
+		} else {
+			$mob_data['wltp-cost-model-from'] = "";
+		}
+		// Zeitspanne bis
+		$temp = $item->xpath('//ad:cost-model/ad:time-frame');
+		error_log('Zeitspanne bis' . $temp[0]['till']);
+
+		if (isset($temp[0]['till'])) {
+			$mob_data['wltp-cost-model-till'] = (string) $temp[0]['till'];
+		} else {
+			$mob_data['wltp-cost-model-till'] = "";
 		}
 		// ==================================================================
-		//
 		// End of new fields section.
 		//
 		// ------------------------------------------------------------------
