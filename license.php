@@ -54,18 +54,34 @@ function mob_license_page() {
 	<?php
 }
 
+function mob_license_check() {
+	error_log('mob_license_check wurde aufgerufen');
+	global $wp_version;
+
+	$license = trim( get_option( 'mob_license_key' ) );
+		
+	$api_params = array( 
+		'edd_action' => 'check_license', 
+		'license' => $license, 
+		'item_name' => urlencode( KFZ_WEB_ITEM_NAME ) 
+	);
+
+	// Call the custom API.
+	$response = wp_remote_get( add_query_arg( $api_params, KFZ_WEB_STORE ), array( 'timeout' => 15, 'sslverify' => false ) );
 
 
+	if ( is_wp_error( $response ) )
+		return false;
 
-
-/************************************
-* this illustrates how to check if 
-* a license key is still valid
-* the updater does this for you,
-* so this is only needed if you
-* want to do something custom
-*************************************/
-
+	$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+	if( $license_data->license == 'valid' ) {
+		return 'active';
+		error_log('lizenz aktiv');
+	} else {
+		return 'expired';
+		error_log('lizenz abgelaufen');
+	}
+}
 
 
 
