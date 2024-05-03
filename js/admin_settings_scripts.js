@@ -57,10 +57,10 @@ jQuery(document).ready(function(){
 			if(data=='1'){
 				// $(location).attr('href')
 				var pathname = window.location.pathname;
-				jQuery('.submit').append('<div class="updated"><p><strong>Your vehicles have been successfully imported!</strong></p></div>'); // replaced alert with updated class admin notification fmh
+				jQuery('.submit').append('<div class="updated"><p><strong>Ihre Fahrzeuge wurden erfolgreich importiert!</strong></p></div>');
 				jQuery('.updated').delay(90000).fadeOut('slow');
 			}else {//error
-				jQuery('.submit').append('<div class="error"><p><strong>An unexpected error has occurred, please repeat the action and, in an emergency, contact <a href="http://www.mobilede-fahrzeugintegration.de/kontakt/" target="_blank">Support</a>. </strong></p></div>'); // replaced alert with updated class admin notification fmh
+				jQuery('.submit').append('<div class="error"><p><strong>Es ist ein unerwarteter Fehler aufgetreten, bitte wiederholen Sie die Aktion und kontaktieren Sie im Notfall den <a href="http://www.mobilede-fahrzeugintegration.de/kontakt/" target="_blank">Support</a>. </strong></p></div>');
 				jQuery('.error').delay(90000).fadeOut('slow');
 				console.log(data);
 				// alert(data);
@@ -79,12 +79,11 @@ jQuery(document).ready(function(){
 			jQuery('#deletePosts').removeProp('disabled');
 
 			if(data=='1'){
-			jQuery('.submit').append('<div class="updated"><p><strong>Ihre Fahrzeuge wurden erfolgreich gelöscht!<strong></p></div>'); // replaced alert with updated class admin notification fmh
-			jQuery('.updated').delay(3000).fadeOut('slow');
+				jQuery('.submit').append('<div class="updated"><p><strong>Ihre Fahrzeuge wurden erfolgreich gelöscht!<strong></p></div>');
+				jQuery('.updated').delay(3000).fadeOut('slow');
 		//	$('#alert').fadeOut('slow')
 			}else{
-			jQuery('.submit').append('<div class="error"><p><strong>Konnte nicht alle Fahrzeuge löschen, bitte erneut versuchen!</strong></p></div>'); // replaced alert with updated class admin notification fmh
-			jQuery('.error').delay(3000).fadeOut('slow');
+				jQuery('.submit').append('<div class="error"><p><strong>Konnte nicht alle Fahrzeuge löschen, bitte erneut versuchen!</strong></p></div>');			jQuery('.error').delay(3000).fadeOut('slow');
 			//	alert('Konnte nicht alle Fahrzeuge löschen, bitte erneut versuchen');
 			}
 		});

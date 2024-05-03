@@ -318,27 +318,29 @@ class mob_Setting{
 		{
 			printf(
 				'<input type="password" class="mob_password" id="mob_password0" name="MobileDE_option[mob_password][0]" value="%s" />',
-				isset( $this->options['mob_password'][0] ) ? esc_attr( $this->options['mob_password'][0]) : ''
+				isset($this->options['mob_password'][0]) ? esc_attr($this->options['mob_password'][0]) : ''
 			);
-			if (isset($this->options['mob_username'])){
-			for($i = 1; $i < count($this->options['mob_username']); $i ++) {
-				echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th>';
-				echo '<tr valign="top"><th scope="row">Benutzername</th><td>';
-				printf('<input type="text" id="mob_username' . $i . '" name="MobileDE_option[mob_username][' . $i .
-						 ']" value="%s" />', 
-								isset($this->options['mob_username'][$i]) ? esc_attr($this->options['mob_username'][$i]) : '');
-				echo '</td></tr>';
-				echo '<tr valign="top"><th scope="row">Passwort</th><td>';
-				printf(
-						'<input type="password" id="mob_password' . $i . '" name="MobileDE_option[mob_password][' . $i .
-								 ']" value="%s" />', 
-								isset($this->options['mob_password'][$i]) ? esc_attr($this->options['mob_password'][$i]) : '');
-				echo '</td></tr>';
+		
+			if (isset($this->options['mob_username']) && is_array($this->options['mob_username'])) {
+				for ($i = 1; $i < count($this->options['mob_username']); $i++) {
+					echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th>';
+					echo '<tr valign="top"><th scope="row">Benutzername</th><td>';
+					printf(
+						'<input type="text" id="mob_username' . $i . '" name="MobileDE_option[mob_username][' . $i . ']" value="%s" />',
+						isset($this->options['mob_username'][$i]) ? esc_attr($this->options['mob_username'][$i]) : ''
+					);
+					echo '</td></tr>';
+					echo '<tr valign="top"><th scope="row">Passwort</th><td>';
+					printf(
+						'<input type="password" id="mob_password' . $i . '" name="MobileDE_option[mob_password][' . $i . ']" value="%s" />',
+						isset($this->options['mob_password'][$i]) ? esc_attr($this->options['mob_password'][$i]) : ''
+					);
+					echo '</td></tr>';
+				}
 			}
-		}
-		echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th>';
-		}
-		public function mob_language_callback()
+		
+			echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th>';
+		}		public function mob_language_callback()
 		{
 			echo '<select class="settingsSelect" name="MobileDE_option[mob_language]">'.
 				mob_htmlToOptions($this->mob_data['languages'], false,

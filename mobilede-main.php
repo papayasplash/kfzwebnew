@@ -15,21 +15,7 @@ if (!function_exists('add_action')) {
  *
  * @param unknown $message
  */
-function log_me($message)
-{
-	if (WP_DEBUG === true) {
-		if (is_array($message) || is_object($message)) {
-			$errormessagehead = "\n \n !!! \n Start of BTH Error Message:";
-			$errormessagefoot = "End of BTH Error Message. \n !!! \n \n";
-			error_log(print_r($errormessagehead, true));
-			error_log(print_r($message, true));
-			error_log(print_r($errormessagefoot, true));
-		}
-		else {
-			error_log($message);
-		}
-	}
-}
+
 // Include template checker
 include_once dirname(__FILE__) . '/template-checker.php';
 // Load Mobile.DE API
@@ -1120,83 +1106,7 @@ function more_fields($resetIndex = false)
 		return false;
 	}
 }
-/**
- * Loads the admin settings page and handlers used with it.
- */
-/*
-* Find out why license is checked here. --bth 2014-11-11
-*/
-// load admin settings page and handlers used with it
-// global $wp_version;
-// $license = trim(get_option('edd_sample_license_key'));
-// $api_params = array(
-// 	'edd_action' => 'check_license',
-// 	'license' => $license,
-// 	'item_name' => urlencode(KFZ_WEB_ITEM_NAME)
-// );
-// Call the custom API.
-//
-// $response = wp_remote_get(add_query_arg($api_params, KFZ_WEB_STORE) , array(
-// 	'timeout' => 15,
-// 	'sslverify' => false
-// ));
-// if (is_wp_error($response)) return false;
-// $license_data = json_decode(wp_remote_retrieve_body($response));
-include_once dirname(__FILE__) . '/admin.php';
-include_once dirname(__FILE__) . '/license.php';
-// if ($license_data->license == 'valid') {
-// 	include_once dirname(__FILE__) . '/license.php';
-// 	// include_once dirname(__FILE__) . '/widget.php';
-// 	// this license is still valid
-// }
-// else {
-// 	include_once dirname(__FILE__) . '/license.php';
-// 	// this license is no longer valid
-// }
-/*
-* ??? --bth 2014-11-11
-*/
-// function start_el(&$output, $category, $depth, $args)
-// {
-// 	$pad = str_repeat(' ', $depth * 3);
-// 	$cat_name = apply_filters('list_cats', $category->name, $category);
-// 	$output.= "\t<option class=\"level-$depth\" value=\"" . $category->slug . "\"";
-// 	if ($category->term_id == $args['selected']) $output.= ' selected="selected"';
-// 	$output.= '>';
-// 	$output.= $pad . $cat_name;
-// 	if ($args['show_count']) $output.= '  (' . $category->count . ')';
-// 	if ($args['show_last_update']) {
-// 		$format = 'Y-m-d';
-// 		$output.= '  ' . gmdate($format, $category->last_update_timestamp);
-// 	}
-// 	$output.= "</option>\n";
-// }
-/*
-* In order to list taxonomies.
-*/
-// Get taxonomies terms links.
-// function custom_taxonomies_terms_links()
-// {
-// 	// get post by post id
-// 	$post = get_post($post->ID);
-// 	// get post type by post
-// 	$post_type = $post->post_type;
-// 	// get post type taxonomies
-// 	$taxonomies = get_object_taxonomies($post_type, 'fahrzeuge');
-// 	$out = array();
-// 	foreach($taxonomies as $taxonomy_slug => $taxonomy) {
-// 		// get the terms related to post
-// 		$terms = get_the_terms($post->ID, $taxonomy_slug);
-// 		if (!empty($terms)) {
-// 			$out[] = "<div class='mobilede-taxlist'><p>" . $taxonomy->label . ":&nbsp</p>\n";
-// 			foreach($terms as $term) {
-// 				$out[] = '  <a href="' . get_term_link($term->slug, $taxonomy_slug) . '">' . $term->name . "</a><br />\n";
-// 			}
-// 			$out[] = "</div>\n";
-// 		}
-// 	}
-// 	return implode('', $out);
-// }
+
 // include CPT in query
 add_filter('pre_get_posts', 'query_post_type');
 function query_post_type($query)
