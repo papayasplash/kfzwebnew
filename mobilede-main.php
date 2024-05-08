@@ -589,6 +589,7 @@ function writeIntoWp($item)
 	if ($options['mob_image_option'] == 'web') {
 		foreach($item['images'] as $image) {
 			add_post_meta($post_id, 'ad_gallery', (string)$image);
+			add_post_meta($post_id, 'images_ebay', (string)$image);
 		}
 		if (substr($item['images'][0], -6) == '27.JPG') {
 			$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
@@ -924,6 +925,10 @@ function writeIntoWp($item)
 		'ad_gallery' => @$item['images']
 	);
 	wp_set_object_terms($post_id, $ad_gallery, 'ad_gallery');
+	$images_ebay = array(
+		'images_ebay' => @$item['images']
+	);
+	wp_set_object_terms($post_id, $images_ebay, 'images_ebay');
 	$baujahr = array(
 		'baujahr' => @$item['construction-year']
 	);

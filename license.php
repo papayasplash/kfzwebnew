@@ -106,7 +106,7 @@ function edd_sample_activate_license() {
 					case 'invalid_item_id' :
 						$message = __( 'Ungültige Artikel-ID' );
                     case 'item_name_mismatch' :
-                        $message = sprintf( __( 'Es scheint sich um einen ungültigen Lizenzschlüssel für %s.' ), KFZ_WEB_ITEM_NAME );
+                        $message = sprintf( __( 'Ungültiger Lizenzschlüssel für %s.' ), KFZ_WEB_ITEM_NAME );
                         break;
                     case 'no_activations_left':
                         $message = __( 'Ihr Lizenzschlüssel hat sein Aktivierungslimit erreicht.' );

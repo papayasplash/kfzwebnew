@@ -21,7 +21,7 @@ function check_single_fahrzeuge($content = null)
         <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Car"><div class="row"><div class="col-xs-12"><h2 class="text-left title" itemprop="name">' . get_the_title() . '</h2><h5 class="text-left" itemprop="category">' . $meta_values['category'][0] . ', ' . $meta_values['condition'][0] . '</h5></div></div><div class="row"><div class="col-xs-12 col-sm-7">';
         $options = get_option('MobileDE_option');
         if (isset($options['mob_slider_option']) && $options['mob_slider_option'] == 'yes') {
-            $content .= '<div class="kfz-slider-container"><div class="kfz-slider-main">';
+            $content .= '<div class="slider-container"><div class="slider-main">';
             if (!empty($meta_values['ad_gallery'])) {
                 $mob_images = $meta_values['ad_gallery'];
                 foreach ($mob_images as $mob_image) {
@@ -35,7 +35,7 @@ function check_single_fahrzeuge($content = null)
                     $content .= '<img src="' . $more_pics['file'] . '"/>';
                 }
             }
-            $content .= '</div><div class="kfz-slider-nav" style="overflow: hidden;">';
+            $content .= '</div><div class="slider-nav" style="overflow: hidden;">';
             if (!empty($meta_values['ad_gallery'])) {
                 $mob_images = $meta_values['ad_gallery'];
                 foreach ($mob_images as $mob_image) {

@@ -1,15 +1,15 @@
 jQuery(document).ready(function() {
-jQuery('.kfz-slider-main').slick({
+jQuery('.slider-main').slick({
   slidesToShow: 1,
   slidesToScroll: 1,
   arrows: false,
   fade: true,
-  asNavFor: '.kfz-slider-nav'
+  asNavFor: '.slider-nav'
 });
-jQuery('.kfz-slider-nav').slick({
+jQuery('.slider-nav').slick({
   slidesToShow: 3,
   slidesToScroll: 1,
-  asNavFor: '.kfz-slider-main',
+  asNavFor: '.slider-main',
   dots: true,
   arrows: true,
   centerMode: true,

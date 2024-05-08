@@ -20,6 +20,7 @@ function mob_htmlToOptions($array, $includeAny=true, $selected=''){
 
 class mob_searchAPI {
 	var $url, $username, $password;
+	var $language;
 	var $xml;
 	function __construct($url, $username, $password, $language){
 		// $this->url=$url; // Replaced for new API 2016
