@@ -21,6 +21,7 @@ include_once dirname(__FILE__) . '/template-checker.php';
 // Load Mobile.DE API
 include_once dirname(__FILE__) . '/includes/searchAPI.php';
 $options = get_option('MobileDE_option');
+
 if (is_array(isset($options['mob_username']))) {
 	// Please correct the following Quatsch. --bth 2014-10-31 06:03:56
 	$mob_api = new mob_searchAPI("mob_URL", isset($options['mob_username'][0]), isset($options['mob_password'][0]), isset($options['mob_language']));
@@ -43,10 +44,11 @@ function registerFrontendStuff() {
     if (empty($options['mob_slider_option'])) {
         $options['mob_slider_option'] = 'yes';
     }
+	
     if ($options['mob_slider_option'] == 'yes' && !is_admin()) {
-        wp_enqueue_style('slider_cdn_css',  plugin_dir_url(__FILE__) . 'css/slick.min.css');
-        wp_enqueue_style('slider_cdn_css_theme',  plugin_dir_url(__FILE__) . 'css/slick-theme.min.css');
-        wp_enqueue_script('slider_cdn_js', plugin_dir_url(__FILE__) . 'js/slick.min.js', array('jquery'));
+        wp_enqueue_style('slider_cdn_css',  'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css');
+        wp_enqueue_style('slider_cdn_css_theme',  'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css');
+        wp_enqueue_script('slider_cdn_js', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js', array('jquery'));
         wp_enqueue_script('slick-init', plugin_dir_url(__FILE__) . 'js/slick-init.js', array('jquery'));
     }
     if (!is_admin()) {
@@ -69,6 +71,7 @@ function registerAdminStuff()
 	));
 	wp_enqueue_script('scriptSearchDE');
 	wp_enqueue_script('admin_settings');
+	
 }
 add_action('admin_enqueue_scripts', 'registerAdminStuff');
 // Add every 3 days, weekly custom schedules
@@ -259,17 +262,23 @@ function importVehicles($vehicles)
     }
     $total_vehicles = count($vehicles);
     $vehicles_imported = 0;
-    foreach ($vehicles as $vehicle) {
-        if (!isset($existing_ad_keys[$vehicle['ad_key']])) {
-            // Insert if not exists.
-            $post_ids[] = writeIntoWp($vehicle);
+	foreach ($vehicles as $vehicle) {
+		if (!isset($existing_ad_keys[$vehicle['ad_key']])) {
+			// Insert if not exists.
+			$post_ids[] = writeIntoWp($vehicle);
 			$vehicles_imported++;
 			update_option('vehicle_import_progress', ($vehicles_imported / $total_vehicles) * 100);
-        } else {
-            // For updates or other operations with existing posts, remove this else block.
-            // $post_ids[] = $existing_ad_keys[$vehicle['ad_key']];
-        }
-    }
+		} else {
+			// Update existing vehicle if data has changed.
+			$existing_post_id = $existing_ad_keys[$vehicle['ad_key']];
+			$existing_vehicle = get_post_meta($existing_post_id);
+			
+			if (array_diff_assoc($vehicle, $existing_vehicle)) {
+				// Update the vehicle data if there are changes.
+				writeIntoWp($vehicle, $existing_post_id);
+			}
+		}
+	}
     return $post_ids;
 }
 add_action('wp_ajax_get_vehicle_import_progress', 'get_vehicle_import_progress_callback');
@@ -540,7 +549,6 @@ function writeIntoWp($item)
 	*/
 	if(!empty($item['energy-efficiency-class'])) { update_post_meta($post_id, 'efficiency_class', $item['energy-efficiency-class']); }
 	if (!empty($item['energy-efficiency-class'])) {
-		// log_me(plugin_dir_url(__FILE__).'images/'.$item['energy-efficiency-class'].'.png');
 		// Maybe additional condition
 		{
 		update_post_meta($post_id, 'efficiency_class_image_url', get_site_url() . '/wp-content/plugins/kfzweb/images/' . $item['energy-efficiency-class'] . '.png');
@@ -603,9 +611,6 @@ function writeIntoWp($item)
 		* Import bigger image.
 		*
 		*/
-		// log_me('EBAY BILD');
-		// log_me((string)$image);
-		// update_post_meta($post_id, 'ad_gallery', (string)$image);
 			if (substr($image, -6) == '27.JPG') {
 				$temp = str_replace('27.JPG', '57.JPG', $image); // 1600x1200 px
 				if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
@@ -1123,9 +1128,13 @@ function query_post_type($query)
 		return $query;
 	}
 }
+
 function mob_search_result_init()
 {
+
+	
 	global $mob_data;
+
 	// create custom type for search result
 	$posts_labels = array(
 		'name' => _x('Fahrzeuge', 'post type general name') ,
@@ -1155,7 +1164,7 @@ function mob_search_result_init()
 			'with_front' => true
 		) ,
 		'capability_type' => 'post',
-		'has_archive' => true,
+		'has_archive' => false,
 		'hierarchical' => true,
 		'menu_position' => 8,
 		'menu_icon' => 'data:image/svg+xml;base64,PHN2ZyBpZD0iRWJlbmVfMSIgZGF0YS1uYW1lPSJFYmVuZSAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxOCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7ZmlsbC1vcGFjaXR5OjAuODU7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5aZWljaGVuZmzDpGNoZSAxPC90aXRsZT48ZyBpZD0ibGF5ZXIxIj48cGF0aCBpZD0icGF0aDkzNDciIGNsYXNzPSJjbHMtMSIgZD0iTTUuNDcsMi4zMUExLjY4LDEuNjgsMCwwLDAsMy43MiwzLjM5TDIuMzEsNi45NEExLjg3LDEuODcsMCwwLDAsLjgxLDguNnY0LjY2SDIuMTd2MS41N2MtLjA3LDEuNDksMi4zNiwxLjU1LDIuNDIsMGwwLTEuNTRoOC43OGwwLDEuNTRjLjA1LDEuNTcsMi40OCwxLjUxLDIuNDIsMFYxMy4yNWgxLjM1VjguNmExLjg3LDEuODcsMCwwLDAtMS41LTEuNjVMMTQuMjgsMy4zOWExLjY4LDEuNjgsMCwwLDAtMS43Ni0xLjA3Wm0uMTYsMS4yM2guMTlsNi4zNywwYy41OCwwLC44MywwLDEuMDguNTZsMSwyLjc2SDMuNzJsMS0yLjY4YS44LjgsMCwwLDEsLjkxLS42NFpNMy40Miw4LjI2QTEuMTUsMS4xNSwwLDEsMSwyLjI3LDkuNDEsMS4xNSwxLjE1LDAsMCwxLDMuNDIsOC4yNlptMTEuMjMsMEExLjE1LDEuMTUsMCwxLDEsMTMuNSw5LjQxLDEuMTUsMS4xNSwwLDAsMSwxNC42NSw4LjI2Wm0tLjc5LTEuNTJaIi8+PC9nPjwvc3ZnPg==',
@@ -2038,24 +2047,18 @@ function mob_clean(){
 		$adKeys = array();
 		$postIds = array();
 		$postIdsToDelete = array();
-		log_me($adKeys);
 		while ($query->have_posts()) {
 			$query->the_post();
 			$meta_values = get_post_meta( get_the_ID() );
 			if(!isset($meta_values['is_finished']) && !isset($meta_values['is_finished'][0])){
-					log_me("MISSING IS_FINISHED STUB DETECTED! " . get_the_ID());
 					$postIdsToDelete[] = get_the_ID();
-					log_me($postIdsToDelete);
 			}
 			if(!isset($meta_values['ad_key']) && !isset($meta_values['ad_key'][0])){
-					log_me("MISSING AD_KEY STUB DETECTED! " . get_the_ID());
 					$postIdsToDelete[] = get_the_ID();
-					log_me($postIdsToDelete);
 			}
 			else {
 					$adKey = $meta_values['ad_key'][0];
 					if (in_array($adKey, $adKeys)){ // Compare to predecessors
-						log_me("DUPLICATE DETECTED! " . $adKey);
 						$postIdsToDelete[] = get_the_ID(); // Push post_id
 					}
 					else {
@@ -2066,16 +2069,43 @@ function mob_clean(){
 		}
 		if(!empty($postIdsToDelete)){
 			removePostsbyIds($postIdsToDelete);
-			log_me(count($postIdsToDelete) . " ERRONEOUS POSTS DELETED.");
 		$query->reset();
 }
-		log_me('adKeys');
-		log_me($adKeys);
-		log_me('dieIDs');
-		log_me($postIdsToDelete);
 		// do_action('kfz_web_after_import');
 }
 function formatCurrency($amount) {
 	
     return number_format((float)$amount, 2, ',', '.') . ' EUR';
 }
+function remove_vehicle_elements() {
+    if ( is_singular( 'fahrzeuge' ) ) {
+        ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Entferne den Titel
+                var title = document.querySelector('.entry-title');
+                if (title) title.remove();
+                
+                // Entferne das Thumbnail
+                var thumbnail = document.querySelector('.post-thumbnail');
+                if (thumbnail) thumbnail.remove();
+                
+                // Entferne den Autor, die Kategorie, das Datum und die Tags
+                var meta = document.querySelector('.entry-meta');
+                if (meta) meta.remove();
+                
+                // Entferne die Kommentare
+                var comments = document.querySelector('#comments');
+                if (comments) comments.remove();
+            });
+        </script>
+        <?php
+    }
+}
+add_action( 'wp_footer', 'remove_vehicle_elements' );
+function remove_vehicle_thumbnail() {
+    if ( is_singular( 'fahrzeuge' ) ) {
+        add_filter( 'post_thumbnail_html', '__return_empty_string' );
+    }
+}
+add_action( 'wp', 'remove_vehicle_thumbnail' );

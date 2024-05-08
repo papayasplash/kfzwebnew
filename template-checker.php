@@ -17,61 +17,61 @@ function check_single_fahrzeuge($content = null)
 {
     if (is_singular('fahrzeuge')) {
         $meta_values = get_post_meta(get_the_ID());
-        // print_r($meta_values);
         $content = '
         <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Car"><div class="row"><div class="col-xs-12"><h2 class="text-left title" itemprop="name">' . get_the_title() . '</h2><h5 class="text-left" itemprop="category">' . $meta_values['category'][0] . ', ' . $meta_values['condition'][0] . '</h5></div></div><div class="row"><div class="col-xs-12 col-sm-7">';
         $options = get_option('MobileDE_option');
-        // if (isset($options['mob_slider_option']) && $options['mob_slider_option'] == 'yes') {
-        //     $content .= '<div class="slider-main" style="overflow: hidden;">';
-        //     if (!empty($meta_values['ad_gallery'])) {
-        //         $mob_images = $meta_values['ad_gallery'];
-        //         foreach ($mob_images as $mob_image) {
-        //             $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
-        //             $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
-        //             $content .= '<img src="' . $bigimage . '" />';
-        //         }
-        //     } else {
-        //         more_fields(true); // Reset index.
-        //         while (($more_pics = more_fields())) {
-        //             $content .= '<img src="' . $more_pics['file'] . '"/>';
-        //         }
-        //     }
-        //     $content .= '</div><div class="slider-nav" style="overflow: hidden;">';
-        //     if (!empty($meta_values['ad_gallery'])) {
-        //         $mob_images = $meta_values['ad_gallery'];
-        //         foreach ($mob_images as $mob_image) {
-        //             $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
-        //             $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
-        //             $content .= '<img src="' . $mob_image_ssl . '" />';
-        //         }
-        //     } else {
-        //         more_fields(true); 
-        //         while (($more_pics = more_fields())) {
-        //             $content .= '<img src="' . $more_pics['sizes']['thumbnail']['file'] . '"/>';
-        //         }
-        //     }
-        //     $content .= '</div>';
-        // } else {
-        //     $content .= '<img class="img-responsive" src="';
-        //     if (function_exists('has_post_thumbnail') && has_post_thumbnail()) {
-        //         $content .= get_the_post_thumbnail_url();
-        //     }
-        //     $content .= '" itemprop="image"/><div class="row">';
-        //     if (!empty($meta_values['ad_gallery'])) {
-        //         $mob_images = $meta_values['ad_gallery'];
-        //         foreach ($mob_images as $mob_image) {
-        //             $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
-        //             $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
-        //             $content .= '<div class="col-xs-4 col-sm-3 col-lg-2 top15"><a href="' . $bigimage . '"><img class="img img-responsive" src="' . $mob_image_ssl . '" /></a></div>';
-        //         }
-        //     } else {
-        //         more_fields(true); 
-        //         while (($more_pics = more_fields())) {
-        //             $content .= '<div class="col-xs-4 col-sm-3 col-lg-2 top15"><a href="' . $more_pics['file'] . '"><img class="img img-responsive" src="' . $more_pics['sizes']['thumbnail']['file'] . '"/></a></div>';
-        //         }
-        //     }   
-        //     $content .= '</div>';
-        // }
+        if (isset($options['mob_slider_option']) && $options['mob_slider_option'] == 'yes') {
+            $content .= '<div class="kfz-slider-container"><div class="kfz-slider-main">';
+            if (!empty($meta_values['ad_gallery'])) {
+                $mob_images = $meta_values['ad_gallery'];
+                foreach ($mob_images as $mob_image) {
+                    $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
+                    $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
+                    $content .= '<img src="' . $bigimage . '" />';
+                }
+            } else {
+                more_fields(true); // Reset index.
+                while (($more_pics = more_fields())) {
+                    $content .= '<img src="' . $more_pics['file'] . '"/>';
+                }
+            }
+            $content .= '</div><div class="kfz-slider-nav" style="overflow: hidden;">';
+            if (!empty($meta_values['ad_gallery'])) {
+                $mob_images = $meta_values['ad_gallery'];
+                foreach ($mob_images as $mob_image) {
+                    $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
+                    $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
+                    $content .= '<img src="' . $mob_image_ssl . '" />';
+                }
+            } else {
+                more_fields(true); 
+                while (($more_pics = more_fields())) {
+                    $content .= '<img src="' . $more_pics['sizes']['thumbnail']['file'] . '"/>';
+                }
+            }
+            $content .= '</div></div>';
+        } else {
+            $content .= '<img class="img-responsive" src="';
+            if (function_exists('has_post_thumbnail') && has_post_thumbnail()) {
+                $content .= get_the_post_thumbnail_url();
+            }
+            $content .= '" itemprop="image"/><div class="row">';
+            if (!empty($meta_values['ad_gallery'])) {
+                $mob_images = $meta_values['ad_gallery'];
+                foreach ($mob_images as $mob_image) {
+                    $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
+                    $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
+                    $content .= '<div class="col-xs-4 col-sm-3 col-lg-2 top15"><a href="' . $bigimage . '"><img class="img img-responsive" src="' . $mob_image_ssl . '" /></a></div>';
+                }
+            } else {
+                more_fields(true); 
+                while (($more_pics = more_fields())) {
+                    $content .= '<div class="col-xs-4 col-sm-3 col-lg-2 top15"><a href="' . $more_pics['file'] . '"><img class="img img-responsive" src="' . $more_pics['sizes']['thumbnail']['file'] . '"/></a></div>';
+                }
+            }   
+            $content .= '</div>';
+        }
+    
         $content .= '</div><hr class="visible-xs"><div class="col-xs-12 col-sm-5"><div class="row"><br><div class="col-xs-12" itemprop="makesOffer" itemscope itemtype="http://schema.org/Offer" itemref="product">';
         if (!empty($meta_values['price'][0])) {
             $content .= '<div itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification"><meta itemprop="priceCurrency" content="EUR"><meta itemprop="price" content="'.$meta_values['price'][0].'">';

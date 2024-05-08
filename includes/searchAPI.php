@@ -57,7 +57,6 @@ class mob_searchAPI {
 	{
 		$adKeys = array();
 		$this->sendRequest('search-api/search?page.size=100'); // Inserted for new API 2016
-		$namespaces = $this->xml->getDocNamespaces();
 		$adList = $this->xml;
 		if ($adList != NULL) {
 			$adKeys = $this->treeToArray($adKeys, $adList[0]->xpath('//ad:ad'));
@@ -1163,7 +1162,6 @@ class mob_searchAPI {
 
 		// CO2-Emissionen
 		$temp = $item->xpath('//ad:emissions/ad:combined');
-		error_log('CO2-Emissionen' . $temp[0]['co2']);
 
 		if (isset($temp[0]['co2'])) {
 			$mob_data['wltp-co2-emission'] = (string) $temp[0]['co2'];
@@ -1172,7 +1170,6 @@ class mob_searchAPI {
 		}
 		// CO2-Klasse auf Basis der CO2-Emissionen
 		$temp = $item->xpath('//ad:emissions/ad:combined');
-		error_log('CO2-Klasse auf Basis der CO2-Emissionen' . $temp[0]['co2-class']);
 
 		if (isset($temp[0]['co2-class'])) {	
 			$mob_data['wltp-co2-class'] = (string) $temp[0]['co2-class'];
@@ -1181,7 +1178,6 @@ class mob_searchAPI {
 		}
 		// CO2-Emissionen (bei entladener Batterie)
 		$temp = $item->xpath('//ad:emissions/ad:discharged');
-		error_log('CO2-Emissionen (bei entladener Batterie)' . $temp[0]['co2']);
 
 		if (isset($temp[0]['co2'])) {
 			$mob_data['wltp-co2-emission-discharged'] = (string) $temp[0]['co2'];
@@ -1190,7 +1186,6 @@ class mob_searchAPI {
 		}
 		// CO2-Klasse auf Grundlage der CO2-Emissionen bei entladener Batterie
 		$temp = $item->xpath('//ad:emissions/ad:discharged');
-		error_log('CO2-Klasse auf Grundlage der CO2-Emissionen bei entladener Batterie' . $temp[0]['co2-class']);
 
 		if (isset($temp[0]['co2-class'])) {
 			$mob_data['wltp-co2-class-discharged'] = (string) $temp[0]['co2-class'];
@@ -1199,7 +1194,6 @@ class mob_searchAPI {
 		}
 		// Elektrische Reichweite	
 		$temp = $item->xpath('//ad:range');
-		error_log('Elektrische Reichweite' . $temp[0]['value']);
 		
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-electric-range'] = (string) $temp[0]['value'];
@@ -1208,7 +1202,6 @@ class mob_searchAPI {
 		}
 		// Elektrische Reichweite (EAER)
 		$temp = $item->xpath('//ad:equivalent-all-electric-range');
-		error_log('Elektrische Reichweite (EAER)' . $tem[0]['value']);
 
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-electric-range-equivalent-all'] = (string) $temp[0]['value'];
@@ -1217,7 +1210,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch gewichtet, kombiniert
 		$temp = $item->xpath('//ad:consumptions/ad:weighted-combined-fuel');
-		error_log('Verbrauch gewichtet, kombiniert' . $temp[0]['value']);
 
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-weighted-combined-fuel'] = (string) $temp[0]['value'];
@@ -1226,7 +1218,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch kombiniert
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch kombiniert' . $temp[0]['combined']);
 
 		if (isset($temp[0]['combined'])) {
 			$mob_data['wltp-combined-fuel'] = (string) $temp[0]['combined'];
@@ -1235,7 +1226,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch Innenstadt 
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch Innenstadt' . $temp[0]['city']);
 
 		if (isset($temp[0]['city'])) {
 			$mob_data['wltp-city-fuel'] = (string) $temp[0]['city'];
@@ -1244,7 +1234,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch Stadtrand
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch Stadtrand' . $temp[0]['suburban']);
 
 		if (isset($temp[0]['suburban'])) {
 			$mob_data['wltp-suburban-fuel'] = (string) $temp[0]['suburban'];
@@ -1253,7 +1242,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch Landstraße
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch Landstraße' . $temp[0]['rural']);
 		if (isset($temp[0]['rural'])) {
 			$mob_data['wltp-rural-fuel'] = (string) $temp[0]['rural'];
 		} else {
@@ -1261,7 +1249,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch Autobahn
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch Autobahn' . $temp[0]['highway']);
 		if (isset($temp[0]['highway'])) {
 			$mob_data['wltp-highway-fuel'] = (string) $temp[0]['highway'];
 		} else {
@@ -1269,7 +1256,6 @@ class mob_searchAPI {
 		}
 		// Stromverbrauch kombiniert
 		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
-		error_log('Stromverbrauch kombiniert' . $temp[0]['combined']);
 		if (isset($temp[0]['combined'])) {
 			$mob_data['wltp-combined-power'] = (string) $temp[0]['combined'];
 		} else {
@@ -1277,7 +1263,6 @@ class mob_searchAPI {
 		}
 		// Stromverbrauch Innenstadt
 		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
-		error_log('Stromverbrauch Innenstadt' . $temp[0]['city']);
 
 		if (isset($temp[0]['city'])) {
 			$mob_data['wltp-city-power'] = (string) $temp[0]['city'];
@@ -1286,7 +1271,6 @@ class mob_searchAPI {
 		}
 		// Stromverbrauch Stadtrand
 		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
-		error_log('Stromverbrauch Stadtrand' . $temp[0]['suburban']);
 
 		if (isset($temp[0]['suburban'])) {
 			$mob_data['wltp-suburban-power'] = (string) $temp[0]['suburban'];
@@ -1295,7 +1279,6 @@ class mob_searchAPI {
 		}
 		// Stromverbrauch Landstraße
 		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
-		error_log('Stromverbrauch Landstraße' . $temp[0]['rural']);
 
 		if (isset($temp[0]['rural'])) {
 			$mob_data['wltp-rural-power'] = (string) $temp[0]['rural'];
@@ -1304,7 +1287,6 @@ class mob_searchAPI {
 		}
 		// Stromverbrauch Autobahn
 		$temp = $item->xpath('//ad:consumptions/ad:power-consumption');
-		error_log('Stromverbrauch Autobahn' . $temp[0]['highway']);
 
 		if (isset($temp[0]['highway'])) {
 			$mob_data['wltp-highway-power'] = (string) $temp[0]['highway'];
@@ -1313,7 +1295,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch bei entladener Batterie kombiniert
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch bei entladener Batterie kombiniert' . $temp[0]['combined']);
 
 		if (isset($temp[0]['combined'])) {
 			$mob_data['wltp-empty-combined-fuel'] = (string) $temp[0]['combined'];
@@ -1322,7 +1303,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch bei entladener Batterie Innenstadt
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch bei entladener Batterie Innenstadt' . $temp[0]['city']);
 
 		if (isset($temp[0]['city'])) {
 			$mob_data['wltp-empty-city-fuel'] = (string) $temp[0]['city'];
@@ -1331,7 +1311,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch bei entladener Batterie Stadtrand
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch bei entladener Batterie Stadtrand' . $temp[0]['suburban']);
 
 		if (isset($temp[0]['suburban'])) {
 			$mob_data['wltp-empty-suburban-fuel'] = (string) $temp[0]['suburban'];
@@ -1340,7 +1319,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch bei entladener Batterie Landstraße
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch bei entladener Batterie Landstraße' . $temp[0]['rural']);
 
 		if (isset($temp[0]['rural'])) {
 			$mob_data['wltp-empty-rural-fuel'] = (string) $temp[0]['rural'];
@@ -1349,7 +1327,6 @@ class mob_searchAPI {
 		}
 		// Verbrauch bei entladener Batterie Autobahn
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');
-		error_log('Verbrauch bei entladener Batterie Autobahn' . $temp[0]['highway']);
 
 		if (isset($temp[0]['highway'])) {
 			$mob_data['wltp-empty-highway-fuel'] = (string) $temp[0]['highway'];
@@ -1358,7 +1335,6 @@ class mob_searchAPI {
 		}
 		// Kraftstoffpreis [Jahr]
 		$temp = $item->xpath('//ad:cost-model/ad:fuel-price');
-		error_log('Kraftstoffpreis [Jahr]' . $temp[0]['value']);
 
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-fuel-price-year'] = (string) $temp[0]['value'];
@@ -1367,7 +1343,6 @@ class mob_searchAPI {
 		}
 		// Strompreis [Jahr]
 		$temp = $item->xpath('//ad:cost-model/ad:power-price');
-		error_log('Strompreis [Jahr]' . $temp[0]['value']);
 
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-power-price-year'] = (string) $temp[0]['value'];
@@ -1376,7 +1351,6 @@ class mob_searchAPI {
 		}
 		// Jahresdurchschnitt [Jahr]
 		$temp = $item->xpath('//ad:cost-model/ad:consumption-price-year');
-		error_log('Jahresdurchschnitt [Jahr]' . $temp[0]['value']);
 
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-consumption-price-year'] = (string) $temp[0]['value'];
@@ -1385,7 +1359,6 @@ class mob_searchAPI {
 		}
 		// Energiekosten bei 15.000 km Jahresfahrleistung
 		$temp = $item->xpath('//ad:cost-model/ad:consumption-costs');
-		error_log('Energiekosten bei 15.000 km Jahresfahrleistung' . $temp[0]['value']);
 
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-consumption-costs'] = (string) $temp[0]['value'];
@@ -1394,7 +1367,6 @@ class mob_searchAPI {
 		}
 		// bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von
 		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:low');
-		error_log('bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von' . $temp[0]['base-price']);
 
 		if (isset($temp[0]['base-price'])) {
 			$mob_data['wltp-co2-costs-low-base'] = (string) $temp[0]['base-price'];
@@ -1403,7 +1375,6 @@ class mob_searchAPI {
 		}
 		// bei einem angenommenen mittleren durchschnittlichen CO2-Preis von
 		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:middle');
-		error_log('bei einem angenommenen mittleren durchschnittlichen CO2-Preis von' . $temp[0]['base-price']);
 
 		if (isset($temp[0]['base-price'])) {
 			$mob_data['wltp-co2-costs-middle-base'] = (string) $temp[0]['base-price'];
@@ -1412,7 +1383,6 @@ class mob_searchAPI {
 		}
 		// bei einem angenommenen hohen durchschnittlichen CO2-Preis von
 		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:high');
-		error_log('bei einem angenommenen hohen durchschnittlichen CO2-Preis von' . $temp[0]['base-price']);
 
 		if (isset($temp[0]['base-price'])) {
 			$mob_data['wltp-co2-costs-high-base'] = (string) $temp[0]['base-price'];
@@ -1421,7 +1391,6 @@ class mob_searchAPI {
 		}
 		// bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von
 		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:low');
-		error_log('bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von' . $temp[0]['accumulated']);
 
 		if (isset($temp[0]['accumulated'])) {
 			$mob_data['wltp-co2-costs-low-accumulated'] = (string) $temp[0]['accumulated'];
@@ -1430,7 +1399,6 @@ class mob_searchAPI {
 		}
 		// bei einem angenommenen mittleren durchschnittlichen CO2-Preis von
 		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:middle');
-		error_log('bei einem angenommenen mittleren durchschnittlichen CO2-Preis von' . $temp[0]['accumulated']);
 
 		if (isset($temp[0]['accumulated'])) {
 			$mob_data['wltp-co2-costs-middle-accumulated'] = (string) $temp[0]['accumulated'];
@@ -1439,7 +1407,6 @@ class mob_searchAPI {
 		}
 		// bei einem angenommenen hohen durchschnittlichen CO2-Preis von
 		$temp = $item->xpath('//ad:cost-model/ad:co2-costs/ad:high');
-		error_log('bei einem angenommenen hohen durchschnittlichen CO2-Preis von' . $temp[0]['accumulated']);
 
 		if (isset($temp[0]['accumulated'])) {
 			$mob_data['wltp-co2-costs-high-accumulated'] = (string) $temp[0]['accumulated'];
@@ -1450,7 +1417,6 @@ class mob_searchAPI {
 
 		// Kraftfahrzeugsteuer
 		$temp = $item->xpath('//ad:cost-model/ad:tax');
-		error_log('Kraftfahrzeugsteuer' . $temp[0]['value']);
 
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-tax'] = (string) $temp[0]['value'];
@@ -1459,7 +1425,6 @@ class mob_searchAPI {
 		}
 		// Zeitspanne von
 		$temp = $item->xpath('//ad:cost-model/ad:time-frame');
-		error_log('Kraftfahrzeugsteuer' . $temp[0]['from']);
 
 		if (isset($temp[0]['from'])) {
 			$mob_data['wltp-cost-model-from'] = (string) $temp[0]['from'];
@@ -1468,7 +1433,6 @@ class mob_searchAPI {
 		}
 		// Zeitspanne bis
 		$temp = $item->xpath('//ad:cost-model/ad:time-frame');
-		error_log('Zeitspanne bis' . $temp[0]['till']);
 
 		if (isset($temp[0]['till'])) {
 			$mob_data['wltp-cost-model-till'] = (string) $temp[0]['till'];

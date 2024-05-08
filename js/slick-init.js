@@ -1,18 +1,19 @@
 jQuery(document).ready(function() {
-jQuery('.slider-main').slick({
+jQuery('.kfz-slider-main').slick({
   slidesToShow: 1,
   slidesToScroll: 1,
-  arrows: true,
+  arrows: false,
   fade: true,
-  asNavFor: '.slider-nav'
+  asNavFor: '.kfz-slider-nav'
 });
-jQuery('.slider-nav').slick({
+jQuery('.kfz-slider-nav').slick({
   slidesToShow: 3,
   slidesToScroll: 1,
-  asNavFor: '.slider-main',
+  asNavFor: '.kfz-slider-main',
   dots: true,
   arrows: true,
   centerMode: true,
   focusOnSelect: true
 });
+
 });

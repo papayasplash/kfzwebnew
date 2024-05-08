@@ -52,22 +52,22 @@ $mob_data['style']['new']	='New Style';
 
 
 
-$mob_data['mob_images']['web'] = 'Remotely get images From mobile.de';
-$mob_data['mob_images']['host'] = 'Import images to your server';
+$mob_data['mob_images']['web'] = 'Bilder abrufen von mobile.de';
+$mob_data['mob_images']['host'] = 'Bilder auf den Server importieren';
 
 
 
 
-$mob_data['mob_slider']['yes'] = 'Yes';
-$mob_data['mob_slider']['no'] = 'No';
-$mob_data['use_cat_tax']['yes'] = 'Yes';
-$mob_data['use_cat_tax']['no'] = 'No';
+$mob_data['mob_slider']['yes'] = 'Ja';
+$mob_data['mob_slider']['no'] = 'Nein';
+$mob_data['use_cat_tax']['yes'] = 'Ja';
+$mob_data['use_cat_tax']['no'] = 'Nein';
 
 
 /* List of supported intervals, you can change the value but please don't change the key name or the feed periodical import function may stop working */
 
-$mob_data['download_interval']['minutely']='Every 5 minutes';
-$mob_data['download_interval']['hourly']='Every hour';
-$mob_data['download_interval']['daily']='Once a day';
-$mob_data['download_interval']['threedays']='Every 3 days';;
-$mob_data['download_interval']['weekly']='Weekly';
+$mob_data['download_interval']['minutely']='Alle 5 Minuten';
+$mob_data['download_interval']['hourly']='Stündlich';
+$mob_data['download_interval']['daily']='Täglich';
+$mob_data['download_interval']['threedays']='Alle 3 Tage';;
+$mob_data['download_interval']['weekly']='Wöchentlich';

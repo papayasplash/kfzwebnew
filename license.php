@@ -68,13 +68,14 @@ function edd_sample_activate_license() {
         if( ! check_admin_referer( 'edd_sample_nonce', 'edd_sample_nonce' ) )
             return; // get out if we didn't click the Activate button
 
-        $license = trim( get_option( 'mob_license_key' ) );
-        $api_params = array(
-            'edd_action' => 'activate_license',
-            'license'    => $license,
-            'item_name'  => urlencode( KFZ_WEB_ITEM_NAME ),
-            'url'        => home_url()
-        );
+			$license = trim( get_option( 'mob_license_key' ) );
+			$api_params = array(
+				'edd_action' => 'activate_license',
+				'license'    => $license,
+				'item_name'  => KFZ_WEB_ITEM_NAME,
+				'item_id'	 => KFZ_WEB_ITEM_ID,
+				'url'        => home_url()
+			);
 
         $response = wp_remote_post( KFZ_WEB_STORE, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
@@ -82,6 +83,7 @@ function edd_sample_activate_license() {
             $message = $response->get_error_message();
         } else {
             $license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
             if ( false === $license_data->success ) {
                 switch( $license_data->error ) {
                     case 'expired' :
@@ -91,23 +93,26 @@ function edd_sample_activate_license() {
                         );
                         break;
                     case 'revoked' :
-                        $message = __( 'Your license key has been disabled.' );
+                        $message = __( 'Ihr Lizenzschlüssel wurde deaktiviert.' );
                         break;
                     case 'missing' :
-                        $message = __( 'Invalid license.' );
+                        $message = __( 'Ungültige Lizenz.' );
                         break;
                     case 'invalid' :
+						$message = __( 'Lizenzschlüssel stimmt nicht überein.' );
                     case 'site_inactive' :
-                        $message = __( 'Your license is not active for this URL.' );
+                        $message = __( 'Ihre Lizenz ist für diese URL nicht aktiv.' );
                         break;
+					case 'invalid_item_id' :
+						$message = __( 'Ungültige Artikel-ID' );
                     case 'item_name_mismatch' :
-                        $message = sprintf( __( 'This appears to be an invalid license key for %s.' ), KFZ_WEB_ITEM_NAME );
+                        $message = sprintf( __( 'Es scheint sich um einen ungültigen Lizenzschlüssel für %s.' ), KFZ_WEB_ITEM_NAME );
                         break;
                     case 'no_activations_left':
-                        $message = __( 'Your license key has reached its activation limit.' );
+                        $message = __( 'Ihr Lizenzschlüssel hat sein Aktivierungslimit erreicht.' );
                         break;
                     default :
-                        $message = __( 'An error occurred, please try again.' );
+                        $message = __( 'Es ist ein Fehler aufgetreten, bitte versuchen Sie es erneut.' );
                         break;
                 }
             }
@@ -121,7 +126,7 @@ function edd_sample_activate_license() {
         }
 
         update_option( 'mob_license_status', $license_data->license );
-        $redirect = add_query_arg( array( 'sl_activation' => 'true', 'message' => urlencode( __( 'License activated successfully.' ) ) ), admin_url( 'plugins.php?page=' . KFZ_WEB_LICENSE_PAGE ) );
+        $redirect = add_query_arg( array( 'sl_activation' => 'true', 'message' => urlencode( __( 'Lizenz erfolgreich aktiviert.' ) ) ), admin_url( 'plugins.php?page=' . KFZ_WEB_LICENSE_PAGE ) );
         wp_redirect( $redirect );
         exit();
     }
@@ -137,7 +142,7 @@ function edd_sample_deactivate_license() {
         $api_params = array(
             'edd_action'=> 'deactivate_license',
             'license'   => $license,
-            'item_name' => urlencode( KFZ_WEB_ITEM_NAME ) // the name of our product in EDD
+            'item_name' => KFZ_WEB_ITEM_NAME // the name of our product in EDD
         );
 
         $response = wp_remote_post( KFZ_WEB_STORE, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
@@ -149,7 +154,7 @@ function edd_sample_deactivate_license() {
 
             if ( $license_data->license == 'deactivated' ) {
                 delete_option( 'mob_license_status' );
-                $message = __( 'License deactivated successfully.' );
+                $message = __( 'Die Lizenz wurde erfolgreich deaktiviert.' );
             }
         }
 
@@ -160,7 +165,7 @@ function edd_sample_deactivate_license() {
         }
 
         delete_option( 'mob_license_status' );
-        $redirect = add_query_arg( array( 'sl_activation' => 'true', 'message' => urlencode( __( 'License deactivated successfully.' ) ) ), admin_url( 'plugins.php?page=' . KFZ_WEB_LICENSE_PAGE ) );
+        $redirect = add_query_arg( array( 'sl_activation' => 'true', 'message' => urlencode( __( 'Die Lizenz wurde erfolgreich deaktiviert.' ) ) ), admin_url( 'plugins.php?page=' . KFZ_WEB_LICENSE_PAGE ) );
         wp_redirect( $redirect );
         exit();
     }
@@ -173,7 +178,7 @@ function mob_check_license_status() {
     $api_params = array(
         'edd_action' => 'check_license',
         'license'    => $license,
-        'item_name'  => urlencode( KFZ_WEB_ITEM_NAME ),
+        'item_name'  => KFZ_WEB_ITEM_NAME,
         'url'        => home_url()
     );
 

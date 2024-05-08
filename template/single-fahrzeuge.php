@@ -23,7 +23,7 @@ $meta_values = get_post_meta( get_the_ID() ); ?>
     <?php $options = get_option('MobileDE_option');
    if($options['mob_slider_option'] == 'yes') { ?>
 
-    <div class="slider-main" style="overflow: hidden;">
+    <div class="kfz-slider-main" style="overflow: hidden;">
      <?php 
 		if(!empty($meta_values['images_ebay'])) {
 			$mob_images = $meta_values['images_ebay'];
@@ -46,7 +46,7 @@ $meta_values = get_post_meta( get_the_ID() ); ?>
 		}		
 		?>
 	</div>
-	<div class="slider-nav" style="overflow: hidden;">
+	<div class="kfz-slider-nav" style="overflow: hidden;">
 		  <?php 
 		if(!empty($meta_values['images_ebay'])) {
 			$mob_images = $meta_values['images_ebay'];

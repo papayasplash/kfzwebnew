@@ -44,10 +44,8 @@ class mob_Setting{
 
 <div class="wrap">
 
-<img src="//www.mobilede-fahrzeugintegration.de/wp-content/uploads/2016/10/kfz-web-logo.png"> </img>
-
-            <?php //screen_icon(); ?>
-			<?php
+<img src="//www.mobilede-fahrzeugintegration.de/wp-content/uploads/2024/05/kfz-web-logo1.png"> </img>
+		<?php
 		$license 	= get_option( 'mob_license_key' );
 		$status 	= get_option( 'mob_license_status' );
 		if( $status == false && $status !== 'valid' ) { 
@@ -69,7 +67,7 @@ class mob_Setting{
                 do_settings_sections( 'searchde-setting-admin' );
                 submit_button(); 
             ?><input class="button-primary" type="button" <?php if( $status == false && $status !== 'valid' ) { ?>disabled<?php } ?>
-			id="importData" value="<?php esc_attr_e('Import vehicles', 'kfz-web') ?>" /> <input class="button-primary" type="button" id="deletePosts" value="Delete vehicles" />
+			id="importData" value="<?php esc_attr_e('Fahrzeuge importieren', 'kfz-web') ?>" /> <input class="button-primary" type="button" id="deletePosts" value="Fahrzeuge löschen" />
 	</form>
 	
 		
@@ -158,7 +156,7 @@ class mob_Setting{
      
 		add_settings_field(
             'mob_username', 
-            'dlr_ user', 
+            'Benutzername', 
             array( $this, 'mob_username_callback' ), 
             'searchde-setting-admin', 
             'connection_section_id'
@@ -166,7 +164,7 @@ class mob_Setting{
 
 		add_settings_field(
             'mob_password', 
-            'Password', 
+            'Passwort', 
             array( $this, 'mob_password_callback' ), 
             'searchde-setting-admin', 
             'connection_section_id'         
@@ -174,7 +172,7 @@ class mob_Setting{
 
     	add_settings_field(
             'mob_download_interval', 
-            'Import interval', 
+            'Import Intervall', 
             array( $this, 'mob_download_interval_callback' ), 
             'searchde-setting-admin', 
             'connection_section_id'
@@ -182,7 +180,7 @@ class mob_Setting{
    
         add_settings_field(
             'mob_language', 
-            'Language', 
+            'Sprache', 
        	    array( $this, 'mob_language_callback' ), 
             'searchde-setting-admin', 
             'connection_section_id'
@@ -190,7 +188,7 @@ class mob_Setting{
 
         add_settings_field(
             'mob_image_option', 
-            'Image storage location', 
+            'Bildspeicherort', 
             array( $this, 'mob_image_callback' ), 
             'searchde-setting-admin', 
             'connection_section_id'
@@ -214,12 +212,18 @@ class mob_Setting{
 
   		add_settings_field(
             'use_cat_tax', 
-            'Standard categories', 
+            'Standard Kategorien', 
             array( $this, 'mob_cat_tax_callback' ), 
             'searchde-setting-admin', 
             'connection_section_id'
         );
-
+		add_settings_field(
+			'mob_cpt_archive_option',
+			'CPT-Archiv',
+			array($this, 'mob_cpt_archive_callback'),
+			'searchde-setting-admin',
+			'connection_section_id'
+		);
 
 		add_action( 'wp_ajax_ajaxImportData', 'mob_ajaxImportData' );
 		add_action( 'wp_ajax_ajaxDeletePosts', 'mob_ajaxDeletePosts' );
@@ -237,7 +241,21 @@ class mob_Setting{
 			die('1');
 			}
 		}
+		public function mob_cpt_archive_callback()
+		{
+			$cpt_archive_options = array(
+				'enabled' => 'Aktiviert',
+				'disabled' => 'Deaktiviert'
+			);
 
+			echo '
+			<sub>' . __('Soll das Archiv für den benutzerdefinierten Beitragstyp aktiviert oder deaktiviert werden?', 'kfz-web') . '</sub><br><br>
+			<select class="settingsSelect" name="MobileDE_option[mob_cpt_archive_option]">' .
+				mob_htmlToOptions($cpt_archive_options, false,
+					isset($this->options['mob_cpt_archive_option']) ? esc_attr($this->options['mob_cpt_archive_option']) : ''
+				) .
+			'</select>';
+		}
 
 		public function sanitize( $data )
 		{
@@ -253,7 +271,9 @@ class mob_Setting{
 					}
 				}
 			}
-
+			if (!empty($data['mob_cpt_archive_option'])) {
+				$new_data['mob_cpt_archive_option'] = sanitize_text_field($data['mob_cpt_archive_option']);
+			}
 			if(!empty($data['mob_language'])){
 				$new_data['mob_language']=sanitize_text_field($data['mob_language']);
 			}
@@ -302,18 +322,13 @@ class mob_Setting{
 		{
 			printf(
 				'<input type="text" id="mob_username0" name="MobileDE_option[mob_username][0]" placeholder="dlr_" value="%s" />',
-
-				isset( $this->options['mob_username'][0] ) ? esc_attr( $this->options['mob_username'][0]) : ''
-
+				isset($this->options['mob_username'][0]) ? esc_attr($this->options['mob_username'][0]) : ''
 			);
 			?>
-			<input class="button-primary" type="button" id="addAccount"
-				value="<?php esc_attr_e('+ add account', 'kfz-web') ?>" />
+			<input class="button-primary" type="button" id="addAccount" value="<?php esc_attr_e('+ weiterer Account', 'kfz-web') ?>" />
 			<?php
-
 		}
-
-
+		
 		public function mob_password_callback()
 		{
 			printf(
@@ -323,24 +338,28 @@ class mob_Setting{
 		
 			if (isset($this->options['mob_username']) && is_array($this->options['mob_username'])) {
 				for ($i = 1; $i < count($this->options['mob_username']); $i++) {
-					echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th>';
+					echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th></tr>';
 					echo '<tr valign="top"><th scope="row">Benutzername</th><td>';
 					printf(
-						'<input type="text" id="mob_username' . $i . '" name="MobileDE_option[mob_username][' . $i . ']" value="%s" />',
+						'<input type="text" id="mob_username%1$d" name="MobileDE_option[mob_username][%1$d]" value="%2$s" />',
+						$i,
 						isset($this->options['mob_username'][$i]) ? esc_attr($this->options['mob_username'][$i]) : ''
 					);
 					echo '</td></tr>';
 					echo '<tr valign="top"><th scope="row">Passwort</th><td>';
 					printf(
-						'<input type="password" id="mob_password' . $i . '" name="MobileDE_option[mob_password][' . $i . ']" value="%s" />',
+						'<input type="password" id="mob_password%1$d" name="MobileDE_option[mob_password][%1$d]" value="%2$s" />',
+						$i,
 						isset($this->options['mob_password'][$i]) ? esc_attr($this->options['mob_password'][$i]) : ''
 					);
+					echo '<button type="button" class="removeAccount" data-index="' . $i . '">' . __('Entfernen', 'kfz-web') . '</button>';
 					echo '</td></tr>';
 				}
 			}
 		
-			echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th>';
-		}		public function mob_language_callback()
+			echo '<tr valign="top"><th colspan="2" scope="row"><hr /></th></tr>';
+		}
+		public function mob_language_callback()
 		{
 			echo '<select class="settingsSelect" name="MobileDE_option[mob_language]">'.
 				mob_htmlToOptions($this->mob_data['languages'], false,
@@ -359,7 +378,7 @@ class mob_Setting{
 		public function mob_image_callback()
 		{
 			echo '
-			<sub>' . __('Leave images on mobile.de or import them and generate thumbnails?', 'kfz-web') . '</sub><br><br>
+			<sub>' . __('Bilder auf mobile.de belassen oder importieren und Thumbnails erzeugen?', 'kfz-web') . '</sub><br><br>
 			<select class="settingsSelect" name="MobileDE_option[mob_image_option]">'.
 				mob_htmlToOptions($this->mob_data['mob_images'], false,
 				isset( $this->options['mob_image_option'] ) ? esc_attr( $this->options['mob_image_option']) : ''.
@@ -387,7 +406,7 @@ class mob_Setting{
 		public function mob_slider_callback()
 		{
 			echo '
-			<sub><a href="http://kenwheeler.github.io/slick/" target=_blank">Slickslider</a> ' . __('for the vehicle pictures to load?', 'kfz-web') . '</sub><br><br>
+			<sub><a href="http://kenwheeler.github.io/slick/" target=_blank">Slickslider</a> ' . __('für das Laden der Fahrzeugbilder?', 'kfz-web') . '</sub><br><br>
 			<select class="settingsSelect" name="MobileDE_option[mob_slider_option]">'.
 				mob_htmlToOptions($this->mob_data['mob_slider'], false,
 				isset( $this->options['mob_slider_option'] ) ? esc_attr( $this->options['mob_slider_option']) : ''.
@@ -399,7 +418,7 @@ class mob_Setting{
 		public function mob_cat_tax_callback()
 		{
 			echo '
-			<sub>' . __('Should the standard categories be filled with vehicle data?', 'kfz-web') . '</sub>
+			<sub>' . __('Sollen die Standardkategorien mit Fahrzeugdaten gefüllt werden?', 'kfz-web') . '</sub>
 			<br><br>
 			<select class="settingsSelect" name="MobileDE_option[mob_cat_tax_option]">'.
 				mob_htmlToOptions($this->mob_data['use_cat_tax'], false,
@@ -408,5 +427,6 @@ class mob_Setting{
 			);
 			// log_me($this->options);
 		}
+
 }
 $mob_page = new mob_setting($mob_data);

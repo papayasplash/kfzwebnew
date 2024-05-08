@@ -60,7 +60,7 @@ if ($vehicles->have_posts()) { ?>
                     <div class="vehicle-thumbnail">
                         <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">
                             <?php if (function_exists('has_post_thumbnail') && has_post_thumbnail()) {
-                                the_post_thumbnail('thumbnail');
+                                the_post_thumbnail('medium');
                             } ?>
                         </a>
                     </div>
@@ -130,27 +130,7 @@ if ($vehicles->have_posts()) { ?>
                                 <?php echo $meta_values['door_count'][0]; ?> Türen
                             </small>
                         <?php } ?>
-
-                    </div>
-
-                    <div class="vehicle-price">
-                        <?php if (!empty($meta_values['price'][0])) { ?>
-                            <div itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
-                                <meta itemprop="priceCurrency" content="EUR">
-                                <meta itemprop="price" content="<?php echo $meta_values['price'][0]; ?>">
-                                <strong>
-                                    <?php echo $meta_values['price'][0]; ?> € (Brutto)
-                                </strong><br><small>
-                                    <?php echo $meta_values['vatable'][0] == 'false' ? 'MwSt. nicht ausweisbar' : 'Inkl. 19% MwSt.'; ?>
-                                </small>
-                            </div>
-                        <?php } ?>
-                        <br>
-                        <a href="<?php the_permalink(); ?>"
-                            class="vehicle-btn wp-block-button__link wp-element-button">Details</a>
-                    </div>
-                </div> <!-- // vehicle-row -->
-                <ul class="vehicle-emission">
+                        <ul class="vehicle-emission">
 					<?php 
 					 if (!empty($meta_values['wltp-combined-fuel'][0])) { 
 						$content .= '<tr><td><span>Kraftstoffverbrauch:</span></td><td> 
@@ -174,26 +154,26 @@ if ($vehicles->have_posts()) { ?>
 					?>
 					<!-- // Combined fuel consumption for all nonelectric vehicles, optional for plugin hybrids, number in l/100km (natural gas (CNG) in kg/100km) -->
 					<?php if (!empty($meta_values['wltp-consumption-fuel-combined'][0])) { ?>
-                        <li style="color: yellow;"><small>Verbrauch komb.*: ≈<?php echo $meta_values['wltp-consumption-fuel-combined'][0]; ?> l/100km</small></li>
+                        <li><small>Verbrauch komb.*: ≈<?php echo $meta_values['wltp-consumption-fuel-combined'][0]; ?> l/100km</small></li>
                        
                     <?php } ?>
                     <?php if (!empty($meta_values['emissionFuelConsumption_Combined'][0])) { ?>
-                        <li style="color: yellow;"><small>Verbrauch komb.*: ≈<?php echo $meta_values['emissionFuelConsumption_Combined'][0]; ?> l/100km</small></li>
+                        <li><small>Verbrauch komb.*: ≈<?php echo $meta_values['emissionFuelConsumption_Combined'][0]; ?> l/100km</small></li>
                     <?php } ?>
                     <?php if (!empty($meta_values['emissionFuelConsumption_Inner'][0])) { ?>
-                        <li style="color: yellow;"><small>Verbrauch innerorts*: ≈<?php echo $meta_values['emissionFuelConsumption_Inner'][0]; ?> l/100km</small></li>
+                        <li><small>Verbrauch innerorts*: ≈<?php echo $meta_values['emissionFuelConsumption_Inner'][0]; ?> l/100km</small></li>
                     <?php } ?>
                     <?php if (!empty($meta_values['emissionFuelConsumption_Outer'][0])) { ?>
-                        <li style="color: yellow;"><small>Verbrauch außerorts*: ≈<?php echo $meta_values['emissionFuelConsumption_Outer'][0]; ?> l/100km</small></li>
+                        <li><small>Verbrauch außerorts*: ≈<?php echo $meta_values['emissionFuelConsumption_Outer'][0]; ?> l/100km</small></li>
                     <?php } ?>
                     <?php if (!empty($meta_values['emissionFuelConsumption_CO2'][0])) { ?>
-                        <li style="color: yellow;"><small>CO2-Emissionen komb.*: ≈<?php echo $meta_values['emissionFuelConsumption_CO2'][0]; ?> g/km</small></li>
+                        <li><small>CO2-Emissionen komb.*: ≈<?php echo $meta_values['emissionFuelConsumption_CO2'][0]; ?> g/km</small></li>
                     <?php } ?>
                     <?php if (!empty($meta_values['combinedPowerConsumption'][0])) { ?>
-                        <li style="color: yellow;"><small>Stromverbrauch komb.*: ≈<?php echo $meta_values['combinedPowerConsumption'][0]; ?> kwH/100km</small></li>
+                        <li><small>Stromverbrauch komb.*: ≈<?php echo $meta_values['combinedPowerConsumption'][0]; ?> kwH/100km</small></li>
                     <?php } ?>
                     <?php if (!empty($meta_values['emissionSticker'][0])) { ?>
-                        <li style="color: yellow;"><small>Emissionsklasse: <?php echo $meta_values['emissionSticker'][0]; ?></small></li>
+                        <li><small>Emissionsklasse: <?php echo $meta_values['emissionSticker'][0]; ?></small></li>
                     <?php } ?>
                     <?php if (!empty($meta_values['efficiency_class_image_url'][0])) { ?>
                         <img src="<?php echo $meta_values['efficiency_class_image_url'][0]; ?>" />
@@ -399,6 +379,27 @@ if ($vehicles->have_posts()) { ?>
 
 
                 </ul>
+
+                    </div>
+
+                    <div class="vehicle-price">
+                        <?php if (!empty($meta_values['price'][0])) { ?>
+                            <div itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
+                                <meta itemprop="priceCurrency" content="EUR">
+                                <meta itemprop="price" content="<?php echo $meta_values['price'][0]; ?>">
+                                <strong>
+                                    <?php echo $meta_values['price'][0]; ?> € (Brutto)
+                                </strong><br><small>
+                                    <?php echo $meta_values['vatable'][0] == 'false' ? 'MwSt. nicht ausweisbar' : 'Inkl. 19% MwSt.'; ?>
+                                </small>
+                            </div>
+                        <?php } ?>
+                        <br>
+                        <a href="<?php the_permalink(); ?>"
+                            class="vehicle-btn wp-block-button__link wp-element-button">Details</a>
+                    </div>
+                </div> <!-- // vehicle-row -->
+               
             </article>
             <?php
         }
