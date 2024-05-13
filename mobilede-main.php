@@ -986,7 +986,7 @@ do_action( 'kfz_web_meta' );
 function import_post_image($post_id, $image_url, $thumbnail = true)
 {
     $re = '/\[0]\s\=\>\s/m';
-    $str = '[0] => https://img.classistatic.de/api/v1/mo-prod/images/a4/a44c541e-fcac-48fc-8974-4fb28782ec52?rule=mo-640.jpg';
+    $str = '[0] => https://img.classistatic.de/api/v1/mo-prod/images/a4/a44c541e-fcac-48fc-8974-4fb28782ec52?rule=mo-800.jpg';
     $subst = '';
     $image_url = preg_replace($re, $subst, $image_url);
   

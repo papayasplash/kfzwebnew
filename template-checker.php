@@ -25,7 +25,7 @@ function check_single_fahrzeuge($content = null)
         <h5 class="text-left" itemprop="category">' . $meta_values['category'][0] . ', ' . $meta_values['condition'][0] . '</h5>
         </div>
         </div>
-        <div class="row vehicle-detail-row">
+        <div class="vehicle-detail-row">
         <div class="col-xs-12 col-sm-7 col-left">';
         $options = get_option('MobileDE_option');
         if (isset($options['mob_slider_option']) && $options['mob_slider_option'] == 'yes') {
@@ -34,7 +34,8 @@ function check_single_fahrzeuge($content = null)
                 $mob_images = $meta_values['ad_gallery'];
                 foreach ($mob_images as $mob_image) {
                     $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
-                    $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
+                    $bigimage = str_replace('mo-1600', 'mo-1024', $mob_image_ssl);
+
                     $content .= '<img src="' . $bigimage . '" />';
                 }
             } else {
@@ -48,8 +49,8 @@ function check_single_fahrzeuge($content = null)
                 $mob_images = $meta_values['ad_gallery'];
                 foreach ($mob_images as $mob_image) {
                     $mob_image_ssl = str_replace('http://', 'https://', $mob_image);
-                    $bigimage = str_replace('27.JPG', '57.JPG', $mob_image_ssl);
-                    $content .= '<img src="' . $mob_image_ssl . '" />';
+                    $bigimage = str_replace('mo-1600', 'mo-240', $mob_image_ssl);
+                    $content .= '<img src="' . $bigimage . '" />';
                 }
             } else {
                 more_fields(true); 
@@ -96,10 +97,10 @@ function check_single_fahrzeuge($content = null)
             
             if (!empty($meta_values['available_from'][0])) {
                 if ($meta_values['available_from'][0] == "Sofort") {
-                    $content .= '<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> sofort verfügbar';
+                    $content .= '<span class="dashicons dashicons-yes"></span> sofort verfügbar';
                 }
                 if ($meta_values['available_from'][0] != "Sofort") {
-                    $content .= '<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> verfügbar ab ' . $meta_values['available_from'][0] . '';
+                    $content .= '<span class="dashicons dashicons-yes"></span> verfügbar ab ' . $meta_values['available_from'][0] . '';
                 }
             }
             
@@ -142,38 +143,67 @@ function check_single_fahrzeuge($content = null)
             }
             $content .= '</small></h4>';
         }
-        $content .= '<div class="row kfz-web-spf"><div class="col-xs-12">';
+        $content .= '<div class="kfz-web-spf"><div class="col-xs-12">';
         if (!empty($meta_values['XENON_HEADLIGHTS'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['XENON_HEADLIGHTS'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"><span class="dashicons dashicons-yes"></span> '.$meta_values['XENON_HEADLIGHTS'][0].'</div>';
         }
         if (!empty($meta_values['NAVIGATION_SYSTEM'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['NAVIGATION_SYSTEM'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['NAVIGATION_SYSTEM'][0].'</div>';
         }
         if (!empty($meta_values['ESP'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['ESP'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['ESP'][0].'</div>';
         }
         if (!empty($meta_values['HEAD_UP_DISPLAY'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['HEAD_UP_DISPLAY'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['HEAD_UP_DISPLAY'][0].'</div>';
         }
         if (!empty($meta_values['FULL_SERVICE_HISTORY'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['FULL_SERVICE_HISTORY'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['FULL_SERVICE_HISTORY'][0].'</div>';
         }
         if (!empty($meta_values['BENDING_LIGHTS'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['BENDING_LIGHTS'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['BENDING_LIGHTS'][0].'</div>';
         }
         if (!empty($meta_values['PARKING_SENSORS'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['PARKING_SENSORS'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['PARKING_SENSORS'][0].'</div>';
         }
         if (!empty($meta_values['PANORAMIC_GLASS_ROOF'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['PANORAMIC_GLASS_ROOF'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['PANORAMIC_GLASS_ROOF'][0].'</div>';
         }
         if (!empty($meta_values['CRUISE_CONTROL'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['CRUISE_CONTROL'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['CRUISE_CONTROL'][0].'</div>';
         }
         if (!empty($meta_values['ELECTRIC_HEATED_SEATS'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['ELECTRIC_HEATED_SEATS'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['ELECTRIC_HEATED_SEATS'][0].'</div>';
         }
-        $content .= '</div></div><hr><div class="row top15"><div class="col-xs-12"><h3>Fahrzeug Direktanfrage</h3></div><div class="col-xs-6"><a href="mailto:' . $meta_values['seller_email'][0] . '?subject=Direktanfrage zu ' . get_the_title() . '"><button class="vehicle-btn wp-block-button__link wp-element-button">E-Mail Anfrage</button></a></div><div class="col-xs-6"><a href="tel:+' . $meta_values['seller_phone_country_calling_code'][0] . $meta_values['seller_phone_area_code'][0] . $meta_values['seller_phone_number'][0] . '" class="btn btn-primary btn-block">+' . $meta_values['seller_phone_country_calling_code'][0] . ' ' . $meta_values['seller_phone_area_code'][0] . ' ' . $meta_values['seller_phone_number'][0] . '</a></div></div></div></div><br><br><hr><div class="row"><div class="col-xs-12"><h3>Detailinformationen</h3></div><div class="col-xs-12 col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Motor & Getriebe</h3></div><div class="panel-body">';
+        $content .= '</div>
+        </div>
+        <hr>
+        <div class="col-xs-12">
+        <h4>Fahrzeug Direktanfrage</h4>
+        </div>
+        <div class="vehicle-detail-row top15">
+        
+        <div class="col-xs-6 col-left">
+        <a href="mailto:' . $meta_values['seller_email'][0] . '?subject=Direktanfrage zu ' . get_the_title() . '"><button class="vehicle-btn wp-block-button__link wp-element-button">E-Mail Anfrage</button></a>
+        </div>
+        <div class="col-xs-6 col-right">
+        <a href="tel:+' . $meta_values['seller_phone_country_calling_code'][0] . $meta_values['seller_phone_area_code'][0] . $meta_values['seller_phone_number'][0] . '"><button class="vehicle-btn wp-block-button__link wp-element-button">+' . $meta_values['seller_phone_country_calling_code'][0] . ' ' . $meta_values['seller_phone_area_code'][0] . ' ' . $meta_values['seller_phone_number'][0] . '</button></a>
+        </div>
+        </div>
+        </div>
+        </div>
+      
+        <hr>
+        <div class="col-xs-12">
+        <h4>Detailinformationen</h4>
+        </div>
+        <div class="vehicle-detail-row">
+       
+        <div class="col-xs-12 col-sm-4 col-left">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+        <strong class="panel-title"><span class="dashicons dashicons-admin-generic"></span> Motor & Getriebe</strong>
+        </div>
+        <div class="panel-body">';
         if (!empty($meta_values['fuel'][0])) {
             $content .= '<span>Kraftstoff:</span> <strong> ' . $meta_values['fuel'][0] . '</strong><br/>';
         }
@@ -191,7 +221,8 @@ function check_single_fahrzeuge($content = null)
             $content .= round($multiplikation);
             $content .= 'PS)</strong>';
         }
-        $content .= '</div></div></div><div class="col-xs-12 col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-wrench placative-info" aria-hidden="true"></span> Daten</h3></div><div class="panel-body">';
+        $content .= '</div></div></div><div class="col-xs-12 col-sm-4 col-left"><div class="panel panel-default"><div class="panel-heading">
+        <strong class="panel-title"><span class="dashicons dashicons-admin-network"></span> Daten</strong></div><div class="panel-body">';
         if (!empty($meta_values['condition'][0])) {
             $content .= '<span>Zustand:</span> <strong> ' . $meta_values['condition'][0] . '</strong><br>';
         }
@@ -210,11 +241,13 @@ function check_single_fahrzeuge($content = null)
             $content .= $nextInspection;
             $content .= '</strong>';
         }
-        $content .= '</div></div></div>
-        <div class="col-xs-12 col-sm-4">
+        $content .= '</div>
+        </div>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-left">
         <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title"><span class="glyphicon glyphicon-leaf placative-info" aria-hidden="true"></span> Energie & Umwelt</h3>
+            <strong class="panel-title"><span class="dashicons dashicons-update"></span> Energie & Umwelt</strong>
         </div>
         <div class="panel-body">
         <table>
@@ -370,7 +403,10 @@ function check_single_fahrzeuge($content = null)
         $content .= '
         </tbody>
         </table>
-        </div></div></div><div class="col-xs-12"><hr></div><div class="col-xs-12 col-sm-6"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-camera placative-info" aria-hidden="true"></span> Optik</h3></div><div class="panel-body">';
+        </div></div></div></div><div class="col-xs-12"><hr></div>
+        <div class="col-xs-12 col-sm-6">
+        <div class="panel panel-default">
+        <div class="panel-heading"><strong class="panel-title"><span class="dashicons dashicons-camera"></span> Optik</strong></div><div class="panel-body">';
         if (!empty($meta_values['manufacturer_color_name'][0])) {
             $content .= '<span>Farbbezeichnung:</span> <strong> ' . $meta_values['manufacturer_color_name'][0] . '</strong><br/>';
         }
@@ -389,7 +425,7 @@ function check_single_fahrzeuge($content = null)
             }
             $content .= '</strong><br/>';
         }
-        $content .= '</div></div></div><div class="col-xs-12 col-sm-6"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-list placative-info" aria-hidden="true"></span> Weitere Daten</h3></div><div class="panel-body">';
+        $content .= '</div></div></div><div class="col-xs-12 col-sm-6"><div class="panel panel-default"><div class="panel-heading"><strong class="panel-title"><span class="glyphicon glyphicon-list placative-info" aria-hidden="true"></span> Weitere Daten</strong></div><div class="panel-body">';
         if (!empty($meta_values['door_count'][0])) {
             $content .= '<span>Anzahl d. Türen:</span> <strong>' . $meta_values['door_count'][0] . '</strong><br/>';
         }
@@ -404,213 +440,213 @@ function check_single_fahrzeuge($content = null)
         }
         $content .= '</div></div></div><div class="col-xs-12"><hr>';
         if(!empty($meta_values['ABS'][0]) || !empty($meta_values['BENDING_LIGHTS'][0]) || !empty($meta_values['DAYTIME_RUNNING_LIGHTS'][0]) || !empty($meta_values['ESP'][0]) || !empty($meta_values['FRONT_FOG_LIGHTS'][0]) || !empty($meta_values['IMMOBILIZER'][0]) || !empty($meta_values['ISOFIX'][0]) || !empty($meta_values['PARKING_SENSORS'][0]) || !empty($meta_values['POWER_ASSISTED_STEERING'][0]) || !empty($meta_values['TRACTION_CONTROL_SYSTEM'][0]) || !empty($meta_values['XENON_HEADLIGHTS'][0])) {
-        $content .= '<div class="row"><div class="col-xs-12"><h4>Sicherheit:</h4></div>';
+        $content .= '<div class="row"><div class="col-xs-12"><span class="dashicons dashicons-shield-alt"></span> <strong>Sicherheit:</strong></div>';
         // ABS
         if (!empty($meta_values['ABS'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ABS'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ABS'][0] . '</div>';
         }
         // Kurvenlicht
         if (!empty($meta_values['BENDING_LIGHTS'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['BENDING_LIGHTS'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['BENDING_LIGHTS'][0] . '</div>';
         } 
         // Tagfahrlicht
         if (!empty($meta_values['DAYTIME_RUNNING_LIGHTS'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['DAYTIME_RUNNING_LIGHTS'][0] . '</div>';    
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['DAYTIME_RUNNING_LIGHTS'][0] . '</div>';    
         }
         // ESP
         if (!empty($meta_values['ESP'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ESP'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ESP'][0] . '</div>';
 		}
 		// Nebelscheinwerfer
 		if (!empty($meta_values['FRONT_FOG_LIGHTS'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['FRONT_FOG_LIGHTS'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['FRONT_FOG_LIGHTS'][0] . '</div>';
 		}
 		// Elektr. Wegfahrsperre
 		if (!empty($meta_values['IMMOBILIZER'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['IMMOBILIZER'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['IMMOBILIZER'][0] . '</div>';
 		}
 		// Isofix
 		if (!empty($meta_values['ISOFIX'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ISOFIX'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ISOFIX'][0] . '</div>';
 		}
 		// Einparkhilfe
 		if (!empty($meta_values['PARKING_SENSORS'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['PARKING_SENSORS'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['PARKING_SENSORS'][0] . '</div>';
 		}
 		// Servolenkung
 		if (!empty($meta_values['POWER_ASSISTED_STEERING'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['POWER_ASSISTED_STEERING'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['POWER_ASSISTED_STEERING'][0] . '</div>';
 		}
 		// Traktionskontrolle
 		if (!empty($meta_values['TRACTION_CONTROL_SYSTEM'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['TRACTION_CONTROL_SYSTEM'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['TRACTION_CONTROL_SYSTEM'][0] . '</div>';
 		}
 		//Xenonscheinwerfer
 		if (!empty($meta_values['XENON_HEADLIGHTS'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['XENON_HEADLIGHTS'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['XENON_HEADLIGHTS'][0] . '</div>';
 		}
         $content .= '</div><br><hr>';
         }
         if(!empty($meta_values['AUTOMATIC_RAIN_SENSOR'][0]) || !empty($meta_values['AUXILIARY_HEATING'][0]) || !empty($meta_values['CENTRAL_LOCKING'][0]) || !empty($meta_values['CRUISE_CONTROL'][0]) || !empty($meta_values['ELECTRIC_ADJUSTABLE_SEATS'][0]) || !empty($meta_values['ELECTRIC_EXTERIOR_MIRRORS'][0]) || !empty($meta_values['ELECTRIC_EXTERIOR_MIRRORS'][0]) || !empty($meta_values['ELECTRIC_HEATED_SEATS'][0]) || !empty($meta_values['ELECTRIC_WINDOWS'][0]) || !empty($meta_values['LIGHT_SENSOR'][0]) || !empty($meta_values['MULTIFUNCTIONAL_WHEEL'][0]) || !empty($meta_values['PANORAMIC_GLASS_ROOF'][0]) || !empty($meta_values['SUNROOF'][0])) {
-		$content .= '<div class="row"><div class="col-xs-12"><h4>Komfort:</h4></div>';
+		$content .= '<div class="row"><div class="col-xs-12"><span class="dashicons dashicons-star-filled"></span> <strong>Komfort:</strong></div>';
 		if (!empty($meta_values['AUTOMATIC_RAIN_SENSOR'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['AUTOMATIC_RAIN_SENSOR'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['AUTOMATIC_RAIN_SENSOR'][0] . '</div>';
 		}
 		// Standheizung
 		if (!empty($meta_values['AUXILIARY_HEATING'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['AUXILIARY_HEATING'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['AUXILIARY_HEATING'][0] . '</div>';
 		}
 		// Zentralverriegelung
 		if (!empty($meta_values['CENTRAL_LOCKING'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['CENTRAL_LOCKING'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['CENTRAL_LOCKING'][0] . '</div>';
         }
 		// Tempomat
 		if (!empty($meta_values['CRUISE_CONTROL'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['CRUISE_CONTROL'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['CRUISE_CONTROL'][0] . '</div>';
 		}
 		// Elektr. Sitzeinstellung
 		if (!empty($meta_values['ELECTRIC_ADJUSTABLE_SEATS'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ELECTRIC_ADJUSTABLE_SEATS'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ELECTRIC_ADJUSTABLE_SEATS'][0] . '</div>';
 		}
 		// Elektr. Seitenspiegel
 		if (!empty($meta_values['ELECTRIC_EXTERIOR_MIRRORS'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ELECTRIC_EXTERIOR_MIRRORS'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ELECTRIC_EXTERIOR_MIRRORS'][0] . '</div>';
 		}
 		// Sitzheizung
 		if (!empty($meta_values['ELECTRIC_HEATED_SEATS'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ELECTRIC_HEATED_SEATS'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ELECTRIC_HEATED_SEATS'][0] . '</div>';
 		}
 		// Elektr. Fensterheber -->
 		if (!empty($meta_values['ELECTRIC_WINDOWS'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ELECTRIC_WINDOWS'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ELECTRIC_WINDOWS'][0] . '</div>';
 		}
 		// Lichtsensor
 		if (!empty($meta_values['LIGHT_SENSOR'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['LIGHT_SENSOR'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['LIGHT_SENSOR'][0] . '</div>';
 		}
 		// Multifunktionslenkrad
 		if (!empty($meta_values['MULTIFUNCTIONAL_WHEEL'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['MULTIFUNCTIONAL_WHEEL'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['MULTIFUNCTIONAL_WHEEL'][0] . '</div>';
 		}
 		// Panorama-Dach
 		if (!empty($meta_values['PANORAMIC_GLASS_ROOF'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['PANORAMIC_GLASS_ROOF'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['PANORAMIC_GLASS_ROOF'][0] . '</div>';
 		}
 		// Start/Stopp-Automatik
 		if (!empty($meta_values['START_STOP_SYSTEM'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['START_STOP_SYSTEM'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['START_STOP_SYSTEM'][0] . '</div>';
 		}
 		// Schiebedach
 		if (!empty($meta_values['SUNROOF'][0])) {
-			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['SUNROOF'][0] . '</div>';
+			$content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['SUNROOF'][0] . '</div>';
 		}
         $content .= '</div><br><hr>';
         } // If Komfort
         if(!empty($meta_values['BLUETOOTH'][0]) || !empty($meta_values['CD_MULTICHANGER'][0]) || !empty($meta_values['HANDS_FREE_PHONE_SYSTEM'][0]) || !empty($meta_values['HEAD_UP_DISPLAY'][0]) || !empty($meta_values['MP3_INTERFACE'][0]) || !empty($meta_values['NAVIGATION_SYSTEM'][0]) || !empty($meta_values['ON_BOARD_COMPUTER'][0]) || !empty($meta_values['TUNER'][0])) {
-        $content .= '<div class="row"><div class="col-xs-12"><h4>Multimedia:</h4></div>';
+        $content .= '<div class="row"><div class="col-xs-12"><span class="dashicons dashicons-admin-media"></span> <strong>Multimedia:</strong></div>';
         if (!empty($meta_values['BLUETOOTH'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['BLUETOOTH'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['BLUETOOTH'][0] . '</div>';
         }
         if (!empty($meta_values['CD_MULTICHANGER'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['CD_MULTICHANGER'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['CD_MULTICHANGER'][0] . '</div>';
         }
         if (!empty($meta_values['HANDS_FREE_PHONE_SYSTEM'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['HANDS_FREE_PHONE_SYSTEM'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['HANDS_FREE_PHONE_SYSTEM'][0] . '</div>';
         }
         if (!empty($meta_values['HEAD_UP_DISPLAY'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['HEAD_UP_DISPLAY'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['HEAD_UP_DISPLAY'][0] . '</div>';
         }
         if (!empty($meta_values['MP3_INTERFACE'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['MP3_INTERFACE'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['MP3_INTERFACE'][0] . '</div>';
         }
         if (!empty($meta_values['NAVIGATION_SYSTEM'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['NAVIGATION_SYSTEM'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['NAVIGATION_SYSTEM'][0] . '</div>';
         }
         if (!empty($meta_values['ON_BOARD_COMPUTER'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ON_BOARD_COMPUTER'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ON_BOARD_COMPUTER'][0] . '</div>';
         }
         if (!empty($meta_values['TUNER'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['TUNER'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['TUNER'][0] . '</div>';
         }
         $content .= '</div><br><hr>';
         } // If Multimedia
         if(!empty($meta_values['ALLOY_WHEELS'][0]) || !empty($meta_values['FULL_SERVICE_HISTORY'][0]) || !empty($meta_values['BIODIESEL_SUITABLE'][0]) || !empty($meta_values['E10_ENABLED'][0]) || !empty($meta_values['HU_AU_NEU'][0]) || !empty($meta_values['FOUR_WHEEL_DRIVE'][0]) || !empty($meta_values['HYBRID_PLUGIN'][0]) || !empty($meta_values['METALLIC'][0]) || !empty($meta_values['NONSMOKER_VEHICLE'][0]) || !empty($meta_values['PARTICULATE_FILTER_DIESEL'][0]) || !empty($meta_values['PERFORMANCE_HANDLING_SYSTEM'][0]) || !empty($meta_values['ROOF_RAILS'][0]) || !empty($meta_values['SKI_BAG'][0]) || !empty($meta_values['SPORT_PACKAGE'][0]) || !empty($meta_values['SPORT_SEATS'][0]) || !empty($meta_values['TRAILER_COUPLING'][0]) || !empty($meta_values['VEGETABLEOILFUEL_SUITABLE'][0]) || !empty($meta_values['WARRANTY'][0])) {
-        $content .= '<div class="row"><div class="col-xs-12"><h4>Extras:</h4></div>';
+        $content .= '<div class="row"><div class="col-xs-12"><span class="dashicons dashicons-admin-post"></span> <strong>Extras:</strong></div>';
         if (!empty($meta_values['ALLOY_WHEELS'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ALLOY_WHEELS'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ALLOY_WHEELS'][0] . '</div>';
         }
         if (!empty($meta_values['FULL_SERVICE_HISTORY'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['FULL_SERVICE_HISTORY'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['FULL_SERVICE_HISTORY'][0] . '</div>';
         }
         if (!empty($meta_values['BIODIESEL_SUITABLE'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['BIODIESEL_SUITABLE'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['BIODIESEL_SUITABLE'][0] . '</div>';
         }
         if (!empty($meta_values['E10_ENABLED'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['E10_ENABLED'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['E10_ENABLED'][0] . '</div>';
         }
         if (!empty($meta_values['HU_AU_NEU'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['HU_AU_NEU'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['HU_AU_NEU'][0] . '</div>';
         }
         if (!empty($meta_values['FOUR_WHEEL_DRIVE'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['FOUR_WHEEL_DRIVE'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['FOUR_WHEEL_DRIVE'][0] . '</div>';
         }
         if (!empty($meta_values['HYBRID_PLUGIN'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['HYBRID_PLUGIN'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['HYBRID_PLUGIN'][0] . '</div>';
         }
         if (!empty($meta_values['METALLIC'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['METALLIC'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['METALLIC'][0] . '</div>';
         }
         if (!empty($meta_values['NONSMOKER_VEHICLE'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['NONSMOKER_VEHICLE'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['NONSMOKER_VEHICLE'][0] . '</div>';
         }
         if (!empty($meta_values['PARTICULATE_FILTER_DIESEL'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['PARTICULATE_FILTER_DIESEL'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['PARTICULATE_FILTER_DIESEL'][0] . '</div>';
         }
          if (!empty($meta_values['PERFORMANCE_HANDLING_SYSTEM'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['PERFORMANCE_HANDLING_SYSTEM'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['PERFORMANCE_HANDLING_SYSTEM'][0] . '</div>';
         }
         if (!empty($meta_values['ROOF_RAILS'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['ROOF_RAILS'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['ROOF_RAILS'][0] . '</div>';
         }
         if (!empty($meta_values['SKI_BAG'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['SKI_BAG'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['SKI_BAG'][0] . '</div>';
         }
         if (!empty($meta_values['SPORT_PACKAGE'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['SPORT_PACKAGE'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['SPORT_PACKAGE'][0] . '</div>';
         }
         if (!empty($meta_values['SPORT_SEATS'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['SPORT_SEATS'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['SPORT_SEATS'][0] . '</div>';
         }
         if (!empty($meta_values['TRAILER_COUPLING'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['TRAILER_COUPLING'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['TRAILER_COUPLING'][0] . '</div>';
         }
         if (!empty($meta_values['VEGETABLEOILFUEL_SUITABLE'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['VEGETABLEOILFUEL_SUITABLE'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['VEGETABLEOILFUEL_SUITABLE'][0] . '</div>';
         }
         if (!empty($meta_values['WARRANTY'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['WARRANTY'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['WARRANTY'][0] . '</div>';
         }
         $content .= '</div><br><hr>';
         } // If Extras
         if(!empty($meta_values['EXPORT'][0]) || !empty($meta_values['TAXI'][0]) || !empty($meta_values['DISABLED_ACCESSIBLE'][0])) {
-        $content .= '<div class="row"><div class="col-xs-12"><h4>Sonstiges:</h4></div>';
+        $content .= '<div class="row"><div class="col-xs-12"><strong>Sonstiges:</strong></div>';
         if (!empty($meta_values['EXPORT'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['EXPORT'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['EXPORT'][0] . '</div>';
         }
         if (!empty($meta_values['TAXI'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['TAXI'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['TAXI'][0] . '</div>';
         }
         if (!empty($meta_values['DISABLED_ACCESSIBLE'][0])) {
-            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="glyphicon glyphicon-chevron-right"></span> ' . $meta_values['DISABLED_ACCESSIBLE'][0] . '</div>';
+            $content .= '<div class="col-xs-6 col-sm-3 top15 text-left"><span class="dashicons dashicons-arrow-right-alt2"></span> ' . $meta_values['DISABLED_ACCESSIBLE'][0] . '</div>';
         }
         $content .= '</div><br><hr>';
         } // If Sonstiges
         $content .= '</div>';
         if (!empty($meta_values['enriched_description'][0])) {
         if (!empty($meta_values['efficiency_class_image_url'][0])) {
-        $content .= '<div class="col-xs-12 col-sm-8" itemprop="description"><h3>Beschreibung</h3>';
+        $content .= '<div class="col-xs-12 col-sm-8" itemprop="description"><span class="dashicons dashicons-media-document"></span> <strong>Beschreibung</strong>';
         } else {
-        $content .= '<div class="col-xs-12" itemprop="description"><h3>Beschreibung</h3>';
+        $content .= '<div class="col-xs-12" itemprop="description"><span class="dashicons dashicons-media-document"></span> <strong>Beschreibung</strong>';
         }
 		$content .= $meta_values['enriched_description'][0];
         $content .= '</div>';

@@ -10,7 +10,7 @@ jQuery('.slider-nav').slick({
   slidesToShow: 3,
   slidesToScroll: 1,
   asNavFor: '.slider-main',
-  dots: true,
+  dots: false,
   arrows: true,
   centerMode: true,
   focusOnSelect: true
