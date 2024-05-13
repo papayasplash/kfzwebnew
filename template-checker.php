@@ -18,7 +18,15 @@ function check_single_fahrzeuge($content = null)
     if (is_singular('fahrzeuge')) {
         $meta_values = get_post_meta(get_the_ID());
         $content = '
-        <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Car"><div class="row"><div class="col-xs-12"><h2 class="text-left title" itemprop="name">' . get_the_title() . '</h2><h5 class="text-left" itemprop="category">' . $meta_values['category'][0] . ', ' . $meta_values['condition'][0] . '</h5></div></div><div class="row"><div class="col-xs-12 col-sm-7">';
+        <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Car">
+        <div class="row">
+        <div class="col-xs-12">
+        <h2 class="text-left title" itemprop="name">' . get_the_title() . '</h2>
+        <h5 class="text-left" itemprop="category">' . $meta_values['category'][0] . ', ' . $meta_values['condition'][0] . '</h5>
+        </div>
+        </div>
+        <div class="row vehicle-detail-row">
+        <div class="col-xs-12 col-sm-7 col-left">';
         $options = get_option('MobileDE_option');
         if (isset($options['mob_slider_option']) && $options['mob_slider_option'] == 'yes') {
             $content .= '<div class="slider-container"><div class="slider-main">';
@@ -72,7 +80,11 @@ function check_single_fahrzeuge($content = null)
             $content .= '</div>';
         }
     
-        $content .= '</div><hr class="visible-xs"><div class="col-xs-12 col-sm-5"><div class="row"><br><div class="col-xs-12" itemprop="makesOffer" itemscope itemtype="http://schema.org/Offer" itemref="product">';
+        $content .= '</div>
+        
+        <div class="col-xs-12 col-sm-5 col-right">
+        <div class="row">
+        <div class="col-xs-12" itemprop="makesOffer" itemscope itemtype="http://schema.org/Offer" itemref="product">';
         if (!empty($meta_values['price'][0])) {
             $content .= '<div itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification"><meta itemprop="priceCurrency" content="EUR"><meta itemprop="price" content="'.$meta_values['price'][0].'">';
             $content .= '<h3><strong>'.$meta_values['price'][0].' € (Brutto) </strong><br><small>';
@@ -161,7 +173,7 @@ function check_single_fahrzeuge($content = null)
         if (!empty($meta_values['ELECTRIC_HEATED_SEATS'][0])) {
             $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '.$meta_values['ELECTRIC_HEATED_SEATS'][0].'</div>';
         }
-        $content .= '</div></div><hr><div class="row top15"><div class="col-xs-12"><h3>Fahrzeug Direktanfrage</h3></div><div class="col-xs-6"><a href="mailto:' . $meta_values['seller_email'][0] . '?subject=Direktanfrage zu ' . get_the_title() . '"><button class="btn btn-primary btn-block">E-Mail Anfrage</button></a></div><div class="col-xs-6"><a href="tel:+' . $meta_values['seller_phone_country_calling_code'][0] . $meta_values['seller_phone_area_code'][0] . $meta_values['seller_phone_number'][0] . '" class="btn btn-primary btn-block">+' . $meta_values['seller_phone_country_calling_code'][0] . ' ' . $meta_values['seller_phone_area_code'][0] . ' ' . $meta_values['seller_phone_number'][0] . '</a></div></div></div></div><br><br><hr><div class="row"><div class="col-xs-12"><h3>Detailinformationen</h3></div><div class="col-xs-12 col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Motor & Getriebe</h3></div><div class="panel-body">';
+        $content .= '</div></div><hr><div class="row top15"><div class="col-xs-12"><h3>Fahrzeug Direktanfrage</h3></div><div class="col-xs-6"><a href="mailto:' . $meta_values['seller_email'][0] . '?subject=Direktanfrage zu ' . get_the_title() . '"><button class="vehicle-btn wp-block-button__link wp-element-button">E-Mail Anfrage</button></a></div><div class="col-xs-6"><a href="tel:+' . $meta_values['seller_phone_country_calling_code'][0] . $meta_values['seller_phone_area_code'][0] . $meta_values['seller_phone_number'][0] . '" class="btn btn-primary btn-block">+' . $meta_values['seller_phone_country_calling_code'][0] . ' ' . $meta_values['seller_phone_area_code'][0] . ' ' . $meta_values['seller_phone_number'][0] . '</a></div></div></div></div><br><br><hr><div class="row"><div class="col-xs-12"><h3>Detailinformationen</h3></div><div class="col-xs-12 col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Motor & Getriebe</h3></div><div class="panel-body">';
         if (!empty($meta_values['fuel'][0])) {
             $content .= '<span>Kraftstoff:</span> <strong> ' . $meta_values['fuel'][0] . '</strong><br/>';
         }
@@ -322,8 +334,9 @@ function check_single_fahrzeuge($content = null)
         $lowBase = !empty($meta_values['wltp-co2-costs-low-base'][0]) ? $meta_values['wltp-co2-costs-low-base'][0] : 0;
         $highAccumulated = !empty($meta_values['wltp-co2-costs-high-accumulated'][0]) ? $meta_values['wltp-co2-costs-high-accumulated'][0] : 0;
         $highBase = !empty($meta_values['wltp-co2-costs-high-base'][0]) ? $meta_values['wltp-co2-costs-high-base'][0] : 0;
-        
+        if ($middleAccumulated > 0) {
         $content .= '<tr><td>Mögliche CO₂-Kosten über die nächsten 10 Jahre (15.000 km/Jahr)</td><td> <strong>' . formatCurrency($middleAccumulated) . ' (bei einem angenommenen mittleren durchschnittlichen CO2-Preis von ' . formatCurrency($middleBase) . '/t)</strong><br>';
+        }
         if ($lowBase > 0) { 
            $content .= formatCurrency($lowAccumulated) . ' (bei einem angenommenen niedrigen durchschnittlichen CO2-Preis von ' . formatCurrency($lowBase) . '/t)<br>'; 
         }

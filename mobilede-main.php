@@ -454,7 +454,7 @@ function writeIntoWp($item)
 	if(!empty($item['class'])) { $meta_data_to_update['class'] = $item['class']; }
 	if(!empty($item['brand'])) { $meta_data_to_update['make'] = $item['make']; } // Deprecated.
 	if(!empty($item['make'])) { $meta_data_to_update['make'] = $item['make']; }
-	if(!empty($item['model'])) { $meta_data_to_update['make'] = $item['model']; }
+	if(!empty($item['model'])) { $meta_data_to_update['model'] = $item['model']; }
 	if(!empty($item['model_variant'])) { $meta_data_to_update['model_variant'] = $item['model_variant']; }
 	if(!empty($item['variant'])) { $meta_data_to_update['model_description'] = $item['model_description']; } // Deprecated.
 	if(!empty($item['model_description'])) { $meta_data_to_update['model_description'] = $item['model_description']; }
@@ -1139,6 +1139,7 @@ function mob_search_result_init()
 
 	
 	global $mob_data;
+	$options = get_option('MobileDE_option');
 
 	// create custom type for search result
 	$posts_labels = array(
@@ -1156,6 +1157,7 @@ function mob_search_result_init()
 		'parent_item_colon' => '',
 		'menu_name' => 'Fahrzeuge'
 	);
+	$cpt_archive_enabled = isset($options['mob_cpt_archive_option']) && $options['mob_cpt_archive_option'] === 'true';
 	$posts_args = array(
 		'labels' => $posts_labels,
 		'public' => true,
@@ -1169,7 +1171,7 @@ function mob_search_result_init()
 			'with_front' => true
 		) ,
 		'capability_type' => 'post',
-		'has_archive' => false,
+		'has_archive' => $cpt_archive_enabled,
 		'hierarchical' => true,
 		'menu_position' => 8,
 		'menu_icon' => 'data:image/svg+xml;base64,PHN2ZyBpZD0iRWJlbmVfMSIgZGF0YS1uYW1lPSJFYmVuZSAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxOCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7ZmlsbC1vcGFjaXR5OjAuODU7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5aZWljaGVuZmzDpGNoZSAxPC90aXRsZT48ZyBpZD0ibGF5ZXIxIj48cGF0aCBpZD0icGF0aDkzNDciIGNsYXNzPSJjbHMtMSIgZD0iTTUuNDcsMi4zMUExLjY4LDEuNjgsMCwwLDAsMy43MiwzLjM5TDIuMzEsNi45NEExLjg3LDEuODcsMCwwLDAsLjgxLDguNnY0LjY2SDIuMTd2MS41N2MtLjA3LDEuNDksMi4zNiwxLjU1LDIuNDIsMGwwLTEuNTRoOC43OGwwLDEuNTRjLjA1LDEuNTcsMi40OCwxLjUxLDIuNDIsMFYxMy4yNWgxLjM1VjguNmExLjg3LDEuODcsMCwwLDAtMS41LTEuNjVMMTQuMjgsMy4zOWExLjY4LDEuNjgsMCwwLDAtMS43Ni0xLjA3Wm0uMTYsMS4yM2guMTlsNi4zNywwYy41OCwwLC44MywwLDEuMDguNTZsMSwyLjc2SDMuNzJsMS0yLjY4YS44LjgsMCwwLDEsLjkxLS42NFpNMy40Miw4LjI2QTEuMTUsMS4xNSwwLDEsMSwyLjI3LDkuNDEsMS4xNSwxLjE1LDAsMCwxLDMuNDIsOC4yNlptMTEuMjMsMEExLjE1LDEuMTUsMCwxLDEsMTMuNSw5LjQxLDEuMTUsMS4xNSwwLDAsMSwxNC42NSw4LjI2Wm0tLjc5LTEuNTJaIi8+PC9nPjwvc3ZnPg==',

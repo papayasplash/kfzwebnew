@@ -245,8 +245,8 @@ class mob_Setting{
 		public function mob_cpt_archive_callback()
 		{
 			$cpt_archive_options = array(
-				'enabled' => 'Aktiviert',
-				'disabled' => 'Deaktiviert'
+				'true' => 'Deaktiviert',
+				'false' => 'Aktiviert'
 			);
 
 			echo '
@@ -292,11 +292,25 @@ class mob_Setting{
 				$new_data['mob_image_option']=sanitize_text_field($data['mob_image_option']);
 			}
 
-			// if(!empty($data['mob_bootstrap_option'])) {
-			// 	$new_data['mob_bootstrap_option']=sanitize_text_field($data['mob_bootstrap_option']);
-			// }
-
-
+			if (!empty($data['mob_cpt_archive_option'])) {
+				$new_data['mob_cpt_archive_option'] = sanitize_text_field($data['mob_cpt_archive_option']);
+		
+				if (!isset($this->options['mob_cpt_archive_option']) || $this->options['mob_cpt_archive_option'] !== $new_data['mob_cpt_archive_option']) {
+					// Option wurde geändert, Permalink-Struktur aktualisieren
+					$permalink_structure = get_option('permalink_structure');
+					
+					if ($permalink_structure) {
+						// Beitragsname-Struktur festlegen
+						update_option('permalink_structure', '/%postname%/');
+					} else {
+						// Einfache Struktur festlegen
+						update_option('permalink_structure', '');
+					}
+		
+					// Rewrite-Regeln aktualisieren
+					flush_rewrite_rules();
+				}
+			}
 			if(!empty($data['mob_slider_option'])) {
 				$new_data['mob_slider_option']=sanitize_text_field($data['mob_slider_option']);
 			}	
@@ -353,7 +367,7 @@ class mob_Setting{
 						$i,
 						isset($this->options['mob_password'][$i]) ? esc_attr($this->options['mob_password'][$i]) : ''
 					);
-					echo '<button type="button" class="removeAccount" data-index="' . $i . '">' . __('Entfernen', 'kfz-web') . '</button>';
+					// echo '<button type="button" class="removeAccount" data-index="' . $i . '">' . __('Entfernen', 'kfz-web') . '</button>';
 					echo '</td></tr>';
 				}
 			}

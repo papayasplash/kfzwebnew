@@ -8,7 +8,19 @@
     display: flex;
     gap: 1rem;
   }
+  .vehicle-detail-row {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
 
+  }
+  .vehicle-detail-row .col-left {
+    flex-grow: 1;
+    width: 60%;
+  }
+  .vehicle-detail-row .col-right {
+    width: 50%;
+  }
   .vehicle-thumbnail {
   }
 
