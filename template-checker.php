@@ -145,34 +145,34 @@ function check_single_fahrzeuge($content = null)
         }
         $content .= '<div class="kfz-web-spf"><div class="col-xs-12">';
         if (!empty($meta_values['XENON_LIGHTS'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"><span class="dashicons dashicons-yes"></span> '.$meta_values['XENON_LIGHTS'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"><span class="dashicons dashicons-saved"></span> '.$meta_values['XENON_LIGHTS'][0].'</div>';
         }
         if (!empty($meta_values['NAVIGATION_SYSTEM'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['NAVIGATION_SYSTEM'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['NAVIGATION_SYSTEM'][0].'</div>';
         }
         if (!empty($meta_values['ESP'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['ESP'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['ESP'][0].'</div>';
         }
         if (!empty($meta_values['HEAD_UP_DISPLAY'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['HEAD_UP_DISPLAY'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['HEAD_UP_DISPLAY'][0].'</div>';
         }
         if (!empty($meta_values['FULL_SERVICE_HISTORY'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['FULL_SERVICE_HISTORY'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['FULL_SERVICE_HISTORY'][0].'</div>';
         }
         if (!empty($meta_values['BENDING_LIGHTS'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['BENDING_LIGHTS'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['BENDING_LIGHTS'][0].'</div>';
         }
         if (!empty($meta_values['PARKING_SENSORS'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['PARKING_SENSORS'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['PARKING_SENSORS'][0].'</div>';
         }
         if (!empty($meta_values['PANORAMIC_GLASS_ROOF'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['PANORAMIC_GLASS_ROOF'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['PANORAMIC_GLASS_ROOF'][0].'</div>';
         }
         if (!empty($meta_values['CRUISE_CONTROL'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['CRUISE_CONTROL'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['CRUISE_CONTROL'][0].'</div>';
         }
         if (!empty($meta_values['ELECTRIC_HEATED_SEATS'][0])) {
-            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-yes"></span> '.$meta_values['ELECTRIC_HEATED_SEATS'][0].'</div>';
+            $content .= '<div class="btn btn-default disabled" style="margin-top: 5px;margin-right: 5px;"> <span class="dashicons dashicons-saved"></span> '.$meta_values['ELECTRIC_HEATED_SEATS'][0].'</div>';
         }
         $content .= '</div>
         </div>
@@ -182,10 +182,10 @@ function check_single_fahrzeuge($content = null)
         </div>
         <div class="vehicle-detail-row top15">
         
-        <div class="col-xs-6 col-left">
+        <div class="col-xs-6 col-right">
         <a href="mailto:' . $meta_values['seller_email'][0] . '?subject=Direktanfrage zu ' . get_the_title() . '"><button class="vehicle-btn wp-block-button__link wp-element-button">E-Mail Anfrage</button></a>
         </div>
-        <div class="col-xs-6 col-right">
+        <div class="col-xs-6 col-left">
         <a href="tel:+' . $meta_values['seller_phone_country_calling_code'][0] . $meta_values['seller_phone_area_code'][0] . $meta_values['seller_phone_number'][0] . '"><button class="vehicle-btn wp-block-button__link wp-element-button">+' . $meta_values['seller_phone_country_calling_code'][0] . ' ' . $meta_values['seller_phone_area_code'][0] . ' ' . $meta_values['seller_phone_number'][0] . '</button></a>
         </div>
         </div>
@@ -665,9 +665,39 @@ function check_single_fahrzeuge($content = null)
         $content .= '<h3>Energieeffizienzklasse</h3><img class="img-responsive" src="';
         $content .= $meta_values['efficiency_class_image_url'][0];
         $content .= '" />';
-        $content .= '</div>';
+        $content .= '</div>
+       
+        ';
         }
-		$content .= '<div class="col-xs-12"><hr><p>* Weitere Informationen zum offiziellen Kraftstoffverbrauch und zu den offiziellen spezifischen CO2-Emissionen und gegebenenfalls zum Stromverbrauch neuer PKW können dem Leitfaden über den offiziellen Kraftstoffverbrauch, die offiziellen spezifischen CO2-Emissionen und den offiziellen Stromverbrauch neuer PKW entnommen werden, der an allen Verkaufsstellen und bei der Deutschen Automobil Treuhand GmbH unentgeltlich erhältlich ist unter <a href="http://www.dat.de/" target="_blank">www.dat.de</a>.</p></div></div></div>';
+		$content .= '<div class="col-xs-12"><hr><p>* Weitere Informationen zum offiziellen Kraftstoffverbrauch und zu den offiziellen spezifischen CO2-Emissionen und gegebenenfalls zum Stromverbrauch neuer PKW können dem Leitfaden über den offiziellen Kraftstoffverbrauch, die offiziellen spezifischen CO2-Emissionen und den offiziellen Stromverbrauch neuer PKW entnommen werden, der an allen Verkaufsstellen und bei der Deutschen Automobil Treuhand GmbH unentgeltlich erhältlich ist unter <a href="http://www.dat.de/" target="_blank">www.dat.de</a>.</p></div></div></div> <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                console.log("DOMContentLoaded");
+                var titleText = "' .  get_the_title() . '";
+                var titleElements = document.getElementsByTagName("*");
+                var titleFound = false;
+                console.log(titleText);
+    
+                for (var i = 0; i < titleElements.length; i++) {
+                    if (titleElements[i].textContent.trim() === titleText) {
+                        titleFound = true;
+                        console.log("titleFound");
+                        titleElements[i].remove(); // Entferne das gefundene Element
+                        break;
+                    }
+                }
+                // Entferne das Datum
+                var dateElements = document.querySelectorAll(".post-date, .entry-date"); // Passe die Selektoren an dein Theme an
+                dateElements.forEach(function(element) {
+                    element.remove();
+                });
+
+                // Entferne die Kategorien
+    var categoryElements = document.querySelectorAll(".category, .cat-links, .entry-categories"); // Passe die Selektoren an dein Theme an
+    categoryElements.forEach(function(element) {
+        element.remove();
+    });
+            });
+            </script>';
 		}
 	return $content;
 }

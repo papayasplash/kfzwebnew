@@ -39,6 +39,9 @@ text-align: right;
 .vehicle-emission {
 font-size: 75% !important;
 }
+.vehicle-btn {
+/* border: 0; */
+}
 .table-responsive {
 width: 100%;
 overflow-x: auto;
@@ -169,6 +172,13 @@ border-color: #000;
 
 /* Smartphones (Landscape) */
 @media only screen and (min-width: 481px) and (max-width: 767px) {
+  .vehicle-detail-row {
+    flex-direction: column;
+  }
+  .vehicle-detail-row .col-left,
+  .vehicle-detail-row .col-right {
+    width: 100%;
+  }
   /* CSS-Regeln für Smartphones im Querformat */
   .vehicle-row-metas {
     column-count: 2;
