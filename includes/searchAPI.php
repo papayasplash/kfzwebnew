@@ -1209,13 +1209,20 @@ class mob_searchAPI {
 		} else {
 			$mob_data['wltp-electric-range-equivalent-all'] = "";
 		}
-		// Verbrauch gewichtet, kombiniert
+		// Verbrauch gewichtet, kombiniert Treibstoff
 		$temp = $item->xpath('//ad:consumptions/ad:weighted-combined-fuel');
 
 		if (isset($temp[0]['value'])) {
 			$mob_data['wltp-weighted-combined-fuel'] = (string) $temp[0]['value'];
 		} else {
 			$mob_data['wltp-weighted-combined-fuel'] = "";
+		}
+		// Verbrauch gewichtet, kombiniert Strom
+		$temp = $item->xpath('//ad:consumptions/ad:weighted-combined-power');
+		if (isset($temp[0]['value'])) {
+			$mob_data['wltp-weighted-combined-power'] = (string) $temp[0]['value'];
+		} else {
+			$mob_data['wltp-weighted-combined-power'] = "";
 		}
 		// Verbrauch kombiniert
 		$temp = $item->xpath('//ad:consumptions/ad:fuel-consumption');

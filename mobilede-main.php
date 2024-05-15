@@ -626,7 +626,7 @@ function writeIntoWp($item)
 				$metaData = import_post_image($post_id, $image, $i == 0); // Original sole API image.
 			}
 		}
-	}	// new feature meta_values as single post_meta
+	}	// new feature meta_values as single post_meta	
 	if(!empty($item['ABS'])) { $meta_data_to_update['ABS'] = $item['ABS']; }
 	if(!empty($item['ALLOY_WHEELS'])) { $meta_data_to_update['ALLOY_WHEELS'] = $item['ALLOY_WHEELS']; }
 	if(!empty($item['AUTOMATIC_RAIN_SENSOR'])) { $meta_data_to_update['AUTOMATIC_RAIN_SENSOR'] = $item['AUTOMATIC_RAIN_SENSOR']; }
