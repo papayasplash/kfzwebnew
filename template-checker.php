@@ -260,7 +260,13 @@ function check_single_fahrzeuge($content = null)
         <tbody align="top">
 
         ';
-        
+        if(!empty($meta_values['fuel'][0])) { 
+            if($meta_values['fuel'][0] == 'Diesel' or $meta_values['fuel'][0] == 'Benzin') {
+                $content .= '<tr><td><span>Antriebsart</span></td><td>Verbrennungsmotor</td></tr>';
+            } else {
+                $content .= '<tr><td><span>Antriebsart</span></td><td>'. $meta_values['fuel'][0] .'</td></tr>';
+            }
+        }
         if (!empty($meta_values['wltp-co2-emission'][0])) {
             $content .= '<tr><td><span>CO2-Emissionen (komb.)* <div class="popover-container"><button>&#x1F6C8;</button><div class="popover-content"><p>CO₂-Emissionen</p><p>Es werden nur die CO₂-Emissionen angegeben, die durch den Betrieb des Pkw entstehen. CO₂-Emissionen, die durch die Produktion und Bereitstellung des Pkw sowie des Kraftstoffes bzw. der Energieträger entstehen oder vermieden werden, werden bei der Ermittlung der CO₂-Emissionen gemäß WLTP nicht berücksichtigt.</p></div></div>: </span></td><td><strong>' . $meta_values['wltp-co2-emission'][0] . ' g/km</strong></td></tr>';
         }
@@ -382,24 +388,24 @@ function check_single_fahrzeuge($content = null)
             $content .= '<tr><td><span>Kraftfahrzeugsteuer:</span></td><td> ' . formatCurrency($meta_values['wltp-tax'][0]) . '/Jahr<br></td></tr>';
         }
        
-        if (!empty($meta_values['emissionFuelConsumption_Combined'][0])) {
-            $content .= '<tr><td><span>Verbrauch komb.*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Combined'][0] . ' l/100km</strong><br></td></tr>';
-        }
-        if (!empty($meta_values['emissionFuelConsumption_Inner'][0])) {
-            $content .= '<tr><td><span>Verbrauch innerorts*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Inner'][0] . ' l/100km</strong><br></td></tr>';
-        }
-        if (!empty($meta_values['emissionFuelConsumption_Outer'][0])) {
-            $content .= '<tr><td><span>Verbrauch außerorts*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Outer'][0] . ' l/100km</strong><br></td></tr>';
-        }
-        if (!empty($meta_values['emissionFuelConsumption_CO2'][0])) {
-            $content .= '<tr><td><span>CO2-Emissionen komb.*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_CO2'][0] . ' g/km</strong><br></td></tr>';
-        }
-        if (!empty($meta_values['combinedPowerConsumption'][0])) {
-            $content .= '<tr><td><span>Stromverbrauch komb.*:</span></td><td> <strong> ≈' . $meta_values['combinedPowerConsumption'][0] . ' kwH/100km</strong><br></td></tr>';
-        }
-        if (!empty($meta_values['emissionSticker'][0])) {
-            $content .= '<tr><td><span>Emissionsklasse:</span></td><td> ' . $meta_values['emissionSticker'][0] . '';
-        }
+        // if (!empty($meta_values['emissionFuelConsumption_Combined'][0])) {
+        //     $content .= '<tr><td><span>Verbrauch komb.*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Combined'][0] . ' l/100km</strong><br></td></tr>';
+        // }
+        // if (!empty($meta_values['emissionFuelConsumption_Inner'][0])) {
+        //     $content .= '<tr><td><span>Verbrauch innerorts*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Inner'][0] . ' l/100km</strong><br></td></tr>';
+        // }
+        // if (!empty($meta_values['emissionFuelConsumption_Outer'][0])) {
+        //     $content .= '<tr><td><span>Verbrauch außerorts*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_Outer'][0] . ' l/100km</strong><br></td></tr>';
+        // }
+        // if (!empty($meta_values['emissionFuelConsumption_CO2'][0])) {
+        //     $content .= '<tr><td><span>CO2-Emissionen komb.*:</span></td><td> <strong> ≈' . $meta_values['emissionFuelConsumption_CO2'][0] . ' g/km</strong><br></td></tr>';
+        // }
+        // if (!empty($meta_values['combinedPowerConsumption'][0])) {
+        //     $content .= '<tr><td><span>Stromverbrauch komb.*:</span></td><td> <strong> ≈' . $meta_values['combinedPowerConsumption'][0] . ' kwH/100km</strong><br></td></tr>';
+        // }
+        // if (!empty($meta_values['emissionSticker'][0])) {
+        //     $content .= '<tr><td><span>Emissionsklasse:</span></td><td> ' . $meta_values['emissionSticker'][0] . '';
+        // }
         $content .= '
         </tbody>
         </table>
@@ -651,25 +657,18 @@ function check_single_fahrzeuge($content = null)
         } // If Sonstiges
         $content .= '</div>';
         if (!empty($meta_values['enriched_description'][0])) {
-        if (!empty($meta_values['efficiency_class_image_url'][0])) {
-        $content .= '<div class="col-xs-12 col-sm-8" itemprop="description"><span class="dashicons dashicons-media-document"></span> <strong>Beschreibung</strong><br><br>';
-        } else {
+       
         $content .= '<div class="col-xs-12" itemprop="description"><span class="dashicons dashicons-media-document"></span> <strong>Beschreibung</strong><br><br>';
-        }
+        
 		$content .= $meta_values['enriched_description'][0];
         $content .= '</div>';
 		}
-        if (!empty($meta_values['efficiency_class_image_url'][0])) {
-        $content .= '<div class="col-xs-12 col-sm-4">';
-        $content .= '<hr class="visible-xs" />';
-        $content .= '<h3>Energieeffizienzklasse</h3><img class="img-responsive" src="';
-        $content .= $meta_values['efficiency_class_image_url'][0];
-        $content .= '" />';
-        $content .= '</div>
-       
-        ';
-        }
-		$content .= '<div class="col-xs-12"><hr><p>* Weitere Informationen zum offiziellen Kraftstoffverbrauch und zu den offiziellen spezifischen CO2-Emissionen und gegebenenfalls zum Stromverbrauch neuer PKW können dem Leitfaden über den offiziellen Kraftstoffverbrauch, die offiziellen spezifischen CO2-Emissionen und den offiziellen Stromverbrauch neuer PKW entnommen werden, der an allen Verkaufsstellen und bei der Deutschen Automobil Treuhand GmbH unentgeltlich erhältlich ist unter <a href="http://www.dat.de/" target="_blank">www.dat.de</a>.</p></div></div></div> <script>
+      
+		$content .= '<div class="col-xs-12"><hr><p>
+        <p><strong>Angaben zum Verbrauch</strong><br>
+        <p>Die Informationen erfolgen gemäß der Pkw-Energieverbrauchskennzeichnungsverordnung. Die angegebenen Werte wurden nach dem vorgeschrieben Messverfahren WLTP (World Harmonised Light Vehicles Test Procedure) ermittelt. Der Kraftstoffverbrauch und der CO2-Ausstoß eines PKW sind nicht nur von der effizienten Ausnutzung des Kraftstoffs durch den PKW, sondern auch vom Fahrstil und anderen nichttechnischen Faktoren abhängig. CO2 ist das fr die Erderwärmung hauptsächlich verantwortliche Treibgas. Ein Leitfaden ber den Kraftstoffverbrauch und die CO2-Emissionen aller in Deutschland angebotenen neuen PKW-Modelle ist unentgeltlich in elektronischer Form einsehbar an jedem Verkaufsort in Deutschland, an dem neue Personenkraftfahrzeuge ausgestellt oder angeboten werden. Der Leitfaden ist auch abrufbar unter der Internetadresse: https://www.dat.de/co2/.</p>
+        <p>Es werden nur die CO2-Emissionen angegeben, die durch den Betrieb des PKW entstehen. CO2-Emissionen, die durch die Produktion und Bereitstellung des PKW sowie des Kraftstoffes bzw. der Energieträger entstehen oder vermieden werden, werden bei der Ermittlung der CO2-Emissionen gemäß WLTP nicht bercksichtigt.</p>
+        </p></div></div></div> <script>
             document.addEventListener("DOMContentLoaded", function() {
                 console.log("DOMContentLoaded");
                 var titleText = "' .  get_the_title() . '";

@@ -130,251 +130,47 @@ if ($vehicles->have_posts()) { ?>
                             </small>
                         <?php } ?>
                         <ul class="vehicle-emission">
-					<?php 
-					 if (!empty($meta_values['wltp-combined-fuel'][0])) { 
-						$content .= '<tr><td><span>Kraftstoffverbrauch:</span></td><td> 
-						<strong>' . $meta_values['wltp-combined-fuel'][0] . 'l/100km (kombiniert)</strong><br>';
-					
-						if (!empty($meta_values['wltp-city-fuel'][0])) {
-							$content .= $meta_values['wltp-city-fuel'][0] . ' l/100km (Innenstadt)<br>';
-						}
-						if (!empty($meta_values['wltp-suburban-fuel'][0])) {
-							$content .= $meta_values['wltp-suburban-fuel'][0] . ' l/100km (Stadtrand)<br>';
-						}
-						if (!empty($meta_values['wltp-rural-fuel'][0])) {
-							$content .= $meta_values['wltp-rural-fuel'][0] . ' l/100km (Landstraße)<br>';
-						}
-						if (!empty($meta_values['wltp-highway-fuel'][0])) {
-							$content .= $meta_values['wltp-highway-fuel'][0] . ' l/100km (Autobahn)<br>';
-						}
-					
-						$content .= '</td></tr>';
-					} 
-					?>
-					<!-- // Combined fuel consumption for all nonelectric vehicles, optional for plugin hybrids, number in l/100km (natural gas (CNG) in kg/100km) -->
-					<?php if (!empty($meta_values['wltp-consumption-fuel-combined'][0])) { ?>
-                        <li><small>Verbrauch komb.*: ≈<?php echo $meta_values['wltp-consumption-fuel-combined'][0]; ?> l/100km</small></li>&nbsp;
-                       
-                    <?php } ?>
-                    <?php if (!empty($meta_values['emissionFuelConsumption_Combined'][0])) { ?>
-                        <li><small>Verbrauch komb.*: ≈<?php echo $meta_values['emissionFuelConsumption_Combined'][0]; ?> l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_values['emissionFuelConsumption_Inner'][0])) { ?>
-                        <li><small>Verbrauch innerorts*: ≈<?php echo $meta_values['emissionFuelConsumption_Inner'][0]; ?> l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_values['emissionFuelConsumption_Outer'][0])) { ?>
-                        <li><small>Verbrauch außerorts*: ≈<?php echo $meta_values['emissionFuelConsumption_Outer'][0]; ?> l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_values['emissionFuelConsumption_CO2'][0])) { ?>
-                        <li><small>CO2-Emissionen komb.*: ≈<?php echo $meta_values['emissionFuelConsumption_CO2'][0]; ?> g/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_values['combinedPowerConsumption'][0])) { ?>
-                        <li><small>Stromverbrauch komb.*: ≈<?php echo $meta_values['combinedPowerConsumption'][0]; ?> kwH/100km</small></li>&nbsp;
-                    <?php } ?>
-                  
-                    <?php if (!empty($meta_values['efficiency_class_image_url'][0])) { ?>
-                        <img src="<?php echo $meta_values['efficiency_class_image_url'][0]; ?>" />
-                    <?php } ?>
-                    <!-- Verbrauch kombiniert -->
-                    <?php if (!empty($meta_values['emissionFuelConsumption_Combined'][0])) { ?>
-                        <li style="color: red;"><small>Kraftstoffverbr. komb. ca.:
-                                    <?php echo $meta_values['emissionFuelConsumption_Combined'][0] . ' l/100km *'; ?>
-                                </small></li>&nbsp;
-                    <?php } ?>
-                    <!-- CO2 Emission kombiniert -->
-                    <?php if (!empty($meta_values['emissionFuelConsumption_CO2'][0])) { ?>
-                        <li style="color: red;"><small>CO₂ Emissionen komb. ca.: 
-                                    <?php echo $meta_values['emissionFuelConsumption_CO2'][0] . ' g/km *'; ?>
-                                </small></li>&nbsp;
-                    <?php } ?>
-                    <!-- Stromverbrauch kombiniert -->
-                    <?php if (!empty($meta_values['combinedPowerConsumption'][0])) { ?>
-                        <li style="color: red;"><small>Stromverbrauch komb.*: ≈ 
-                                    <?php echo $meta_values['combinedPowerConsumption'][0] . ' kwH/100km' ?>
-                                </small></li>&nbsp;
-                    <?php } ?>
-                    <!-- Emissionsklasse -->
-                 
-                    <!-- Energieeffizienzklasse -->
-                    <?php if (!empty($meta_values['efficiency_class'][0])) { ?>
-                        <li style="color: red;"><small>Energieeffizienzklasse: 
-                                    <?php echo $meta_values['efficiency_class'][0]; ?>
-                                </small></li>&nbsp;
-                    <?php } ?>
-                    <!-- CO2-Emissionen	-->
-                    <?php if (!empty($meta_values['wltp-co2-emission'][0])) { ?>
-                        <li><small>CO₂-Emissionen*: ≈ 
-                                    <?php echo $meta_values['wltp-co2-emission'][0]; ?>
-                                 g/km</small></li>&nbsp;
-                    <?php } ?>
-                    <!-- CO2-Emissionen	-->
-                    <?php if (!empty($meta_values['wltp-co2-class'][0])) { ?>
-                        <li><small>CO₂-Klasse: 
-                                    <?php echo $meta_values['wltp-co2-class'][0]; ?>
-                                </small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_values['wltp-electric-range'][0])) { ?>
-                        <li><small>Elektrische Reichweite: 
-                                    <?php echo $meta_values['wltp-electric-range'][0]; ?>
-                                 km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_values['wltp-electric-range-equivalent-all'][0])) { ?>
-                        <li><small>Elektrische Reichweite (EAER): 
-                                    <?php echo $meta_values['wltp-electric-range-equivalent-all'][0]; ?>
-                                 km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_values['wltp-weighted-combined-fuel'][0])) { ?>
-                        <li><small>Kraftstoffverbrauch gewichtet, kombiniert: 
+                        <?php if (!empty($meta_values['wltp-weighted-combined-fuel'][0])) { ?>
+                        <span>Kraftstoffverbrauch gewichtet, kombiniert: 
                                     <?php echo $meta_values['wltp-weighted-combined-fuel'][0]; ?>
-                                 l/100km</small></li>&nbsp;
+                                 l/100km</span><br>
+                    <?php } ?>
+ <?php if (!empty($meta_values['wltp-combined-fuel'][0])) { ?>
+                        <span>Verbrauch komb.: 
+                                    <?php echo $meta_values['wltp-combined-fuel'][0]; ?>
+                                 l/100km</span><br>
                     <?php } ?>
                     <?php if (!empty($meta_values['wltp-weighted-combined-power'][0])) { ?>
-                        <?php error_log('wltp-weighted-combined-power: ' . $meta_values['wltp-weighted-combined-power'][0]); ?>
-                        <li><small>Stromverbrauch gewichtet, kombiniert: 
+                        <span>Stromverbrauch gewichtet, kombiniert: 
                                     <?php echo $meta_values['wltp-weighted-combined-power'][0]; ?>
-                                 kWh/100km</small></li>&nbsp;
+                                 kWh/100km</span><br>
                     <?php } ?>
-                    <?php if (!empty($meta_values['wltp-combined-fuel'][0])) { ?>
-                        <li><small>Verbrauch kombiniert: 
-                                    <?php echo $meta_values['wltp-combined-fuel'][0]; ?>
-                                 l/100km</small></li>&nbsp;
+                     <?php if (!empty($meta_value['wltp-combined-power'][0])) { ?>
+                        <span>Stromverbrauch komb.: 
+                                    <?php echo $meta_values['wltp-combined-power'][0]; ?>
+                                 kW/h</span><br>
+                    <?php } ?>
+                   
+                    <?php if (!empty($meta_value['wltp-empty-combined-fuel'][0])) { ?>
+                        <span>Verbrauch bei entladener Batterie kombiniert: 
+                                    <?php echo $meta_values['wltp-empty-combined-fuel'][0]; ?>
+                                 l/100km</span><br>
+                    <?php } ?>
+                   
+  <!-- CO2-Emissionen	-->
+                    <?php if (!empty($meta_values['wltp-co2-emission'][0])) { ?>
+                        <span>CO₂-Emissionen komb.: <?php echo $meta_values['wltp-co2-emission'][0]; ?>
+                                 g/km</span><br>
+                    <?php } ?>
+                    <!-- CO2-Emissionen	-->
+                   
+ 
+ <?php if (!empty($meta_values['wltp-co2-class'][0])) { ?>
+                        <span>CO₂-Klasse: 
+                                    <?php echo $meta_values['wltp-co2-class'][0]; ?>
+                                </span><br>
                     <?php } ?>
 
-                    <?php if (!empty($meta_value['wltp-city-fuel'][0])) { ?>
-                        <li><small>Verbrauch Innenstadt: 
-                                    <?php echo $meta_values['wltp-city-fuel'][0]; ?>
-                                l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-suburban-fuel'][0])) { ?>
-                        <li><small>Verbrauch Stadtrand: 
-                                    <?php echo $meta_values['wltp-suburban-fuel'][0]; ?>
-                                 l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-rural-fuel'][0])) { ?>
-                        <li><small>Verbrauch Landstraße: 
-                                    <?php echo $meta_values['wltp-rural-fuel'][0]; ?>
-                                l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-highway-fuel'][0])) { ?>
-                        <li><small>Verbrauch Autobahn: 
-                                    <?php echo $meta_values['wltp-highway-fuel'][0]; ?>
-                                 l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-combined-power'][0])) { ?>
-                        <li><small>Stromverbrauch kombiniert: 
-                                    <?php echo $meta_values['wltp-combined-power'][0]; ?>
-                                 kW/h</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-city-power'][0])) { ?>
-                        <li><small>Stromverbrauch Innenstadt: 
-                                    <?php echo $meta_values['wltp-city-power'][0]; ?>
-                                 kW/h</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-suburban-power'][0])) { ?>
-                        <li><small>Stromverbrauch Stadtrand: 
-                                    <?php echo $meta_values['wltp-suburban-power'][0]; ?>
-                                 kW/h</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-rural-power'][0])) { ?>
-                        <li><small>Stromverbrauch Landstraße: 
-                                    <?php echo $meta_values['wltp-rural-power'][0]; ?>
-                                 kW/h</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-highway-power'][0])) { ?>
-                        <li><small>Stromverbrauch Autobahn: <span>
-                                    <?php echo $meta_values['wltp-highway-power'][0]; ?>
-                                 kW/h</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-empty-combined-fuel'][0])) { ?>
-                        <li><small>Verbrauch bei entladener Batterie kombiniert: 
-                                    <?php echo $meta_values['wltp-empty-combined-fuel'][0]; ?>
-                                 l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-empty-city-fuel'][0])) { ?>
-                        <li><small>Verbrauch bei entladener Batterie Innenstadt: 
-                                    <?php echo $meta_values['wltp-empty-city-fuel'][0]; ?>
-                                l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-empty-suburban-fuel'][0])) { ?>
-                        <li><small>Verbrauch bei entladener Batterie Stadtrand: 
-                                    <?php echo $meta_values['wltp-empty-suburban-fuel'][0]; ?>
-                                 l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-empty-rural-fuel'][0])) { ?>
-                        <li><small>Verbrauch bei entladener Batterie Landstraße: 
-                                    <?php echo $meta_values['wltp-empty-rural-fuel'][0]; ?>
-                                 l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-empty-highway-fuel'][0])) { ?>
-                        <li><small>Verbrauch bei entladener Batterie Autobahn: 
-                                    <?php echo $meta_values['wltp-empty-highway-fuel'][0]; ?>
-                                 l/100km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-fuel-price-year'][0])) { ?>
-                        <li><small>Kraftstoffpreis [Jahr]: 
-                                    <?php echo $meta_values['wltp-fuel-price-year'][0]; ?>
-                                 EUR/l</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-power-price-year'][0])) { ?>
-                        <li><small>Strompreis [Jahr]: 
-                                    <?php echo $meta_values['wltp-power-price-year'][0]; ?>
-                                 EUR/kW/h</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-consumption-price-year'][0])) { ?>
-                        <li><small>Jahresdurchschnitt [Jahr]: 
-                                    <?php echo $meta_values['wltp-consumption-price-year'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-consumption-costs'][0])) { ?>
-                        <li><small>Energiekosten bei 15.000 km Jahresfahrleistung: 
-                                    <?php echo $meta_values['wltp-consumption-costs'][0]; ?>
-                                 EUR</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-co2-costs-low-base'][0])) { ?>
-                        <li><small>CO2-Kosten bei einem angenommenen mittleren durchschnittlichen CO2-Preis von: 
-                                    <?php echo $meta_values['wltp-co2-costs-low-base'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-co2-costs-low-accumulated'][0])) { ?>
-                        <li><small>CO2-Kosten bei einem angenommenen mittleren durchschnittlichen CO2-Preis von: 
-                                    <?php echo $meta_values['wltp-co2-costs-low-accumulated'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-co2-costs-middle-base'][0])) { ?>
-                        <li><small>CO2-Kosten bei einem angenommenen mittleren durchschnittlichen CO2-Preis von: 
-                                    <?php echo $meta_values['wltp-co2-costs-middle-base'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-co2-costs-middle-accumulated'][0])) { ?>
-                        <li><small>CO2-Kosten bei einem angenommenen mittleren durchschnittlichen CO2-Preis von: 
-                                    <?php echo $meta_values['wltp-co2-costs-middle-accumulated'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-co2-costs-high-base'][0])) { ?>
-                        <li><small>CO2-Kosten bei einem angenommenen mittleren durchschnittlichen CO2-Preis von: 
-                                    <?php echo $meta_values['wltp-co2-costs-high-base'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-co2-costs-high-accumulated'][0])) { ?>
-                        <li><small>CO2-Kosten bei einem angenommenen mittleren durchschnittlichen CO2-Preis von: 
-                                    <?php echo $meta_values['wltp-co2-costs-high-accumulated'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-tax'][0])) { ?>
-                        <li><small>Kraftfahrzeugsteuer: 
-                                    <?php echo $meta_values['wltp-tax'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-cost-model-from'][0])) { ?>
-                        <li><small>Zeitspanne von: 
-                                    <?php echo $meta_values['wltp-cost-model-from'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
-                    <?php if (!empty($meta_value['wltp-cost-model-till'][0])) { ?>
-                        <li><small>Zeitspanne bis: 
-                                    <?php echo $meta_values['wltp-cost-model-till'][0]; ?>
-                                 EUR/km</small></li>&nbsp;
-                    <?php } ?>
 
 
                 </ul>
@@ -404,9 +200,10 @@ if ($vehicles->have_posts()) { ?>
         }
         ?>
     </div> <!-- FacetWP Template End -->
-    <p>* Weitere Informationen zum offiziellen Kraftstoffverbrauch und zu den offiziellen spezifischen CO2-Emissionen und
-        gegebenenfalls zum Stromverbrauch neuer PKW können dem Leitfaden über den offiziellen Kraftstoffverbrauch, die
-        offiziellen spezifischen CO2-Emissionen und den offiziellen Stromverbrauch neuer PKW' entnommen werden, der an allen
-        Verkaufsstellen und bei der 'Deutschen Automobil Treuhand GmbH' unentgeltlich erhältlich ist unter www.dat.de.</p>
+    <p><strong>Angaben zum Verbrauch</strong><br>
+    <p>Die Informationen erfolgen gemäß der Pkw-Energieverbrauchskennzeichnungsverordnung. Die angegebenen Werte wurden nach dem vorgeschrieben Messverfahren WLTP (World Harmonised Light Vehicles Test Procedure) ermittelt. Der Kraftstoffverbrauch und der CO2-Ausstoß eines PKW sind nicht nur von der effizienten Ausnutzung des Kraftstoffs durch den PKW, sondern auch vom Fahrstil und anderen nichttechnischen Faktoren abhängig. CO2 ist das fr die Erderwärmung hauptsächlich verantwortliche Treibgas. Ein Leitfaden ber den Kraftstoffverbrauch und die CO2-Emissionen aller in Deutschland angebotenen neuen PKW-Modelle ist unentgeltlich in elektronischer Form einsehbar an jedem Verkaufsort in Deutschland, an dem neue Personenkraftfahrzeuge ausgestellt oder angeboten werden. Der Leitfaden ist auch abrufbar unter der Internetadresse: <a href="https://www.dat.de/co2/">https://www.dat.de/co2/</a>.</p>
+    <p>Es werden nur die CO2-Emissionen angegeben, die durch den Betrieb des PKW entstehen. CO2-Emissionen, die durch die Produktion und Bereitstellung des PKW sowie des Kraftstoffes bzw. der Energieträger entstehen oder vermieden werden, werden bei der Ermittlung der CO2-Emissionen gemäß WLTP nicht bercksichtigt.</p>
+   
     <?php
 }
+

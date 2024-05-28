@@ -587,8 +587,10 @@ function writeIntoWp($item)
 		$options['mob_image_option'] = 'web';
 	}
 	if ($options['mob_image_option'] == 'web') {
+		$i = 0;
 		foreach($item['images'] as $image) {
 			add_post_meta($post_id, 'ad_gallery', (string)$image);
+			add_post_meta($post_id, 'ad_gallery_' . $i++ . '_image', (string)$image);
 			add_post_meta($post_id, 'images_ebay', (string)$image);
 		}
 		if (substr($item['images'][0], -6) == '27.JPG') {
