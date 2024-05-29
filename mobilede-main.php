@@ -577,11 +577,7 @@ function writeIntoWp($item)
 	if(!empty($item['manufacturer-color-name'])) { $meta_data_to_update['manufacturer_color_name'] = $item['manufacturer-color-name']; }
 	if(!empty($item['shipping-volume'])) { $meta_data_to_update['shipping_volume'] = $item['shipping-volume']; }
 	if(!empty($item['loadCapacity'])) { $meta_data_to_update['load_capacity'] = $item['loadCapacity']; }
-	$numimages = count($item['images']);
-	if($numimages > 1) {
-		update_post_meta($post_id, 'carousel', '1');
-	}
-	// add_post_meta($post_id, 'ad_gallery', (string)$item['images']);
+	
 	$options = get_option('MobileDE_option');
 	if (empty($options['mob_image_option'])) {
 		$options['mob_image_option'] = 'web';
@@ -593,21 +589,10 @@ function writeIntoWp($item)
 			add_post_meta($post_id, 'ad_gallery_' . $i++ . '_image', (string)$image);
 			add_post_meta($post_id, 'images_ebay', (string)$image);
 		}
-		if (substr($item['images'][0], -6) == '27.JPG') {
-			$temp = str_replace('27.JPG', '57.JPG', $item['images'][0]); // 1600x1200 px
-			if (getimagesize($temp)) { // This is the FileExists check. Using a dirty side effect, but seems to be fast.
-				$i = '';
-				$metaData = import_post_image($post_id, $temp, $i == 0);
-				// metaData = update_post_meta($post_id, $temp, $i);
-			}
-			else {
-				$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
-			}
-		}
-		else {
+		
 			
-			$metaData = import_post_image($post_id, $item['images'][0], $i == 0); // Original sole API image.
-		}
+			import_post_image($post_id, $item['images'][0]); // Original sole API image.
+		
 	} else {
 		foreach($item['images'] as $i => $image) {
 		/***
@@ -960,31 +945,7 @@ function writeIntoWp($item)
 		}
 	}
 do_action( 'kfz_web_meta' );
-// function import_post_image($post_id, $image_url, $thumbnail = false)
-// {
-// 	$upload_dir = wp_upload_dir();
-// 	$image_data = wp_remote_get($image_url);
-// 	$filename = uniqid($post_id . '-') . basename($image_url);
-// 	if (wp_mkdir_p($upload_dir['path'])) $file = $upload_dir['path'] . '/' . $filename;
-// 	else $file = $upload_dir['subdir'] . '/' . $filename;
-// 	file_put_contents($file, $image_data);
-// 	$wp_filetype = wp_check_filetype($filename, null);
-// 	$attachment = array(
-// 		'post_mime_type' => $wp_filetype['type'],
-// 		'post_title' => sanitize_file_name($filename) ,
-// 		'post_content' => '',
-// 		'post_status' => 'inherit'
-// 	);
-// 	$attach_id = wp_insert_attachment($attachment, $file, $post_id);
-// 	require_once (ABSPATH . 'wp-admin/includes/image.php');
-// 	$attach_data = wp_generate_attachment_metadata($attach_id, $file);
-// 	// Generate thumbnails and different sizes of images.
-// 	wp_update_attachment_metadata($attach_id, $attach_data);
-// 	if ($thumbnail) {
-// 		set_post_thumbnail($post_id, $attach_id);
-// 	}
-// 	return $attach_data;
-// }
+
 function import_post_image($post_id, $image_url, $thumbnail = true)
 {
     $re = '/\[0]\s\=\>\s/m';
@@ -1018,8 +979,10 @@ function import_post_image($post_id, $image_url, $thumbnail = true)
     wp_update_attachment_metadata($attach_id, $attach_data);
     if ($thumbnail) {
         set_post_thumbnail($post_id, $attach_id);
+		error_log($thumbnail);
     }
     return $attach_data;
+	error_log($attach_data);
 }
 /**
  * Deletes all posts from 'fahrzeuge'.

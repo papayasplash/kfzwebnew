@@ -3,7 +3,7 @@
 Plugin Name: kfz-web Plugin
 Plugin URI: http://www.mobilede-fahrzeugintegration.de/
 Description: Importieren Sie Ihren Fahrzeugbestand von mobile.de einfach in Ihre Wordpress Seite.
-Version: 2.0.8
+Version: 2.0.8.1
 Author: neusued GmbH
 Author URI: www.neusued.de 
 License: All rights reserved
@@ -28,7 +28,7 @@ if(!class_exists('EDD_SL_Plugin_Updater')) {
 $license = trim( get_option( 'mob_license_key' ) );
 // setup the updater
 $edd_updater = new EDD_SL_Plugin_Updater( KFZ_WEB_STORE, __FILE__, array(
-	'version' 	=> '2.0.8',		// current version number
+	'version' 	=> '2.0.8.1',		// current version number
 	'license' 	=> $license,	// license key (used get_option above to retrieve from DB)
 	'item_id'       => KFZ_WEB_ITEM_ID,	// id of this plugin
 	'author' 	=> 'neusued GmbH',	// author of this plugin
